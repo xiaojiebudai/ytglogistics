@@ -92,6 +92,7 @@ public class FunInMaxDetailActivity extends FatherActivity {
     @Override
     protected void initValues() {
         initDefautHead("入仓修改", true);
+
         context = (MyApplication) getApplicationContext();
         inMax = JSON.parseObject(getIntent().getStringExtra(Consts.KEY_DATA), AppInMax.class);
     }
