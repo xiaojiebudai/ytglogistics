@@ -15,8 +15,12 @@ import com.ytglogistics.www.ytglogistics.utils.DensityUtil;
  */
 
 public class FunInAdapter extends SuperBaseAdapter<Car> {
-    public FunInAdapter(Context ctx) {
+    public static final int FUNIN=0;
+    public static final int FUNOUT=1;
+    private int model=0;
+    public FunInAdapter(Context ctx,int model) {
         super(ctx);
+        this.model=model;
     }
 
     @Override
@@ -48,29 +52,28 @@ public class FunInAdapter extends SuperBaseAdapter<Car> {
 
         public void setData(int pos) {
             Car item = getItem(pos);
-      tv_num.setText(pos+"");
-            tv_name.setText(item.CarNo);
-            tv_bowei.setText(item.PlaceId);
-            tv_state.setText(item.CarNo);
-            switch (item.Status) {
-                case 0:
-                    tv_state.setText( "已取号");
-                    break;
-                case 1:
-                    tv_state.setText("已分配");
-                    break;
-                case 2:
-                    tv_state.setText("已完成");
-                    break;
-                default:
-                    tv_state.setText("未知");
-            }
-//            tv_num.setText("¥" + item.ChangeAmt);
-//            tv_mark.setText(item.Explain);
-            // 状态待处理
-            // tv_state.setText();
-            // tv_mark.setText(item.Explain);
-
+            tv_num.setText(pos+"");
+            if(model==FUNIN){
+                tv_name.setText(item.CarNo);
+                tv_bowei.setText(item.PlaceId);
+                switch (item.Status) {
+                    case 0:
+                        tv_state.setText( "已取号");
+                        break;
+                    case 1:
+                        tv_state.setText("已分配");
+                        break;
+                    case 2:
+                        tv_state.setText("已完成");
+                        break;
+                    default:
+                        tv_state.setText("未知");
+                }
+            }else{
+                tv_name.setText(item.So);
+                tv_bowei.setText(item.CabinetNo);
+              tv_state.setText( item.PlaceId);
+                }
         }
 
     }

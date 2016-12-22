@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -27,7 +28,7 @@ import butterknife.ButterKnife;
  * @date:2016-7-24下午3:06:09
  * @description
  */
-public abstract class FatherActivity extends FragmentActivity {
+public abstract class FatherActivity extends AppCompatActivity {
 	protected Bundle mSavedInstanceState;
 	protected InputMethodManager inputMethodManager;
 	protected Dialog mDialog_wait;

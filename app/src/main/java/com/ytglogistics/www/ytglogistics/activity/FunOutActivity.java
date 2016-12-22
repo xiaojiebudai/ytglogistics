@@ -17,7 +17,6 @@ import com.ytglogistics.www.ytglogistics.api.Api;
 import com.ytglogistics.www.ytglogistics.been.Car;
 import com.ytglogistics.www.ytglogistics.utils.Consts;
 import com.ytglogistics.www.ytglogistics.utils.ParamsUtils;
-import com.ytglogistics.www.ytglogistics.utils.ZLog;
 import com.ytglogistics.www.ytglogistics.xutils.WWXCallBack;
 
 import org.xutils.http.RequestParams;
@@ -30,31 +29,33 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * Created by Administrator on 2016/12/8.
+ * Created by Administrator on 2016/12/22.
  */
 
-public class FunInActivity extends FatherActivity {
-    @BindView(R.id.tv_0)
-    TextView tv0;
-    @BindView(R.id.tv_1)
-    TextView tv1;
-    @BindView(R.id.tv_2)
-    TextView tv2;
+public class FunOutActivity extends FatherActivity {
+
     @BindView(R.id.et_no)
     EditText etNo;
     @BindView(R.id.tv_search)
     TextView tvSearch;
     @BindView(R.id.lv_data)
     ListView lvData;
+    @BindView(R.id.tv_0)
+    TextView tv0;
+    @BindView(R.id.tv_1)
+    TextView tv1;
+    @BindView(R.id.tv_2)
+    TextView tv2;
     private FunInAdapter funInAdapter;
+
     @Override
     protected int getLayoutId() {
-        return R.layout.act_funinlist;
+        return R.layout.act_funoutlist;
     }
 
     @Override
     protected void initValues() {
-        initDefautHead("入仓修改", true);
+        initDefautHead("出仓修改", true);
         initTextHeadRigth(R.string.fresh, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,14 +66,14 @@ public class FunInActivity extends FatherActivity {
 
     @Override
     protected void initView() {
-        funInAdapter=new FunInAdapter(this,FunInAdapter.FUNIN);
+        funInAdapter = new FunInAdapter(this, FunInAdapter.FUNIN);
         lvData.setAdapter(funInAdapter);
         lvData.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent=new Intent(FunInActivity.this,FunDetailActivity.class);
-                intent.putExtra(Consts.KEY_MODULE,FunDetailActivity.FUNIN);
-                intent.putExtra(Consts.KEY_DATA,JSONObject.toJSONString(funInAdapter.getData().get(position)));
+                Intent intent = new Intent(FunOutActivity.this, FunDetailActivity.class);
+                intent.putExtra(Consts.KEY_MODULE,FunDetailActivity.FUNOUT);
+                intent.putExtra(Consts.KEY_DATA, JSONObject.toJSONString(funInAdapter.getData().get(position)));
                 startActivity(intent);
             }
         });
@@ -82,6 +83,7 @@ public class FunInActivity extends FatherActivity {
     protected void doOperate() {
 
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -89,12 +91,11 @@ public class FunInActivity extends FatherActivity {
     }
 
     private void getListData() {
-        String carno=etNo.getText().toString().trim();
-        RequestParams params= ParamsUtils.getSessionParams(Api.GetQueues());
-        params.addBodyParameter("direct",0+"");
-        params.addBodyParameter("status",2+"");
-        params.addBodyParameter("carno",carno);
-        x.http().get(params, new WWXCallBack("GetQueues") {
+        String carno = etNo.getText().toString().trim();
+        RequestParams params = ParamsUtils.getSessionParams(Api.GetOutQueue());
+        params.addBodyParameter("status", 4 + "");
+        params.addBodyParameter("clp", carno);
+        x.http().get(params, new WWXCallBack("GetOutQueue") {
             @Override
             public void onAfterSuccessOk(JSONObject data) {
                 JSONArray jsonArray = data.getJSONArray("Data");
@@ -105,6 +106,7 @@ public class FunInActivity extends FatherActivity {
                 tv1.setText(data.getString("FpCount"));
                 tv2.setText(data.getString("WcCount"));
             }
+
             @Override
             public void onAfterFinished() {
 

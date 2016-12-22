@@ -5,7 +5,7 @@
         <!-- Customize your theme here. -->
     </style>
     <!-- 旺旺主题 -->
-    <style name="ww_app_theme" parent="android:Theme.Light.NoTitleBar">
+    <style name="ww_app_theme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="android:windowBackground">@color/white</item>
         <item name="android:colorBackground">@color/white</item>
         <!-- 默认textview的字体颜色 -->

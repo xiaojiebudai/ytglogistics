@@ -1,5 +1,6 @@
 package com.ytglogistics.www.ytglogistics.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -13,6 +14,7 @@ import com.ytglogistics.www.ytglogistics.MyApplication;
 import com.ytglogistics.www.ytglogistics.R;
 import com.ytglogistics.www.ytglogistics.api.Api;
 import com.ytglogistics.www.ytglogistics.been.AppInMax;
+import com.ytglogistics.www.ytglogistics.been.DataCbm;
 import com.ytglogistics.www.ytglogistics.been.PrintInfo;
 import com.ytglogistics.www.ytglogistics.dialog.InputDialog;
 import com.ytglogistics.www.ytglogistics.utils.Consts;
@@ -83,7 +85,8 @@ public class FunInMaxDetailActivity extends FatherActivity {
     TextView tvXiangbang;
     private InputDialog dialog;
     private AppInMax inMax;
-
+    private String Serial;
+    private ArrayList<DataCbm> lsit = new ArrayList<DataCbm>();
     @Override
     protected int getLayoutId() {
         return R.layout.act_funinmaxdetail;
@@ -95,6 +98,7 @@ public class FunInMaxDetailActivity extends FatherActivity {
 
         context = (MyApplication) getApplicationContext();
         inMax = JSON.parseObject(getIntent().getStringExtra(Consts.KEY_DATA), AppInMax.class);
+        Serial=getIntent().getStringExtra("Serial");
     }
 
     @Override
@@ -230,12 +234,29 @@ return TimeUtil.getOnlyDateToS(s1);
         ButterKnife.bind(this);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==RESULT_OK){
+            if(requestCode==888){
+                lsit = (ArrayList<DataCbm>) JSON.parseArray(
+                        data.getStringExtra(Consts.KEY_DATA), DataCbm.class);
+            }
+        }
+    }
+
     @OnClick({R.id.tv_lh_input, R.id.tv_conmit, R.id.tv_print})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_lh_input:
+                Intent intent=new Intent(this,FuncInCbmActivity.class);
+                intent.putExtra(Consts.KEY_DATA,JSON.toJSONString(inMax));
+                intent.putExtra("Serial",Serial);
+                startActivityForResult(intent,888);
                 break;
             case R.id.tv_conmit:
+
+
                 break;
             case R.id.tv_print:
                 if (mBconnect) {

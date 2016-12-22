@@ -47,9 +47,31 @@
             android:screenOrientation="portrait" />
         <activity
             android:name="com.ytglogistics.www.ytglogistics.activity.FunInMaxListActivity"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.ytglogistics.www.ytglogistics.activity.FunInMaxDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.ytglogistics.www.ytglogistics.activity.FuncInCbmActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.ytglogistics.www.ytglogistics.activity.FunOutActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.ytglogistics.www.ytglogistics.activity.FunOutMxListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.ytglogistics.www.ytglogistics.activity.FuncPlaceActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.ytglogistics.www.ytglogistics.activity.MoveLocaActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.ytglogistics.www.ytglogistics.activity.PoSearchListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.ytglogistics.www.ytglogistics.activity.FuncPlaceStatusActivity"
             android:screenOrientation="portrait" />
     </application>
 

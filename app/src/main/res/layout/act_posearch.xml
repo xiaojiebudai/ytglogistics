@@ -6,49 +6,6 @@
 
     <include layout="@layout/head_operation" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:background="@color/gray_bg"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:text="已入闸：" />
-
-        <TextView
-            android:id="@+id/tv_0"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-           />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:text="已分配：" />
-
-        <TextView
-            android:id="@+id/tv_1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-       />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:text="已完成：" />
-
-        <TextView
-            android:id="@+id/tv_2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-         />
-    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -61,8 +18,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="5dp"
             android:gravity="center"
-            android:text="车牌号："
-            android:id="@+id/textView3" />
+            android:text="PO/SKN：" />
 
         <EditText
             android:id="@+id/et_no"
@@ -83,7 +39,7 @@
             android:gravity="center"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
-            android:text="查询"
+            android:text="检索"
             android:textColor="@color/white" />
     </LinearLayout>
 
@@ -96,42 +52,54 @@
         android:layout_height="35dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
-<TextView
-    android:layout_width="0dp"
-    android:layout_weight="1"
-    android:layout_height="match_parent" />
 
         <TextView
-            android:layout_width="110dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:gravity="center"
-            android:text="车牌"
+            android:text="日期"
             android:textColor="@color/text_f7"
-            android:textSize="12sp"
-            android:id="@+id/textView" />
+            android:textSize="12sp" />
 
         <TextView
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="泊位"
+            android:text="S0"
             android:textColor="@color/text_f7"
-            android:textSize="12sp"
-            android:id="@+id/textView2" />
+            android:textSize="12sp" />
 
         <TextView
-            android:layout_width="110dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="状态"
+            android:text="SKN"
+            android:textColor="@color/text_f7"
+            android:textSize="12sp" />
+
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="LOCAL"
+            android:textColor="@color/text_f7"
+            android:textSize="12sp" />
+
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="库存"
             android:textColor="@color/text_f7"
             android:textSize="12sp" />
     </LinearLayout>
 
     <View style="@style/cutline_fine" />
 
-    <ListView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/lv_data"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></ListView>
+        android:layout_height="0dp"
+        android:layout_weight="1"></android.support.v7.widget.RecyclerView>
 </LinearLayout>

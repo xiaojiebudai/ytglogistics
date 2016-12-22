@@ -8,6 +8,7 @@ public class Car {
    public String QueueNo;//排队号
    public String CarNo;//车牌
    public String PlaceId;//泊位
+   public String CabinetNo;//柜号
    public String So;//SO
    public String OperDate;//排队日期
    public String OrderId;//预约订单

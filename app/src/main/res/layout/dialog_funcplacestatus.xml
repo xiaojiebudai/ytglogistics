@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:background="@drawable/dialog_bg_share_news"
+    android:orientation="vertical" >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:gravity="center"
+            android:text="泊位：" />
+
+        <TextView
+            android:id="@+id/tv_bowei"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:textColorHint="@color/text_c1"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"   android:background="@color/white"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:gravity="center"
+            android:text="状态：" />
+
+        <TextView
+            android:id="@+id/tv_status"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:textColorHint="@color/text_c1"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"   android:background="@color/white"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:gravity="center"
+            android:text="车牌：" />
+
+        <TextView
+            android:id="@+id/tv_chepai"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:textColorHint="@color/text_c1"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tv_kongxiang"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:background="#055AEB"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:gravity="center"
+            android:text="空闲"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+        <TextView
+            android:id="@+id/tv_zuoyezhong"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:layout_marginRight="20dp"
+            android:background="#5F974C"
+            android:gravity="center"
+            android:text="作业中"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tv_tongzhilichang"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:background="#D76356"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:gravity="center"
+            android:text="通知离家"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+        <TextView
+            android:id="@+id/tv_tingyong"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:layout_marginRight="20dp"
+            android:background="#F5C267"
+            android:gravity="center"
+            android:text="停用"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/tv_back"
+            android:layout_width="70dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="20dp"
+            android:background="@color/top_title_bg"
+            android:gravity="center"
+            android:text="返回"
+            android:layout_marginBottom="20dp"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+
+</LinearLayout>

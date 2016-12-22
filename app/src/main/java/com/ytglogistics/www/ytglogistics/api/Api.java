@@ -1,7 +1,7 @@
 package com.ytglogistics.www.ytglogistics.api;
 
 public class Api {
-	 private static final boolean isDebug =true;
+	 private static final boolean isDebug =false;
 
 	 /** 主机地址 */
 	public static final String ONLINE = isDebug ? "http://120.24.184.18:808/Wcf/bllService.svc/"
@@ -79,6 +79,42 @@ public class Api {
 	 */
 	public static final String PdaPallet() {
 		return ONLINE + "PdaPallet";
+	}
+	public static final String AppMxCbmCommit() {
+		return ONLINE + "AppMxCbmCommit";
+	}
+	public static final String GetOutQueue() {
+		return ONLINE + "GetOutQueue";
+	}
+	public static final String GetAppOut() {
+		return ONLINE + "GetAppOut";
+	}
+	public static final String GetAppOutMx() {
+		return ONLINE + "GetAppOutMx";
+	}
+	public static final String AllPlaces() {
+		return ONLINE + "AllPlaces";
+	}
+	public static final String GetAllQueues() {
+		return ONLINE + "GetAllQueues";
+	}
+	public static final String GetRecSoIts() {
+		return ONLINE + "GetRecSoIts";
+	}
+	public static final String ChangeSoLoca() {
+		return ONLINE + "ChangeSoLoca";
+	}
+	public static final String PoQuery() {
+		return ONLINE + "PoQuery";
+	}
+	public static final String PlaceStatus() {
+		return ONLINE + "PlaceStatus";
+	}
+	public static final String PlaceLastInfo() {
+		return ONLINE + "PlaceLastInfo";
+	}
+	public static final String PlaceOper() {
+		return ONLINE + "PlaceOper";
 	}
 
 }

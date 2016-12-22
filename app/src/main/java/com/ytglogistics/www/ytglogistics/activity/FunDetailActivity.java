@@ -40,6 +40,7 @@ import com.ytglogistics.www.ytglogistics.utils.RegexUtil;
 import com.ytglogistics.www.ytglogistics.utils.SharedPreferenceUtils;
 import com.ytglogistics.www.ytglogistics.utils.TimeUtil;
 import com.ytglogistics.www.ytglogistics.utils.WWToast;
+import com.ytglogistics.www.ytglogistics.utils.ZLog;
 import com.ytglogistics.www.ytglogistics.utils.preDefiniation;
 import com.ytglogistics.www.ytglogistics.xutils.WWXCallBack;
 
@@ -89,7 +90,10 @@ public class FunDetailActivity extends FatherActivity {
     TextView tvGet;
 
     private AppInResult result;
-
+    private Car car;
+    public static final int FUNIN=0;
+    public static final int FUNOUT=1;
+    private int model=0;
     @Override
     protected int getLayoutId() {
         return R.layout.act_fundetail;
@@ -97,19 +101,31 @@ public class FunDetailActivity extends FatherActivity {
 
     @Override
     protected void initValues() {
+        model=getIntent().getIntExtra(Consts.KEY_MODULE,FUNIN);
         initDefautHead("详情", true);
     }
 
     @Override
     protected void initView() {
-
+if(model==FUNIN){
+    tvSave.setText("保存");
+    tvGet.setText("收货");
+}else{
+    tvSave.setText("提交资料");
+    tvGet.setText("出货录入");
+}
     }
 
     @Override
     protected void doOperate() {
-        RequestParams params = ParamsUtils.getSessionParams(Api.GetAppIn());
-        params.addBodyParameter("queueNo", getIntent().getStringExtra(Consts.KEY_DATA));
-        x.http().get(params, new WWXCallBack("GetAppIn") {
+        RequestParams params = ParamsUtils.getSessionParams((model==FUNIN)?Api.GetAppIn():Api.GetAppOut());
+        if(model==FUNIN){
+            params.addBodyParameter("queueNo", car.YyNo);
+        }else{
+            params.addBodyParameter("orderId", car.OrderId);
+        }
+
+        x.http().get(params, new WWXCallBack((model==FUNIN)?"GetAppIn":"GetAppOut") {
             @Override
             public void onAfterSuccessOk(JSONObject data) {
                 result = JSON.parseObject(data.getString("Data"), AppInResult.class);
@@ -154,6 +170,7 @@ public class FunDetailActivity extends FatherActivity {
                         @Override
                         public void getDateTime(long time, boolean longTimeChecked) {
                             et2.setText(TimeUtil.getTimeToS(time*1000));
+                            result.JdTime=time;
                         }
                     });
                     startDateChooseDialog.setDateDialogTitle("接单时间");
@@ -167,6 +184,7 @@ public class FunDetailActivity extends FatherActivity {
                         @Override
                         public void getDateTime(long time, boolean longTimeChecked) {
                             et3.setText(TimeUtil.getTimeToS(time*1000));
+                            result.PdTime=time;
                         }
                     });
                     startDateChooseDialog1.setDateDialogTitle("派单时间");
@@ -179,6 +197,7 @@ public class FunDetailActivity extends FatherActivity {
                         @Override
                         public void getDateTime(long time, boolean longTimeChecked) {
                             et4.setText(TimeUtil.getTimeToS(time*1000));
+                            result.BeginTime=time;
                         }
                     });
                     startDateChooseDialog2.setDateDialogTitle("开始时间");
@@ -191,6 +210,7 @@ public class FunDetailActivity extends FatherActivity {
                         @Override
                         public void getDateTime(long time, boolean longTimeChecked) {
                             et5.setText(TimeUtil.getTimeToS(time*1000));
+                            result.EndTime=time;
                         }
                     });
                     startDateChooseDialog3.setDateDialogTitle("结束时间");
@@ -198,13 +218,36 @@ public class FunDetailActivity extends FatherActivity {
                 startDateChooseDialog3.showDateChooseDialog();
                 break;
             case R.id.tv_save:
+                saveInfo();
                 break;
             case R.id.tv_get:
-                Intent intent = new Intent(FunDetailActivity.this, FunInMaxListActivity.class);
+                Intent intent = new Intent(FunDetailActivity.this,(model==FUNIN)? FunInMaxListActivity.class:FunOutMxListActivity.class);
                 intent.putExtra(Consts.KEY_DATA, JSON.toJSONString(result));
                 startActivity(intent);
                 break;
         }
+    }
+
+    private void saveInfo() {
+
+        JSONObject jsonObject=new JSONObject();
+        jsonObject.put(Consts.KEY_SESSIONID, MyApplication
+                .getInstance().getSessionId());
+        jsonObject.put("obj",result.toJson());
+        x.http().post(ParamsUtils.getPostJsonParams(jsonObject,Api.AppInCommit()), new WWXCallBack("AppInCommit") {
+            @Override
+            public void onAfterSuccessOk(JSONObject data) {
+                    result.Serial=data.getString("Data");
+
+               WWToast.showShort("提交成功");
+                tvSave.setClickable(false);
+            }
+
+            @Override
+            public void onAfterFinished() {
+
+            }
+        });
     }
 
 
@@ -285,6 +328,8 @@ public class FunDetailActivity extends FatherActivity {
                                         int position, long id) {
                     adapter.setSelectPostion(position);
                     et0.setText(stevedList.get(position).Stevedoringcompanyname);
+                    result.StevedId=stevedList.get(position).Keyid;
+                    result.StevedName=stevedList.get(position).Stevedoringcompanyname;
                     popupWindow.dismiss();
                 }
             });
@@ -318,6 +363,8 @@ public class FunDetailActivity extends FatherActivity {
                                         int position, long id) {
                     adapter.setSelectPostion(position);
                     et1.setText(userList.get(position).Usercode);
+                    result.UserId=userList.get(position).Keyid;
+                    result.UserCode=userList.get(position).Usercode;
                     popupWindowUser.dismiss();
                 }
             });

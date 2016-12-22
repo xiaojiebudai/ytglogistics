@@ -280,5 +280,6 @@
             android:gravity="center"
             android:text="收货"
             android:textColor="@color/white" />
+
     </LinearLayout>
 </LinearLayout>

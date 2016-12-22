@@ -99,10 +99,13 @@ public class MainActivity extends FatherActivity {
                 startActivity(new Intent(this, FunInActivity.class));
                 break;
             case R.id.outofstorage:
+                startActivity(new Intent(this, FunOutActivity.class));
                 break;
             case R.id.garage_m:
+                startActivity(new Intent(this, FuncPlaceActivity.class));
                 break;
             case R.id.move_operate:
+                startActivity(new Intent(this, MoveLocaActivity.class));
                 break;
             case R.id.housing_reservation_query:
                 break;
@@ -111,8 +114,10 @@ public class MainActivity extends FatherActivity {
             case R.id.locale_photos:
                 break;
             case R.id.housing_reservation_po_query:
+                startActivity(new Intent(this, PoSearchListActivity.class));
                 break;
             case R.id.berth_map:
+                startActivity(new Intent(this, FuncPlaceStatusActivity.class));
                 break;
             case R.id.loginout:
                 MyApplication.getInstance().setSessionId("");
