@@ -124,7 +124,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:gravity="center"
-            android:text="通知离家"
+            android:text="通知离开"
             android:textColor="@color/white"
             android:textSize="18sp" />
         <TextView

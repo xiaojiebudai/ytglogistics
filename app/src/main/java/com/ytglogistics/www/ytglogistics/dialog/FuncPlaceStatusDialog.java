@@ -29,23 +29,10 @@ import butterknife.OnClick;
  * Created by Administrator on 2016/12/22.
  */
 
-public class FuncPlaceStatusDialog extends Dialog {
-    @BindView(R.id.tv_bowei)
+public class FuncPlaceStatusDialog extends Dialog implements View.OnClickListener{
     TextView tvBowei;
-    @BindView(R.id.tv_status)
     TextView tvStatus;
-    @BindView(R.id.tv_chepai)
     TextView tvChepai;
-    @BindView(R.id.tv_kongxiang)
-    TextView tvKongxiang;
-    @BindView(R.id.tv_zuoyezhong)
-    TextView tvZuoyezhong;
-    @BindView(R.id.tv_tongzhilichang)
-    TextView tvTongzhilichang;
-    @BindView(R.id.tv_tingyong)
-    TextView tvTingyong;
-    @BindView(R.id.tv_back)
-    TextView tvBack;
     private Place place;
 
     public FuncPlaceStatusDialog(Context context,Place place) {
@@ -55,6 +42,19 @@ public class FuncPlaceStatusDialog extends Dialog {
         WindowManager.LayoutParams attributes = getWindow().getAttributes();
         attributes.width = (int) (context.getResources().getDisplayMetrics().widthPixels * 0.8);
         getWindow().setAttributes(attributes);
+        initView();
+    }
+
+    private void initView() {
+        tvBowei=(TextView)findViewById(R.id.tv_bowei) ;
+        tvStatus=(TextView)findViewById(R.id.tv_status) ;
+        tvChepai=(TextView)findViewById(R.id.tv_chepai) ;
+        findViewById(R.id.tv_kongxiang).setOnClickListener(this);
+        findViewById(R.id.tv_zuoyezhong).setOnClickListener(this);
+        findViewById(R.id.tv_tongzhilichang).setOnClickListener(this);
+        findViewById(R.id.tv_tingyong).setOnClickListener(this);
+        findViewById(R.id.tv_back).setOnClickListener(this);
+
         getChePia();
         tvBowei.setText(place.PlaceId);
         tvStatus.setText(place.StatusText);
@@ -62,6 +62,7 @@ public class FuncPlaceStatusDialog extends Dialog {
 
     private void getChePia() {
         RequestParams params = ParamsUtils.getSessionParams(Api.PlaceLastInfo());
+        params.addBodyParameter("placeId",place.PlaceId);
         x.http().get(params, new WWXCallBack("PlaceLastInfo") {
             @Override
             public void onAfterSuccessOk(JSONObject data) {
@@ -74,33 +75,17 @@ public class FuncPlaceStatusDialog extends Dialog {
         });
     }
 
-    @OnClick({R.id.tv_kongxiang, R.id.tv_zuoyezhong, R.id.tv_tongzhilichang, R.id.tv_tingyong, R.id.tv_back})
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.tv_kongxiang:
-                doOper("0");
-                break;
-            case R.id.tv_zuoyezhong:
-                doOper("1");
-                break;
-            case R.id.tv_tongzhilichang:
-                doOper("3");
-                break;
-            case R.id.tv_tingyong:
-                doOper("2");
-                break;
-            case R.id.tv_back:
-                dismiss();
-                break;
-        }
-    }
 
-    private void doOper(String s) {
+    private void doOper(int s) {
+        if(s==place.Status){
+            WWToast.showShort("状态未更改");
+            return;
+        }
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Consts.KEY_SESSIONID, MyApplication
                 .getInstance().getSessionId());
         jsonObject.put("placeId",place.PlaceId);
-        jsonObject.put("status",s);
+        jsonObject.put("status",s+"");
         x.http().post(ParamsUtils.getPostJsonParams(jsonObject, Api.PlaceOper()), new WWXCallBack("PlaceOper") {
 
             @Override
@@ -113,5 +98,26 @@ public class FuncPlaceStatusDialog extends Dialog {
 
             }
         });
+    }
+
+    @Override
+    public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.tv_kongxiang:
+                    doOper(0);
+                    break;
+                case R.id.tv_zuoyezhong:
+                    doOper(1);
+                    break;
+                case R.id.tv_tongzhilichang:
+                    doOper(3);
+                    break;
+                case R.id.tv_tingyong:
+                    doOper(2);
+                    break;
+                case R.id.tv_back:
+                    dismiss();
+                    break;
+            }
     }
 }

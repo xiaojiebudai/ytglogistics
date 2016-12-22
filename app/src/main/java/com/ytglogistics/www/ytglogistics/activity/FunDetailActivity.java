@@ -103,6 +103,7 @@ public class FunDetailActivity extends FatherActivity {
     protected void initValues() {
         model=getIntent().getIntExtra(Consts.KEY_MODULE,FUNIN);
         initDefautHead("详情", true);
+        car=JSONObject.parseObject(getIntent().getStringExtra(Consts.KEY_DATA),Car.class);
     }
 
     @Override
