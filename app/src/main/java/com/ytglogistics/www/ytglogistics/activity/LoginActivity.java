@@ -46,7 +46,7 @@ public class LoginActivity extends FatherActivity {
 
     @Override
     protected void initView() {
-        if(!TextUtils.isEmpty(SharedPreferenceUtils.getInstance().getUserName())){
+        if (!TextUtils.isEmpty(SharedPreferenceUtils.getInstance().getUserName())) {
             edUsername.setText(SharedPreferenceUtils.getInstance().getUserName());
         }
 
@@ -84,11 +84,10 @@ public class LoginActivity extends FatherActivity {
             WWToast.showShort("密码不能为空");
             return;
         }
-
+        showWaitDialog();
         RequestParams params = new RequestParams(Api.UserLogin());
         params.addBodyParameter("userName", username);
         params.addBodyParameter("userPsd", psw);
-        showWaitDialog();
         x.http().get(params,
                 new WWXCallBack("UserLogin") {
 

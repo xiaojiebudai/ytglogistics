@@ -116,5 +116,8 @@ public class Api {
 	public static final String PlaceOper() {
 		return ONLINE + "PlaceOper";
 	}
+	public static final String QueryOrder() {
+		return ONLINE + "QueryOrder";
+	}
 
 }

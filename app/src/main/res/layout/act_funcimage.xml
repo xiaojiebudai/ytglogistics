@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <include layout="@layout/head_operation" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:gravity="center"
+            android:text="存放目录：" />
+
+        <EditText
+            android:id="@+id/et_no"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/bg_yellow_white_shape"
+            android:gravity="center_vertical"
+            android:textColorHint="@color/text_c1"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <View
+        style="@style/cutline_fine"
+        android:layout_marginTop="5dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="文件名"
+            android:textColor="@color/text_f7"
+            android:textSize="12sp"
+        />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="状态"
+            android:textColor="@color/text_f7"
+            android:textSize="12sp"
+        />
+
+    </LinearLayout>
+
+    <View style="@style/cutline_fine" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/lv_data"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="0dp"></android.support.v7.widget.RecyclerView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:gravity="center"
+            android:text="修改文件名：" />
+
+        <EditText
+            android:id="@+id/tv_newfilename"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/bg_yellow_white_shape"
+            android:gravity="center_vertical"
+            android:paddingRight="5dp"
+            android:textColorHint="@color/text_c1"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_operate"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp">
+
+        <TextView
+            android:id="@+id/tv_select"
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_weight="1"
+            android:background="@color/top_title_bg"
+            android:gravity="center"
+            android:text="选择照片"
+            android:textColor="@color/white" />
+
+
+        <TextView
+            android:id="@+id/tv_takephoto"
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"
+            android:background="@color/top_title_bg"
+            android:gravity="center"
+            android:text="拍照"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:id="@+id/tv_del"
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"
+            android:background="@color/top_title_bg"
+            android:gravity="center"
+            android:text="删除"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:id="@+id/tv_commit"
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"
+            android:background="@color/top_title_bg"
+            android:gravity="center"
+            android:text="提交"
+            android:textColor="@color/white" />
+    </LinearLayout>
+</LinearLayout>

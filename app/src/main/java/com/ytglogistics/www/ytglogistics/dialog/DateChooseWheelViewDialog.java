@@ -436,7 +436,7 @@ public class DateChooseWheelViewDialog extends Dialog implements View.OnClickLis
             case R.id.sure_btn://确定选择按钮监听
                 if (mBlnTimePickerGone) {
                     //暂时无用
-//                    dateChooseInterface.getDateTime(strTimeToDateFormat(mYearStr, mDateStr), mBlnBeLongTerm);
+                    dateChooseInterface.getDateTime(strTimeToDateFormat(mYearStr, mDateStr), mBlnBeLongTerm);
                 } else {
                     dateChooseInterface.getDateTime(strTimeToDateFormat(mYearStr, mDateStr, mHourStr, mMinuteStr), mBlnBeLongTerm);
                 }
@@ -524,8 +524,9 @@ public class DateChooseWheelViewDialog extends Dialog implements View.OnClickLis
         return Long.parseLong(TimeUtil.dataOne(s));
     }
 
-    private String strTimeToDateFormat(String yearStr, String dateStr) {
-        return yearStr.replace("年", "-") + dateStr.replace("月", "-").replace("日", "");
+    private long strTimeToDateFormat(String yearStr, String dateStr) {
+        String s = yearStr.replace("年", "-") + dateStr.replace("月", "-").replace("日", "-") + "1" + "-" + "1"+ "-00";
+        return Long.parseLong(TimeUtil.dataOne(s));
     }
 
     /**

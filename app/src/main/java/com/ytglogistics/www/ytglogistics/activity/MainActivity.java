@@ -92,14 +92,16 @@ public class MainActivity extends FatherActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.receiving:
+                startActivity(new Intent(this, FunInActivity.class).putExtra(Consts.KEY_MODULE, FunInActivity.INOPERATE));
                 break;
             case R.id.shipping:
+                startActivity(new Intent(this, FunOutActivity.class).putExtra(Consts.KEY_MODULE, FunOutActivity.OUTOPERATE));
                 break;
             case R.id.warehousing:
-                startActivity(new Intent(this, FunInActivity.class));
+                startActivity(new Intent(this, FunInActivity.class).putExtra(Consts.KEY_MODULE, FunInActivity.INEDIT));
                 break;
             case R.id.outofstorage:
-                startActivity(new Intent(this, FunOutActivity.class));
+                startActivity(new Intent(this, FunOutActivity.class).putExtra(Consts.KEY_MODULE, FunOutActivity.OUTEDIT));
                 break;
             case R.id.garage_m:
                 startActivity(new Intent(this, FuncPlaceActivity.class));
@@ -108,10 +110,13 @@ public class MainActivity extends FatherActivity {
                 startActivity(new Intent(this, MoveLocaActivity.class));
                 break;
             case R.id.housing_reservation_query:
+                startActivity(new Intent(this, FuncQueryActivity.class).putExtra(Consts.KEY_MODULE, FuncQueryActivity.INYUYUE));
                 break;
             case R.id.outofstorage_query:
+                startActivity(new Intent(this, FuncQueryActivity.class).putExtra(Consts.KEY_MODULE, FuncQueryActivity.OUTYUYUE));
                 break;
             case R.id.locale_photos:
+                startActivity(new Intent(this, FuncImageActivity.class));
                 break;
             case R.id.housing_reservation_po_query:
                 startActivity(new Intent(this, PoSearchListActivity.class));
@@ -136,6 +141,7 @@ public class MainActivity extends FatherActivity {
     }
 
     private void getUserIngo() {
+        showWaitDialog();
         x.http().get(ParamsUtils.getSessionParams(Api.GetMyInfo()), new WWXCallBack("GetMyInfo") {
             @Override
             public void onAfterSuccessOk(JSONObject data) {
@@ -144,7 +150,7 @@ public class MainActivity extends FatherActivity {
 
             @Override
             public void onAfterFinished() {
-
+                dismissWaitDialog();
             }
         });
     }

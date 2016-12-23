@@ -45,6 +45,7 @@ public class PoSearchListActivity extends FatherActivity {
     RecyclerView lvData;
     private ArrayList<PoSearch> poSearches;
     private BaseRecyclerAdapter mAdapter;
+
     @Override
     protected int getLayoutId() {
         return R.layout.act_posearch;
@@ -65,7 +66,7 @@ public class PoSearchListActivity extends FatherActivity {
                 helper.setText(R.id.tv_so, item.SoNo);
                 helper.setText(R.id.tv_po, item.Skn);
                 helper.setText(R.id.tv_skn, item.Loca);
-                helper.setText(R.id.tv_state, item.Usablequan+"");
+                helper.setText(R.id.tv_state, item.Usablequan + "");
             }
         };
         mAdapter.setSelectedColor(R.color.text_selected_white_gray);
@@ -74,11 +75,13 @@ public class PoSearchListActivity extends FatherActivity {
         lvData.setItemAnimator(new DefaultItemAnimator());
         lvData.setAdapter(mAdapter);
     }
+
     private String getTime(String timeInfo) {
         String s = timeInfo.replace("/Date(", "").replace(")/", "");
         long s1 = Long.parseLong(s.substring(0, s.indexOf("+")));
         return TimeUtil.getOnlyDateToS(s1);
     }
+
     @Override
     protected void doOperate() {
 
@@ -98,6 +101,7 @@ public class PoSearchListActivity extends FatherActivity {
             WWToast.showShort("请输入PO查询");
             return;
         }
+        showWaitDialog();
         RequestParams params = ParamsUtils.getSessionParams(Api.PoQuery());
         params.addBodyParameter("po", carno);
         x.http().get(params, new WWXCallBack("PoQuery") {
@@ -108,9 +112,10 @@ public class PoSearchListActivity extends FatherActivity {
                         jsonArray.toJSONString(), PoSearch.class);
                 mAdapter.setData(poSearches);
             }
+
             @Override
             public void onAfterFinished() {
-
+                dismissWaitDialog();
             }
         });
     }

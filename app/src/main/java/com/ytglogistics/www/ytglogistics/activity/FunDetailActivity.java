@@ -91,9 +91,10 @@ public class FunDetailActivity extends FatherActivity {
 
     private AppInResult result;
     private Car car;
-    public static final int FUNIN=0;
-    public static final int FUNOUT=1;
-    private int model=0;
+    public static final int FUNIN = 0;
+    public static final int FUNOUT = 1;
+    private int model = 0;
+
     @Override
     protected int getLayoutId() {
         return R.layout.act_fundetail;
@@ -101,32 +102,33 @@ public class FunDetailActivity extends FatherActivity {
 
     @Override
     protected void initValues() {
-        model=getIntent().getIntExtra(Consts.KEY_MODULE,FUNIN);
+        model = getIntent().getIntExtra(Consts.KEY_MODULE, FUNIN);
         initDefautHead("详情", true);
-        car=JSONObject.parseObject(getIntent().getStringExtra(Consts.KEY_DATA),Car.class);
+        car = JSONObject.parseObject(getIntent().getStringExtra(Consts.KEY_DATA), Car.class);
     }
 
     @Override
     protected void initView() {
-if(model==FUNIN){
-    tvSave.setText("保存");
-    tvGet.setText("收货");
-}else{
-    tvSave.setText("提交资料");
-    tvGet.setText("出货录入");
-}
+        if (model == FUNIN) {
+            tvSave.setText("保存");
+            tvGet.setText("收货");
+        } else {
+            tvSave.setText("提交资料");
+            tvGet.setText("出货录入");
+        }
     }
 
     @Override
     protected void doOperate() {
-        RequestParams params = ParamsUtils.getSessionParams((model==FUNIN)?Api.GetAppIn():Api.GetAppOut());
-        if(model==FUNIN){
+        showWaitDialog();
+        RequestParams params = ParamsUtils.getSessionParams((model == FUNIN) ? Api.GetAppIn() : Api.GetAppOut());
+        if (model == FUNIN) {
             params.addBodyParameter("queueNo", car.YyNo);
-        }else{
+        } else {
             params.addBodyParameter("orderId", car.OrderId);
         }
 
-        x.http().get(params, new WWXCallBack((model==FUNIN)?"GetAppIn":"GetAppOut") {
+        x.http().get(params, new WWXCallBack((model == FUNIN) ? "GetAppIn" : "GetAppOut") {
             @Override
             public void onAfterSuccessOk(JSONObject data) {
                 result = JSON.parseObject(data.getString("Data"), AppInResult.class);
@@ -140,7 +142,7 @@ if(model==FUNIN){
 
             @Override
             public void onAfterFinished() {
-
+                dismissWaitDialog();
             }
         });
 
@@ -170,8 +172,8 @@ if(model==FUNIN){
                     startDateChooseDialog = new DateChooseWheelViewDialog(FunDetailActivity.this, new DateChooseWheelViewDialog.DateChooseInterface() {
                         @Override
                         public void getDateTime(long time, boolean longTimeChecked) {
-                            et2.setText(TimeUtil.getTimeToS(time*1000));
-                            result.JdTime=time;
+                            et2.setText(TimeUtil.getTimeToS(time * 1000));
+                            result.JdTime = time;
                         }
                     });
                     startDateChooseDialog.setDateDialogTitle("接单时间");
@@ -184,8 +186,8 @@ if(model==FUNIN){
                     startDateChooseDialog1 = new DateChooseWheelViewDialog(FunDetailActivity.this, new DateChooseWheelViewDialog.DateChooseInterface() {
                         @Override
                         public void getDateTime(long time, boolean longTimeChecked) {
-                            et3.setText(TimeUtil.getTimeToS(time*1000));
-                            result.PdTime=time;
+                            et3.setText(TimeUtil.getTimeToS(time * 1000));
+                            result.PdTime = time;
                         }
                     });
                     startDateChooseDialog1.setDateDialogTitle("派单时间");
@@ -197,8 +199,8 @@ if(model==FUNIN){
                     startDateChooseDialog2 = new DateChooseWheelViewDialog(FunDetailActivity.this, new DateChooseWheelViewDialog.DateChooseInterface() {
                         @Override
                         public void getDateTime(long time, boolean longTimeChecked) {
-                            et4.setText(TimeUtil.getTimeToS(time*1000));
-                            result.BeginTime=time;
+                            et4.setText(TimeUtil.getTimeToS(time * 1000));
+                            result.BeginTime = time;
                         }
                     });
                     startDateChooseDialog2.setDateDialogTitle("开始时间");
@@ -210,8 +212,8 @@ if(model==FUNIN){
                     startDateChooseDialog3 = new DateChooseWheelViewDialog(FunDetailActivity.this, new DateChooseWheelViewDialog.DateChooseInterface() {
                         @Override
                         public void getDateTime(long time, boolean longTimeChecked) {
-                            et5.setText(TimeUtil.getTimeToS(time*1000));
-                            result.EndTime=time;
+                            et5.setText(TimeUtil.getTimeToS(time * 1000));
+                            result.EndTime = time;
                         }
                     });
                     startDateChooseDialog3.setDateDialogTitle("结束时间");
@@ -222,7 +224,7 @@ if(model==FUNIN){
                 saveInfo();
                 break;
             case R.id.tv_get:
-                Intent intent = new Intent(FunDetailActivity.this,(model==FUNIN)? FunInMaxListActivity.class:FunOutMxListActivity.class);
+                Intent intent = new Intent(FunDetailActivity.this, (model == FUNIN) ? FunInMaxListActivity.class : FunOutMxListActivity.class);
                 intent.putExtra(Consts.KEY_DATA, JSON.toJSONString(result));
                 startActivity(intent);
                 break;
@@ -230,29 +232,30 @@ if(model==FUNIN){
     }
 
     private void saveInfo() {
-
-        JSONObject jsonObject=new JSONObject();
+        showWaitDialog();
+        JSONObject jsonObject = new JSONObject();
         jsonObject.put(Consts.KEY_SESSIONID, MyApplication
                 .getInstance().getSessionId());
-        jsonObject.put("obj",result.toJson());
-        x.http().post(ParamsUtils.getPostJsonParams(jsonObject,Api.AppInCommit()), new WWXCallBack("AppInCommit") {
+        jsonObject.put("obj", result.toJson());
+        x.http().post(ParamsUtils.getPostJsonParams(jsonObject, Api.AppInCommit()), new WWXCallBack("AppInCommit") {
             @Override
             public void onAfterSuccessOk(JSONObject data) {
-                    result.Serial=data.getString("Data");
+                result.Serial = data.getString("Data");
 
-               WWToast.showShort("提交成功");
+                WWToast.showShort("提交成功");
                 tvSave.setClickable(false);
             }
 
             @Override
             public void onAfterFinished() {
-
+                dismissWaitDialog();
             }
         });
     }
 
 
     private void getStevedData() {
+        showWaitDialog();
         RequestParams params = ParamsUtils.getSessionParams(Api.GetSteved());
         x.http().get(params, new WWXCallBack("GetSteved") {
             @Override
@@ -262,7 +265,7 @@ if(model==FUNIN){
                         jsonArray.toJSONString(), Steved.class);
                 if (stevedList != null && stevedList.size() > 0) {
                     for (int i = 0; i < stevedList.size(); i++) {
-                        if(stevedList.get(i).Keyid.equals(result.StevedId)){
+                        if (stevedList.get(i).Keyid.equals(result.StevedId)) {
                             et0.setText(stevedList.get(i).Stevedoringcompanyname);
                             break;
                         }
@@ -273,12 +276,13 @@ if(model==FUNIN){
 
             @Override
             public void onAfterFinished() {
-
+                dismissWaitDialog();
             }
         });
     }
 
     private void getUserData() {
+        showWaitDialog();
         RequestParams params = ParamsUtils.getSessionParams(Api.GetUsers());
         x.http().get(params, new WWXCallBack("GetUsers") {
             @Override
@@ -288,7 +292,7 @@ if(model==FUNIN){
                         jsonArray.toJSONString(), User.class);
                 if (userList != null && userList.size() > 0) {
                     for (int i = 0; i < userList.size(); i++) {
-                        if(userList.get(i).Keyid.equals(result.UserId)){
+                        if (userList.get(i).Keyid.equals(result.UserId)) {
                             et1.setText(userList.get(i).Usercode);
                             break;
                         }
@@ -298,7 +302,7 @@ if(model==FUNIN){
 
             @Override
             public void onAfterFinished() {
-
+                dismissWaitDialog();
             }
         });
     }
@@ -329,8 +333,8 @@ if(model==FUNIN){
                                         int position, long id) {
                     adapter.setSelectPostion(position);
                     et0.setText(stevedList.get(position).Stevedoringcompanyname);
-                    result.StevedId=stevedList.get(position).Keyid;
-                    result.StevedName=stevedList.get(position).Stevedoringcompanyname;
+                    result.StevedId = stevedList.get(position).Keyid;
+                    result.StevedName = stevedList.get(position).Stevedoringcompanyname;
                     popupWindow.dismiss();
                 }
             });
@@ -364,8 +368,8 @@ if(model==FUNIN){
                                         int position, long id) {
                     adapter.setSelectPostion(position);
                     et1.setText(userList.get(position).Usercode);
-                    result.UserId=userList.get(position).Keyid;
-                    result.UserCode=userList.get(position).Usercode;
+                    result.UserId = userList.get(position).Keyid;
+                    result.UserCode = userList.get(position).Usercode;
                     popupWindowUser.dismiss();
                 }
             });

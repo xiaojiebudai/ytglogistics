@@ -47,6 +47,9 @@ public class FunOutActivity extends FatherActivity {
     @BindView(R.id.tv_2)
     TextView tv2;
     private FunInAdapter funInAdapter;
+    public static final int OUTOPERATE = 0;
+    public static final int OUTEDIT = 1;
+    private int model = 0;
 
     @Override
     protected int getLayoutId() {
@@ -55,7 +58,13 @@ public class FunOutActivity extends FatherActivity {
 
     @Override
     protected void initValues() {
-        initDefautHead("出仓修改", true);
+
+        model = getIntent().getIntExtra(Consts.KEY_MODULE, OUTOPERATE);
+        if (model == OUTOPERATE) {
+            initDefautHead("出货操作", true);
+        } else {
+            initDefautHead("出仓修改", true);
+        }
         initTextHeadRigth(R.string.fresh, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,7 +81,7 @@ public class FunOutActivity extends FatherActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(FunOutActivity.this, FunDetailActivity.class);
-                intent.putExtra(Consts.KEY_MODULE,FunDetailActivity.FUNOUT);
+                intent.putExtra(Consts.KEY_MODULE, FunDetailActivity.FUNOUT);
                 intent.putExtra(Consts.KEY_DATA, JSONObject.toJSONString(funInAdapter.getData().get(position)));
                 startActivity(intent);
             }
@@ -91,9 +100,10 @@ public class FunOutActivity extends FatherActivity {
     }
 
     private void getListData() {
+        showWaitDialog();
         String carno = etNo.getText().toString().trim();
         RequestParams params = ParamsUtils.getSessionParams(Api.GetOutQueue());
-        params.addBodyParameter("status", 4 + "");
+        params.addBodyParameter("status", model == OUTEDIT ? "4" : "1");
         params.addBodyParameter("clp", carno);
         x.http().get(params, new WWXCallBack("GetOutQueue") {
             @Override
@@ -109,7 +119,7 @@ public class FunOutActivity extends FatherActivity {
 
             @Override
             public void onAfterFinished() {
-
+                dismissWaitDialog();
             }
         });
     }

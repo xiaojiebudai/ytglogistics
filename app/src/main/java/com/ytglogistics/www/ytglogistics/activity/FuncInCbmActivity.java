@@ -84,6 +84,7 @@ public class FuncInCbmActivity extends FatherActivity {
     }
 
     private void getListData() {
+        showWaitDialog();
         RequestParams params = ParamsUtils.getSessionParams(Api.GetAppMxCbmById());
         params.addBodyParameter("serial", Serial);
         x.http().get(params, new WWXCallBack("GetAppMxCbmById") {
@@ -103,7 +104,7 @@ public class FuncInCbmActivity extends FatherActivity {
 
             @Override
             public void onAfterFinished() {
-
+                dismissWaitDialog();
             }
         });
     }
@@ -151,7 +152,6 @@ public class FuncInCbmActivity extends FatherActivity {
             public void afterTextChanged(Editable s) {
                 if (!TextUtils.isEmpty(s)) {
                     if (selectPosition == -1) {
-                        WWToast.showShort("请先选择一条记录");
                     } else {
                         ((DataCbm) mAdapter.getItem(selectPosition)).Ctnno = Double.valueOf(s + "");
                     }
@@ -175,7 +175,6 @@ public class FuncInCbmActivity extends FatherActivity {
             public void afterTextChanged(Editable s) {
                 if (!TextUtils.isEmpty(s)) {
                     if (selectPosition == -1) {
-                        WWToast.showShort("请先选择一条记录");
                     } else {
                         ((DataCbm) mAdapter.getItem(selectPosition)).Leng = Double.valueOf(s + "");
                     }
@@ -198,7 +197,6 @@ public class FuncInCbmActivity extends FatherActivity {
             public void afterTextChanged(Editable s) {
                 if (!TextUtils.isEmpty(s)) {
                     if (selectPosition == -1) {
-                        WWToast.showShort("请先选择一条记录");
                     } else {
                         ((DataCbm) mAdapter.getItem(selectPosition)).Wide = Double.valueOf(s + "");
                     }
@@ -221,7 +219,6 @@ public class FuncInCbmActivity extends FatherActivity {
             public void afterTextChanged(Editable s) {
                 if (!TextUtils.isEmpty(s)) {
                     if (selectPosition == -1) {
-                        WWToast.showShort("请先选择一条记录");
                     } else {
                         ((DataCbm) mAdapter.getItem(selectPosition)).High = Double.valueOf(s + "");
                     }
@@ -244,7 +241,6 @@ public class FuncInCbmActivity extends FatherActivity {
             public void afterTextChanged(Editable s) {
                 if (!TextUtils.isEmpty(s)) {
                     if (selectPosition == -1) {
-                        WWToast.showShort("请先选择一条记录");
                     } else {
                         ((DataCbm) mAdapter.getItem(selectPosition)).Unitwei = Double.valueOf(s + "");
                     }

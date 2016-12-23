@@ -81,6 +81,7 @@ public class FuncPlaceActivity extends FatherActivity {
     }
 
     private void getAllData() {
+        showWaitDialog();
         RequestParams params = ParamsUtils.getSessionParams(Api.GetAllQueues());
         x.http().get(params, new WWXCallBack("GetAllQueues") {
             @Override
@@ -92,12 +93,13 @@ public class FuncPlaceActivity extends FatherActivity {
 
             @Override
             public void onAfterFinished() {
-
+                dismissWaitDialog();
             }
         });
     }
 
     private void getAllPlace() {
+        showWaitDialog();
         RequestParams params = ParamsUtils.getSessionParams(Api.AllPlaces());
         params.addBodyParameter("bz", 0 + "");
         x.http().get(params, new WWXCallBack("AllPlaces") {
@@ -110,7 +112,7 @@ public class FuncPlaceActivity extends FatherActivity {
 
             @Override
             public void onAfterFinished() {
-
+                dismissWaitDialog();
             }
         });
     }
@@ -123,7 +125,6 @@ public class FuncPlaceActivity extends FatherActivity {
     private void seletePlace() {
         if (popupWindow == null) {
             RecyclerView listView = new RecyclerView(this);
-            listView.setBackgroundResource(R.drawable.bg_yellow_white_shape);
             final BaseRecyclerAdapter mAdapter = new BaseRecyclerAdapter<Place>(this, places, R.layout.list_text_item) {
                 @Override
                 protected void convert(BaseViewHolder helper, Place item) {
@@ -161,6 +162,7 @@ public class FuncPlaceActivity extends FatherActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_search:
+                hideSoftKeyboard();
                 String carno = etNo.getText().toString().trim();
                 if (TextUtils.isEmpty(carno)) {
                     WWToast.showShort("请输入所要查询的车牌或者CLP号");
@@ -181,22 +183,23 @@ public class FuncPlaceActivity extends FatherActivity {
                 }
                 break;
             case R.id.tv_change:
-                if(dataYySelect==null){
+                hideSoftKeyboard();
+                if (dataYySelect == null) {
                     WWToast.showShort("请选择需要变更的车牌");
                     return;
                 }
-                if(placeSelect==null){
+                if (placeSelect == null) {
                     WWToast.showShort("请选择需要变更到哪个泊位");
                     return;
                 }
-                if(dataYySelect.PlaceId.equals(placeSelect.PlaceId)){
+                if (dataYySelect.PlaceId.equals(placeSelect.PlaceId)) {
                     WWToast.showShort("新泊位与原泊位不能相同，请重新选择");
                     return;
                 }
-
+                showWaitDialog();
                 RequestParams params = ParamsUtils.getSessionParams(Api.AllPlaces());
-                params.addBodyParameter("queueNo",dataYySelect.QueueNo);
-                params.addBodyParameter("oldPlace",dataYySelect.PlaceId);
+                params.addBodyParameter("queueNo", dataYySelect.QueueNo);
+                params.addBodyParameter("oldPlace", dataYySelect.PlaceId);
                 params.addBodyParameter("newPlace", placeSelect.PlaceId);
                 x.http().get(params, new WWXCallBack("AllPlaces") {
                     @Override
@@ -207,7 +210,7 @@ public class FuncPlaceActivity extends FatherActivity {
 
                     @Override
                     public void onAfterFinished() {
-
+                        dismissWaitDialog();
                     }
                 });
 

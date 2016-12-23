@@ -45,6 +45,7 @@ public class FunOutMxListActivity extends FatherActivity {
     private AppInResult result;
     private ArrayList<AppInMax> appInMaxes;
     private BaseRecyclerAdapter mAdapter;
+
     @Override
     protected int getLayoutId() {
         return R.layout.act_funoutmaxlist;
@@ -62,7 +63,7 @@ public class FunOutMxListActivity extends FatherActivity {
         mAdapter = new BaseRecyclerAdapter<AppInMax>(this, appInMaxes, R.layout.list_funoutmax_item) {
             @Override
             protected void convert(BaseViewHolder helper, AppInMax item) {
-                helper.setText(R.id.tv_xuhao, item.OutItem+"");
+                helper.setText(R.id.tv_xuhao, item.OutItem + "");
                 helper.setText(R.id.tv_so, item.So);
                 helper.setText(R.id.tv_po, item.Po);
                 helper.setText(R.id.tv_skn, item.Skn);
@@ -89,6 +90,7 @@ public class FunOutMxListActivity extends FatherActivity {
     }
 
     private void getOutMaxData() {
+        showWaitDialog();
         RequestParams params = ParamsUtils.getSessionParams(Api.GetAppOutMx());
         params.addBodyParameter("serial", result.Serial);
         params.addBodyParameter("clp", result.Clp);
@@ -103,7 +105,7 @@ public class FunOutMxListActivity extends FatherActivity {
 
             @Override
             public void onAfterFinished() {
-
+                dismissWaitDialog();
             }
         });
     }

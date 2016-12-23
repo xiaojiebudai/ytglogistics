@@ -47,6 +47,10 @@ public class FunInActivity extends FatherActivity {
     @BindView(R.id.lv_data)
     ListView lvData;
     private FunInAdapter funInAdapter;
+    public static final int INOPERATE = 0;
+    public static final int INEDIT = 1;
+    private int model = 0;
+
     @Override
     protected int getLayoutId() {
         return R.layout.act_funinlist;
@@ -54,7 +58,13 @@ public class FunInActivity extends FatherActivity {
 
     @Override
     protected void initValues() {
-        initDefautHead("入仓修改", true);
+        model = getIntent().getIntExtra(Consts.KEY_MODULE, INOPERATE);
+        if (model == INOPERATE) {
+            initDefautHead("收货操作", true);
+        } else {
+            initDefautHead("入仓修改", true);
+        }
+
         initTextHeadRigth(R.string.fresh, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,14 +75,14 @@ public class FunInActivity extends FatherActivity {
 
     @Override
     protected void initView() {
-        funInAdapter=new FunInAdapter(this,FunInAdapter.FUNIN);
+        funInAdapter = new FunInAdapter(this, FunInAdapter.FUNIN);
         lvData.setAdapter(funInAdapter);
         lvData.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent=new Intent(FunInActivity.this,FunDetailActivity.class);
-                intent.putExtra(Consts.KEY_MODULE,FunDetailActivity.FUNIN);
-                intent.putExtra(Consts.KEY_DATA,JSONObject.toJSONString(funInAdapter.getData().get(position)));
+                Intent intent = new Intent(FunInActivity.this, FunDetailActivity.class);
+                intent.putExtra(Consts.KEY_MODULE, FunDetailActivity.FUNIN);
+                intent.putExtra(Consts.KEY_DATA, JSONObject.toJSONString(funInAdapter.getData().get(position)));
                 startActivity(intent);
             }
         });
@@ -82,6 +92,7 @@ public class FunInActivity extends FatherActivity {
     protected void doOperate() {
 
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -89,11 +100,12 @@ public class FunInActivity extends FatherActivity {
     }
 
     private void getListData() {
-        String carno=etNo.getText().toString().trim();
-        RequestParams params= ParamsUtils.getSessionParams(Api.GetQueues());
-        params.addBodyParameter("direct",0+"");
-        params.addBodyParameter("status",2+"");
-        params.addBodyParameter("carno",carno);
+        showWaitDialog();
+        String carno = etNo.getText().toString().trim();
+        RequestParams params = ParamsUtils.getSessionParams(Api.GetQueues());
+        params.addBodyParameter("direct", 0 + "");
+        params.addBodyParameter("status", model == INEDIT ? "2" : "0");
+        params.addBodyParameter("carno", carno);
         x.http().get(params, new WWXCallBack("GetQueues") {
             @Override
             public void onAfterSuccessOk(JSONObject data) {
@@ -105,9 +117,10 @@ public class FunInActivity extends FatherActivity {
                 tv1.setText(data.getString("FpCount"));
                 tv2.setText(data.getString("WcCount"));
             }
+
             @Override
             public void onAfterFinished() {
-
+                dismissWaitDialog();
             }
         });
     }

@@ -385,14 +385,14 @@ public class FileUtils {
 					.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 			String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
 					Locale.CHINA).format(new Date());
-			String fileName = "jsh88_" + timeStamp + "";
+			String fileName = "Img_" + timeStamp + "";
 			File tmpFile = new File(pic, fileName + ".jpg");
 			return tmpFile;
 		} else {
 			File cacheDir = context.getCacheDir();
 			String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
 					Locale.CHINA).format(new Date());
-			String fileName = "szhysy_" + timeStamp + "";
+			String fileName = "Img_" + timeStamp + "";
 			File tmpFile = new File(cacheDir, fileName + ".jpg");
 			return tmpFile;
 		}

@@ -293,6 +293,7 @@ public class FunInMaxListActivity extends FatherActivity {
     }
 
     private void getInMaxData() {
+        showWaitDialog();
         RequestParams params = ParamsUtils.getSessionParams(Api.GetAppInMx());
         params.addBodyParameter("serial", result.Serial);
         params.addBodyParameter("queueNo", result.QueueNo);
@@ -307,7 +308,7 @@ public class FunInMaxListActivity extends FatherActivity {
 
             @Override
             public void onAfterFinished() {
-
+                dismissWaitDialog();
             }
         });
 
@@ -403,6 +404,7 @@ public class FunInMaxListActivity extends FatherActivity {
     }
 
     private void allInfoCommit() {
+        showWaitDialog();
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Consts.KEY_SESSIONID, MyApplication
                 .getInstance().getSessionId());
@@ -457,12 +459,13 @@ public class FunInMaxListActivity extends FatherActivity {
 
             @Override
             public void onAfterFinished() {
-
+                dismissWaitDialog();
             }
         });
     }
 
     private void getPrintData() {
+        showWaitDialog();
         RequestParams params = ParamsUtils.getSessionParams(Api.PdaPallet());
         params.addBodyParameter("rowId", inMax.RowId + "");
         x.http().get(params, new WWXCallBack("PdaPallet") {
@@ -482,7 +485,7 @@ public class FunInMaxListActivity extends FatherActivity {
 
             @Override
             public void onAfterFinished() {
-
+                dismissWaitDialog();
             }
         });
     }

@@ -108,15 +108,17 @@ public class MoveLocaActivity extends FatherActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.tv_search,R.id.tv_change})
+    @OnClick({R.id.tv_search, R.id.tv_change})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_search:
+                hideSoftKeyboard();
                 String carno = etNo.getText().toString().trim();
                 if (TextUtils.isEmpty(carno)) {
                     WWToast.showShort("请输入SO Num查询");
                     return;
                 }
+                showWaitDialog();
                 RequestParams params = ParamsUtils.getSessionParams(Api.GetRecSoIts());
                 params.addBodyParameter("sono", carno);
                 x.http().get(params, new WWXCallBack("GetRecSoIts") {
@@ -127,15 +129,17 @@ public class MoveLocaActivity extends FatherActivity {
                                 jsonArray.toJSONString(), DataSolt.class);
                         mAdapter.setData(dataSolts);
                     }
+
                     @Override
                     public void onAfterFinished() {
-
+                        dismissWaitDialog();
                     }
                 });
                 break;
             case R.id.tv_change:
+                hideSoftKeyboard();
                 String newplaceId = tvNewplaceId.getText().toString().trim();
-                if (dataSolt==null) {
+                if (dataSolt == null) {
                     WWToast.showShort("请选择要修改的入仓记录");
                     return;
                 }
@@ -143,6 +147,7 @@ public class MoveLocaActivity extends FatherActivity {
                     WWToast.showShort("请输入新的仓位");
                     return;
                 }
+                showWaitDialog();
                 RequestParams params1 = ParamsUtils.getSessionParams(Api.ChangeSoLoca());
                 params1.addBodyParameter("newloca", dataSolt.Keyid);
                 params1.addBodyParameter("keyId", newplaceId);
@@ -156,9 +161,10 @@ public class MoveLocaActivity extends FatherActivity {
                         tvOldloca.setText("");
                         tvNewplaceId.setText("");
                     }
+
                     @Override
                     public void onAfterFinished() {
-
+                        dismissWaitDialog();
                     }
                 });
                 break;

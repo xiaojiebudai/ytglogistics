@@ -105,10 +105,10 @@ public class FuncPlaceStatusActivity extends FatherActivity {
     protected void onResume() {
         super.onResume();
         getList();
-
     }
 
     private void getList() {
+        showWaitDialog();
         RequestParams params = ParamsUtils.getSessionParams(Api.PlaceStatus());
         x.http().get(params, new WWXCallBack("PlaceStatus") {
             @Override
@@ -121,7 +121,7 @@ public class FuncPlaceStatusActivity extends FatherActivity {
 
             @Override
             public void onAfterFinished() {
-
+                dismissWaitDialog();
             }
         });
     }

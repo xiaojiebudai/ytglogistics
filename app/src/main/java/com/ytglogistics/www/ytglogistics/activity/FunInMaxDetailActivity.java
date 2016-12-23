@@ -87,6 +87,7 @@ public class FunInMaxDetailActivity extends FatherActivity {
     private AppInMax inMax;
     private String Serial;
     private ArrayList<DataCbm> lsit = new ArrayList<DataCbm>();
+
     @Override
     protected int getLayoutId() {
         return R.layout.act_funinmaxdetail;
@@ -98,29 +99,30 @@ public class FunInMaxDetailActivity extends FatherActivity {
 
         context = (MyApplication) getApplicationContext();
         inMax = JSON.parseObject(getIntent().getStringExtra(Consts.KEY_DATA), AppInMax.class);
-        Serial=getIntent().getStringExtra("Serial");
+        Serial = getIntent().getStringExtra("Serial");
     }
 
     @Override
     protected void initView() {
-       tvPo.setText(inMax.Po);
-       tvSkn.setText(inMax.Skn);
-       tvNum.setText((int) inMax.Soquan+"");
-       tvPcs.setText(inMax.Format+"");
-       tvGeshu.setText((int)inMax.Ttlpcs+"");
-       tvCangwei.setText(inMax.Loca+"");
-       tvOneWeight.setText(inMax.Unitwei+"");
-       tvWeight.setText(inMax.Rweight+"");
-        tvLength.setText(inMax.Leng+"");
-        tvOneWigth.setText(inMax.Wide+"");
-       tvOneHeight.setText(inMax.High+"");
-       tvCbm.setText(inMax.Cbm+"");
-       tvBkcbm.setText(inMax.BookingCbm+"");
-       tvCbmrate.setText((inMax.CbmRate*100)+"%");
-        tvXiangbang.setText(inMax.PaperCtn+"");
+        tvPo.setText(inMax.Po);
+        tvSkn.setText(inMax.Skn);
+        tvNum.setText((int) inMax.Soquan + "");
+        tvPcs.setText(inMax.Format + "");
+        tvGeshu.setText((int) inMax.Ttlpcs + "");
+        tvCangwei.setText(inMax.Loca + "");
+        tvOneWeight.setText(inMax.Unitwei + "");
+        tvWeight.setText(inMax.Rweight + "");
+        tvLength.setText(inMax.Leng + "");
+        tvOneWigth.setText(inMax.Wide + "");
+        tvOneHeight.setText(inMax.High + "");
+        tvCbm.setText(inMax.Cbm + "");
+        tvBkcbm.setText(inMax.BookingCbm + "");
+        tvCbmrate.setText((inMax.CbmRate * 100) + "%");
+        tvXiangbang.setText(inMax.PaperCtn + "");
     }
 
     private void getPrintData() {
+        showWaitDialog();
         RequestParams params = ParamsUtils.getSessionParams(Api.PdaPallet());
         params.addBodyParameter("rowId", inMax.RowId + "");
         x.http().get(params, new WWXCallBack("PdaPallet") {
@@ -140,7 +142,7 @@ public class FunInMaxDetailActivity extends FatherActivity {
 
             @Override
             public void onAfterFinished() {
-
+                dismissWaitDialog();
             }
         });
     }
@@ -173,8 +175,8 @@ public class FunInMaxDetailActivity extends FatherActivity {
 
     private void QueryStatus() {
         //2:(0 状态正常，1 网络错误，2打印机缺纸，3脱机.4不存在打印对象未连接。5复位错误.6卡纸)
-      int sta=  context.getObject().CON_QueryStatus2(context.getState(),2);
-        switch(sta){
+        int sta = context.getObject().CON_QueryStatus2(context.getState(), 2);
+        switch (sta) {
             case 0:
                 WWToast.showShort("状态正常");
                 break;
@@ -201,26 +203,27 @@ public class FunInMaxDetailActivity extends FatherActivity {
 
     //打印数据
     private void printLabel(PrintInfo info) {
-        context.getObject().CPCL_PageStart(context.getState(),504, 680, 0, 1);
-        context.getObject().CPCL_SetBold(context.getState(),true);
+        context.getObject().CPCL_PageStart(context.getState(), 504, 680, 0, 1);
+        context.getObject().CPCL_SetBold(context.getState(), true);
         context.getObject().CPCL_AlignType(context.getState(), preDefiniation.AlignType.AT_CENTER.getValue());
         context.getObject().CPCL_Print1DBarcode(context.getState(), preDefiniation.BarcodeType.BT_CODEBAR.getValue(), 0, 40, 4, 3, 250, info.Palletid, "gb2312");
         context.getObject().CPCL_PrintString(context.getState(), 0, 310, 1, 1, 0, 24, info.Palletid, "gb2312");
-        context.getObject().CPCL_PrintString(context.getState(), 10, 380, 1, 1, 0, 24, "DATE: "+getPrintTime(info.CreateTime), "gb2312");
-        context.getObject().CPCL_PrintString(context.getState(), 10, 440, 1, 1, 0, 24, "SO NO: "+info.Sono, "gb2312");
-        context.getObject().CPCL_PrintString(context.getState(), 10, 500, 1, 1, 0, 24, "PO NO: "+((info.Po==null)?" ":info.Po), "gb2312");
-        context.getObject().CPCL_PrintString(context.getState(), 10, 560, 1,1, 0, 24, "ITEM NO: "+((info.Skn==null)?" ":info.Skn), "gb2312");
-        context.getObject().CPCL_PrintString(context.getState(), 10, 610, 1, 1, 0, 24, "QTY: "+ info.Pkgs+"/"+info.PaperCtn, "gb2312");
+        context.getObject().CPCL_PrintString(context.getState(), 10, 380, 1, 1, 0, 24, "DATE: " + getPrintTime(info.CreateTime), "gb2312");
+        context.getObject().CPCL_PrintString(context.getState(), 10, 440, 1, 1, 0, 24, "SO NO: " + info.Sono, "gb2312");
+        context.getObject().CPCL_PrintString(context.getState(), 10, 500, 1, 1, 0, 24, "PO NO: " + ((info.Po == null) ? " " : info.Po), "gb2312");
+        context.getObject().CPCL_PrintString(context.getState(), 10, 560, 1, 1, 0, 24, "ITEM NO: " + ((info.Skn == null) ? " " : info.Skn), "gb2312");
+        context.getObject().CPCL_PrintString(context.getState(), 10, 610, 1, 1, 0, 24, "QTY: " + info.Pkgs + "/" + info.PaperCtn, "gb2312");
         context.getObject().CON_PageEnd(context.getState(),
                 context.getPrintway());
 
     }
-private String getPrintTime(String timeInfo){
-String s=timeInfo.replace("/Date(","").replace(")/","");
-    long s1=Long.parseLong(s.substring(0,s.indexOf("+")));
+
+    private String getPrintTime(String timeInfo) {
+        String s = timeInfo.replace("/Date(", "").replace(")/", "");
+        long s1 = Long.parseLong(s.substring(0, s.indexOf("+")));
 //    long s2=  Long.parseLong(s.substring(s.indexOf("+")+1));
-return TimeUtil.getOnlyDateToS(s1);
-}
+        return TimeUtil.getOnlyDateToS(s1);
+    }
 
     @Override
     protected void doOperate() {
@@ -237,8 +240,8 @@ return TimeUtil.getOnlyDateToS(s1);
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode==RESULT_OK){
-            if(requestCode==888){
+        if (resultCode == RESULT_OK) {
+            if (requestCode == 888) {
                 lsit = (ArrayList<DataCbm>) JSON.parseArray(
                         data.getStringExtra(Consts.KEY_DATA), DataCbm.class);
             }
@@ -249,10 +252,10 @@ return TimeUtil.getOnlyDateToS(s1);
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_lh_input:
-                Intent intent=new Intent(this,FuncInCbmActivity.class);
-                intent.putExtra(Consts.KEY_DATA,JSON.toJSONString(inMax));
-                intent.putExtra("Serial",Serial);
-                startActivityForResult(intent,888);
+                Intent intent = new Intent(this, FuncInCbmActivity.class);
+                intent.putExtra(Consts.KEY_DATA, JSON.toJSONString(inMax));
+                intent.putExtra("Serial", Serial);
+                startActivityForResult(intent, 888);
                 break;
             case R.id.tv_conmit:
 
