@@ -119,5 +119,8 @@ public class Api {
 	public static final String QueryOrder() {
 		return ONLINE + "QueryOrder";
 	}
+	public static final String FinishOutQueue() {
+		return ONLINE + "FinishOutQueue";
+	}
 
 }

@@ -4,8 +4,11 @@
     android:layout_height="wrap_content"
     android:gravity="center"
     android:orientation="horizontal"
-    android:background="@color/white"
     android:paddingBottom="10dp"
+    android:clickable="true"
+    android:focusableInTouchMode="true"
+    android:focusable="true"
+    android:background="@drawable/selector_item_selected"
     android:paddingTop="10dp" >
 
     <TextView

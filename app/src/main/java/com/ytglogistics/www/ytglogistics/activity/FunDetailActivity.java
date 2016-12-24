@@ -1,23 +1,16 @@
 package com.ytglogistics.www.ytglogistics.activity;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.NumberPicker;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.TimePicker;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -27,29 +20,21 @@ import com.ytglogistics.www.ytglogistics.R;
 import com.ytglogistics.www.ytglogistics.adapter.StevedListSelectAdapter;
 import com.ytglogistics.www.ytglogistics.adapter.UserListSelectAdapter;
 import com.ytglogistics.www.ytglogistics.api.Api;
-import com.ytglogistics.www.ytglogistics.been.AppInMax;
 import com.ytglogistics.www.ytglogistics.been.AppInResult;
 import com.ytglogistics.www.ytglogistics.been.Car;
 import com.ytglogistics.www.ytglogistics.been.Steved;
 import com.ytglogistics.www.ytglogistics.been.User;
 import com.ytglogistics.www.ytglogistics.dialog.DateChooseWheelViewDialog;
-import com.ytglogistics.www.ytglogistics.dialog.InputDialog;
 import com.ytglogistics.www.ytglogistics.utils.Consts;
 import com.ytglogistics.www.ytglogistics.utils.ParamsUtils;
-import com.ytglogistics.www.ytglogistics.utils.RegexUtil;
-import com.ytglogistics.www.ytglogistics.utils.SharedPreferenceUtils;
 import com.ytglogistics.www.ytglogistics.utils.TimeUtil;
 import com.ytglogistics.www.ytglogistics.utils.WWToast;
-import com.ytglogistics.www.ytglogistics.utils.ZLog;
-import com.ytglogistics.www.ytglogistics.utils.preDefiniation;
 import com.ytglogistics.www.ytglogistics.xutils.WWXCallBack;
 
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -88,6 +73,8 @@ public class FunDetailActivity extends FatherActivity {
     TextView tvSave;
     @BindView(R.id.tv_get)
     TextView tvGet;
+    @BindView(R.id.tv_leave)
+    TextView tvLeave;
 
     private AppInResult result;
     private Car car;
@@ -112,9 +99,11 @@ public class FunDetailActivity extends FatherActivity {
         if (model == FUNIN) {
             tvSave.setText("保存");
             tvGet.setText("收货");
+            tvLeave.setVisibility(View.GONE);
         } else {
             tvSave.setText("提交资料");
             tvGet.setText("出货录入");
+            tvLeave.setVisibility(View.VISIBLE);
         }
     }
 
@@ -157,7 +146,7 @@ public class FunDetailActivity extends FatherActivity {
 
     private DateChooseWheelViewDialog startDateChooseDialog, startDateChooseDialog1, startDateChooseDialog2, startDateChooseDialog3;
 
-    @OnClick({R.id.ll_0, R.id.ll_1, R.id.ll_2, R.id.ll_3, R.id.ll_4, R.id.ll_5, R.id.tv_save, R.id.tv_get})
+    @OnClick({R.id.ll_0, R.id.ll_1, R.id.ll_2, R.id.ll_3, R.id.ll_4, R.id.ll_5, R.id.tv_save, R.id.tv_get,R.id.tv_leave})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ll_0:
@@ -227,6 +216,22 @@ public class FunDetailActivity extends FatherActivity {
                 Intent intent = new Intent(FunDetailActivity.this, (model == FUNIN) ? FunInMaxListActivity.class : FunOutMxListActivity.class);
                 intent.putExtra(Consts.KEY_DATA, JSON.toJSONString(result));
                 startActivity(intent);
+                break;
+            case R.id.tv_leave:
+                //车辆离开
+//                if(result.Soquan==)
+//                RequestParams params=ParamsUtils.getSessionParams(Api.FinishOutQueue());
+//                x.http().get(params, new WWXCallBack("FinishOutQueue") {
+//                    @Override
+//                    public void onAfterSuccessOk(JSONObject data) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onAfterFinished() {
+//
+//                    }
+//                })
                 break;
         }
     }
@@ -376,6 +381,4 @@ public class FunDetailActivity extends FatherActivity {
         }
         popupWindowUser.showAsDropDown(ll1);
     }
-
-
 }
