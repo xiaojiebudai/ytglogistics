@@ -91,5 +91,15 @@
             android:text="审核"
             android:textColor="@color/white" />
 
+        <TextView
+            android:id="@+id/tv_leave"
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"
+            android:background="@color/top_title_bg"
+            android:gravity="center"
+            android:text="车辆离开"
+            android:textColor="@color/white" />
     </LinearLayout>
 </LinearLayout>

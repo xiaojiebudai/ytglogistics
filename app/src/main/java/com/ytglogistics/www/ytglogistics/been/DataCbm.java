@@ -18,6 +18,7 @@ public class DataCbm {
     public double Wide;//宽
     public double High;//高
     public double Unitwei;//单重
+    public int Soquan;//箱数
     public JSONObject toJson() throws JSONException {
         JSONObject localItemObject = new JSONObject();
         localItemObject.put("Serial", Serial);
@@ -30,6 +31,7 @@ public class DataCbm {
         localItemObject.put("Wide", Wide);
         localItemObject.put("High", High);
         localItemObject.put("Unitwei", Unitwei);
+        localItemObject.put("Soquan", Soquan);
         return localItemObject;
     }
 

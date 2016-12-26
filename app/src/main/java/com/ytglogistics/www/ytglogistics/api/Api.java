@@ -63,6 +63,9 @@ public class Api {
 	public static final String GetAppInMx() {
 		return ONLINE + "GetAppInMx";
 	}
+	public static final String GetAppMxNumsById() {
+		return ONLINE + "GetAppMxNumsById";
+	}
 
 	/**
 	 * in收获  get
@@ -121,6 +124,12 @@ public class Api {
 	}
 	public static final String FinishOutQueue() {
 		return ONLINE + "FinishOutQueue";
+	}
+	public static final String AppOutMxCommit() {
+		return ONLINE + "AppOutMxCommit";
+	}
+	public static final String AppMxNumCommit() {
+		return ONLINE + "AppMxNumCommit";
 	}
 
 }

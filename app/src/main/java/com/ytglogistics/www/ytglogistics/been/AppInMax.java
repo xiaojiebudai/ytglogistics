@@ -25,6 +25,7 @@ public class AppInMax {
     public String Skn;
     public double BookingCbm;
     public double CbmRate;
+    public int OutCtn;
     public String OutKeyid;
     public int PaperCtn;
     public int OutItem;
@@ -52,6 +53,7 @@ public class AppInMax {
         localItemObject.put("PaperCtn", PaperCtn);
         localItemObject.put("OutItem", OutItem);
         localItemObject.put("QtyStatus", QtyStatus);
+        localItemObject.put("OutCtn", OutCtn);
         return localItemObject;
     }
 

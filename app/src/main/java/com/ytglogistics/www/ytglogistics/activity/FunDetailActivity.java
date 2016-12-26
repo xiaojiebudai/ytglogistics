@@ -73,8 +73,6 @@ public class FunDetailActivity extends FatherActivity {
     TextView tvSave;
     @BindView(R.id.tv_get)
     TextView tvGet;
-    @BindView(R.id.tv_leave)
-    TextView tvLeave;
 
     private AppInResult result;
     private Car car;
@@ -99,11 +97,9 @@ public class FunDetailActivity extends FatherActivity {
         if (model == FUNIN) {
             tvSave.setText("保存");
             tvGet.setText("收货");
-            tvLeave.setVisibility(View.GONE);
         } else {
             tvSave.setText("提交资料");
             tvGet.setText("出货录入");
-            tvLeave.setVisibility(View.VISIBLE);
         }
     }
 
@@ -146,7 +142,7 @@ public class FunDetailActivity extends FatherActivity {
 
     private DateChooseWheelViewDialog startDateChooseDialog, startDateChooseDialog1, startDateChooseDialog2, startDateChooseDialog3;
 
-    @OnClick({R.id.ll_0, R.id.ll_1, R.id.ll_2, R.id.ll_3, R.id.ll_4, R.id.ll_5, R.id.tv_save, R.id.tv_get,R.id.tv_leave})
+    @OnClick({R.id.ll_0, R.id.ll_1, R.id.ll_2, R.id.ll_3, R.id.ll_4, R.id.ll_5, R.id.tv_save, R.id.tv_get})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ll_0:
@@ -217,22 +213,7 @@ public class FunDetailActivity extends FatherActivity {
                 intent.putExtra(Consts.KEY_DATA, JSON.toJSONString(result));
                 startActivity(intent);
                 break;
-            case R.id.tv_leave:
-                //车辆离开
-//                if(result.Soquan==)
-//                RequestParams params=ParamsUtils.getSessionParams(Api.FinishOutQueue());
-//                x.http().get(params, new WWXCallBack("FinishOutQueue") {
-//                    @Override
-//                    public void onAfterSuccessOk(JSONObject data) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onAfterFinished() {
-//
-//                    }
-//                })
-                break;
+
         }
     }
 
