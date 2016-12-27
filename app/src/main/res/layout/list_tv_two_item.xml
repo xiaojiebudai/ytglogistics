@@ -5,10 +5,6 @@
     android:gravity="center"
     android:orientation="horizontal"
     android:paddingBottom="10dp"
-    android:clickable="true"
-    android:focusableInTouchMode="true"
-    android:focusable="true"
-    android:background="@drawable/selector_item_selected"
     android:paddingTop="10dp" >
 
     <TextView

@@ -85,9 +85,9 @@ public class FuncImageActivity extends FatherActivity {
         mAdapter.setOnRecyclerItemClickListener(new OnRecyclerItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
+                selectPos = position;
                 DataImg item = (DataImg) mAdapter.getItem(position);
                 tvNewfilename.setText(item.fName);
-                selectPos = position;
             }
         });
         mAdapter.setSelectedColor(R.color.text_selected_white_gray);
@@ -187,7 +187,7 @@ public class FuncImageActivity extends FatherActivity {
                     "storeFileName" : fName
         }
     }*/
-        params.addBodyParameter("fileName", new File(newUrl), null, item.fName);
+        params.addBodyParameter("file", new File(newUrl), null, item.fName);
         params.setMultipart(true);
         x.http().post(params, new WWXCallBack("UploadPicture") {
 

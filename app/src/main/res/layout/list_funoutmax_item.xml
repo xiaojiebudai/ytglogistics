@@ -4,10 +4,6 @@
     android:layout_height="wrap_content"
     android:gravity="center"
     android:orientation="horizontal"
-    android:clickable="true"
-    android:focusableInTouchMode="true"
-    android:focusable="true"
-    android:background="@drawable/selector_item_selected"
     android:paddingBottom="10dp"
     android:paddingTop="10dp" >
 
