@@ -23,6 +23,8 @@ import com.ytglogistics.www.ytglogistics.R;
 import com.ytglogistics.www.ytglogistics.api.Api;
 import com.ytglogistics.www.ytglogistics.been.AppInMax;
 import com.ytglogistics.www.ytglogistics.been.DataCbm;
+import com.ytglogistics.www.ytglogistics.been.PrintInfo;
+import com.ytglogistics.www.ytglogistics.karics.library.zxing.android.CaptureActivity;
 import com.ytglogistics.www.ytglogistics.utils.Consts;
 import com.ytglogistics.www.ytglogistics.utils.ParamsUtils;
 import com.ytglogistics.www.ytglogistics.utils.WWToast;
@@ -83,7 +85,7 @@ public class FuncOutNumActivity extends FatherActivity {
         Serial = getIntent().getStringExtra("Serial");
         edSo.setText(inMax.So);
         edCangwei.setText(inMax.Loca);
-        edChucangnum.setText(inMax.OutCtn);
+        edChucangnum.setText(inMax.OutCtn+"");
         getListData();
     }
     private void getListData() {
@@ -159,7 +161,7 @@ public class FuncOutNumActivity extends FatherActivity {
                 if (!TextUtils.isEmpty(s)) {
                     if (selectPosition == -1) {
                     } else {
-                        ((DataCbm) mAdapter.getItem(selectPosition)).Serial = Integer.valueOf(s + "");
+                        ((DataCbm) mAdapter.getItem(selectPosition)).Soquan = Integer.valueOf(s + "");
                         mAdapter.notifyDataSetChanged();
                         setShijiNum();
                     }
@@ -230,7 +232,51 @@ public class FuncOutNumActivity extends FatherActivity {
                 finish();
                 break;
             case R.id.tv_saomiao:
+                Intent intent = new Intent(this, CaptureActivity.class);
+                startActivityForResult(intent, 999);
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (data == null)
+            return;
+        if (requestCode == 999) {
+            String info = data.getExtras().getString("codedContent");
+            if(!TextUtils.isEmpty(info)){
+                RequestParams sessionParams = ParamsUtils.getSessionParams(Api.PalletGet());
+                sessionParams.addBodyParameter("palletId",info);
+                x.http().get(sessionParams, new WWXCallBack("PalletGet") {
+                    @Override
+                    public void onAfterSuccessOk(JSONObject data) {
+                        PrintInfo printInfo = (PrintInfo) JSON.parseObject(data.getString("Data"), PrintInfo.class);
+                        if(printInfo.Sono.equals(inMax.So)&&printInfo.Po.equals(inMax.Po)&&printInfo.Skn.equals(inMax.Skn)){
+                            DataCbm item = new DataCbm();
+                            item.So = printInfo.Sono;
+                            item.Po = printInfo.Po;
+                            item.Skn = printInfo.Skn;
+                            item.InMxId = inMax.RowId;
+                            item.Soquan=printInfo.Pkgs;
+                            mAdapter.add(item);
+                            selectPosition = mAdapter.getData().size() - 1;
+                            edCtnNO.setText(item.Soquan);
+                        }else{
+                            WWToast.showShort("板单信息有误！！！");
+                        }
+
+                    }
+
+                    @Override
+                    public void onAfterFinished() {
+
+                    }
+                });
+            }else{
+                WWToast.showShort("未扫描到信息，请重新扫描");
+            }
+
         }
     }
 }

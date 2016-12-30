@@ -75,6 +75,11 @@ public class FunOutMxListActivity extends FatherActivity {
                 helper.setText(R.id.tv_so, item.So);
                 helper.setText(R.id.tv_po, item.Po);
                 helper.setText(R.id.tv_skn, item.Skn);
+                if(item.Soquan==item.OutCtn){
+                    item.QtyStatus="完成";
+                }else {
+                    item.QtyStatus="未完成";
+                }
                 helper.setText(R.id.tv_state, item.QtyStatus);
             }
         };
@@ -82,7 +87,10 @@ public class FunOutMxListActivity extends FatherActivity {
             @Override
             public void onItemClick(View view, int position) {
                 AppInMax item = (AppInMax) mAdapter.getItem(position);
-
+                Intent intent = new Intent(FunOutMxListActivity.this, FuncOutNumActivity.class);
+                intent.putExtra(Consts.KEY_DATA, JSONObject.toJSONString(item));
+                intent.putExtra("Serial", result.Serial);
+                startActivity(intent);
             }
         });
         mAdapter.setSelectedColor(R.color.text_selected_white_gray);
@@ -106,7 +114,7 @@ public class FunOutMxListActivity extends FatherActivity {
     private void getOutMaxData() {
         showWaitDialog();
         RequestParams params = ParamsUtils.getSessionParams(Api.GetAppOutMx());
-        params.addBodyParameter("serial", result.Serial);
+        params.addBodyParameter("serial", result.Serial+"");
         params.addBodyParameter("clp", result.Clp);
         x.http().get(params, new WWXCallBack("GetAppOutMx") {
             @Override

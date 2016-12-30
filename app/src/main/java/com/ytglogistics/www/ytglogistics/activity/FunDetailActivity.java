@@ -27,6 +27,7 @@ import com.ytglogistics.www.ytglogistics.been.User;
 import com.ytglogistics.www.ytglogistics.dialog.DateChooseWheelViewDialog;
 import com.ytglogistics.www.ytglogistics.utils.Consts;
 import com.ytglogistics.www.ytglogistics.utils.ParamsUtils;
+import com.ytglogistics.www.ytglogistics.utils.SharedPreferenceUtils;
 import com.ytglogistics.www.ytglogistics.utils.TimeUtil;
 import com.ytglogistics.www.ytglogistics.utils.WWToast;
 import com.ytglogistics.www.ytglogistics.xutils.WWXCallBack;
@@ -117,10 +118,25 @@ public class FunDetailActivity extends FatherActivity {
             @Override
             public void onAfterSuccessOk(JSONObject data) {
                 result = JSON.parseObject(data.getString("Data"), AppInResult.class);
-                et2.setText(TimeUtil.getTimeToS(result.JdTime * 1000));
-                et3.setText(TimeUtil.getTimeToS(result.PdTime * 1000));
-                et4.setText(TimeUtil.getTimeToS(result.BeginTime * 1000));
-                et5.setText(TimeUtil.getTimeToS(result.EndTime * 1000));
+                if (result.Serial == 0) {
+                    User user = (User) JSONObject.parseObject(SharedPreferenceUtils.getInstance().getUserInfo(), User.class);
+                    result.UserId = user.Keyid;
+                    result.QueueNo = car.QueueNo;
+                    result.CarNo = car.CarNo;
+                    result.PlaceId = car.PlaceId;
+                    result.OrderId = car.OrderId;
+                    result.So = car.So;
+                    result.OperType = 1;
+                } else {
+                    if (result.JdTime != null)
+                        et2.setText(TimeUtil.getTimeToS(result.JdTime * 1000));
+                    if (result.PdTime != null)
+                    et3.setText(TimeUtil.getTimeToS(result.PdTime * 1000));
+                    if (result.BeginTime != null)
+                    et4.setText(TimeUtil.getTimeToS(result.BeginTime * 1000));
+                    if (result.EndTime != null)
+                    et5.setText(TimeUtil.getTimeToS(result.EndTime * 1000));
+                }
                 getStevedData();
                 getUserData();
             }
@@ -226,8 +242,7 @@ public class FunDetailActivity extends FatherActivity {
         x.http().post(ParamsUtils.getPostJsonParams(jsonObject, Api.AppInCommit()), new WWXCallBack("AppInCommit") {
             @Override
             public void onAfterSuccessOk(JSONObject data) {
-                result.Serial = data.getString("Data");
-
+                result.Serial = data.getIntValue("Data");
                 WWToast.showShort("提交成功");
                 tvSave.setClickable(false);
             }
@@ -276,13 +291,18 @@ public class FunDetailActivity extends FatherActivity {
                 JSONArray jsonArray = data.getJSONArray("Data");
                 userList = (ArrayList<User>) JSON.parseArray(
                         jsonArray.toJSONString(), User.class);
+                boolean isHave = false;
                 if (userList != null && userList.size() > 0) {
                     for (int i = 0; i < userList.size(); i++) {
                         if (userList.get(i).Keyid.equals(result.UserId)) {
+                            isHave = true;
                             et1.setText(userList.get(i).Usercode);
                             break;
                         }
                     }
+                }
+                if (!isHave) {
+                    result.UserId = "";
                 }
             }
 

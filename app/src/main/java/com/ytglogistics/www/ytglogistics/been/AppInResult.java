@@ -13,11 +13,12 @@ public class AppInResult {
     public Long JdTime;
     public Long PdTime;
     public String CarNo;
+    public String So;
     public int OperType;
     public String OrderId;
     public String PlaceId;
     public String QueueNo;
-    public String Serial;
+    public int Serial;
     public String StevedId;
     public String UserId;
     public String StevedName;
@@ -30,6 +31,7 @@ public class AppInResult {
         localItemObject.put("JdTime", JdTime);
         localItemObject.put("PdTime", PdTime);
         localItemObject.put("CarNo", CarNo);
+        localItemObject.put("So", So);
         localItemObject.put("OperType", OperType);
         localItemObject.put("OrderId", OrderId);
         localItemObject.put("PlaceId", PlaceId);

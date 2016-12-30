@@ -15,4 +15,8 @@
     <string name="str9">收件人签名：</string>
     <string name="str10">收货时间： 年   月   日</string>
     <string name="str11">订单ID：</string>
+    <!-- 扫码 -->
+    <string name="msg_camera_framework_bug">Sorry, the Android camera encountered a problem.
+		You may need to restart the device.
+	</string>
 </resources>

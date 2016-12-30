@@ -33,4 +33,14 @@
     <color name="line">#dddddd</color>
     <color name="text_10">#333333</color>
     <color name="text_11">#999999</color>
+    <!-- 扫码 -->
+    <color name="viewfinder_mask">#60000000</color>
+    <color name="status_text">#ffffffff</color>
+    <color name="viewfinder_laser">#ffcc0000</color>
+    <color name="possible_result_points">#c0ffbd21</color>
+    <color name="result_view">#b0000000</color>
+    <color name="gray_bg_s">#e5e5e5</color>
+    <color name="address_book_item_header">#FFE0E0E0</color>
+    <color name="gray_bg_category_check">#FF7A7A7A</color>
+    <color name="cut_line_gray">#D7D7D7</color>
 </resources>

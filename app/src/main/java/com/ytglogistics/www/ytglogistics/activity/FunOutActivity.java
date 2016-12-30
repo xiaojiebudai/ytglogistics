@@ -75,7 +75,7 @@ public class FunOutActivity extends FatherActivity {
 
     @Override
     protected void initView() {
-        funInAdapter = new FunInAdapter(this, FunInAdapter.FUNIN);
+        funInAdapter = new FunInAdapter(this, FunInAdapter.FUNOUT);
         lvData.setAdapter(funInAdapter);
         lvData.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -102,6 +102,7 @@ public class FunOutActivity extends FatherActivity {
     private void getListData() {
         showWaitDialog();
         String carno = etNo.getText().toString().trim();
+
         RequestParams params = ParamsUtils.getSessionParams(Api.GetOutQueue());
         params.addBodyParameter("status", model == OUTEDIT ? "4" : "1");
         params.addBodyParameter("clp", carno);

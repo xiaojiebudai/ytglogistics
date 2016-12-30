@@ -131,5 +131,8 @@ public class Api {
 	public static final String AppMxNumCommit() {
 		return ONLINE + "AppMxNumCommit";
 	}
+	public static final String PalletGet() {
+		return ONLINE + "PalletGet";
+	}
 
 }
