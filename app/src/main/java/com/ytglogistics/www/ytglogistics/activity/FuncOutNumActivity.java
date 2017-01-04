@@ -68,7 +68,8 @@ public class FuncOutNumActivity extends FatherActivity {
     TextView tvSaomiao;
     @BindView(R.id.ll_operate)
     LinearLayout llOperate;
-    private AppInMax inMax;
+//    private AppInMax inMax;
+private ArrayList<AppInMax> appInMaxes;
     private ArrayList<DataCbm> lsit = new ArrayList<DataCbm>();
     private BaseRecyclerAdapter mAdapter;
     private int selectPosition = -1;
@@ -81,11 +82,13 @@ public class FuncOutNumActivity extends FatherActivity {
     @Override
     protected void initValues() {
         initDefautHead("出仓修改", true);
-        inMax = JSON.parseObject(getIntent().getStringExtra(Consts.KEY_DATA), AppInMax.class);
+//        inMax = JS.parseObject(getIntent().getStringExtra(Consts.KEY_DATA), AppInMax.class);
+        appInMaxes = (ArrayList<AppInMax>) JSON.parseArray(
+                getIntent().getStringExtra(Consts.KEY_DATA), AppInMax.class);
         Serial = getIntent().getStringExtra("Serial");
-        edSo.setText(inMax.So);
-        edCangwei.setText(inMax.Loca);
-        edChucangnum.setText(inMax.OutCtn+"");
+//        edSo.setText(inMax.So);
+//        edCangwei.setText(inMax.Loca);
+//        edChucangnum.setText(inMax.OutCtn+"");
         getListData();
     }
     private void getListData() {
@@ -96,14 +99,9 @@ public class FuncOutNumActivity extends FatherActivity {
             @Override
             public void onAfterSuccessOk(JSONObject data) {
                 JSONArray jsonArray = data.getJSONArray("Data");
-                ArrayList<DataCbm> listAll = (ArrayList<DataCbm>) JSON.parseArray(
+                lsit = (ArrayList<DataCbm>) JSON.parseArray(
                         jsonArray.toJSONString(), DataCbm.class);
-                for (int i = 0; i < listAll.size(); i++) {
-                    if (listAll.get(i).InMxId == inMax.RowId) {
-                        lsit.add(listAll.get(i));
-                    }
-                }
-                setShijiNum();
+//                setShijiNum();
                 mAdapter.addAll(lsit);
             }
 
@@ -124,12 +122,18 @@ public class FuncOutNumActivity extends FatherActivity {
 
     @Override
     protected void initView() {
-        mAdapter = new BaseRecyclerAdapter<DataCbm>(this, lsit, R.layout.list_funinmax_item) {
+        mAdapter = new BaseRecyclerAdapter<DataCbm>(this, lsit, R.layout.fun_in_list) {
             @Override
             protected void convert(BaseViewHolder helper, DataCbm item) {
-                helper.setText(R.id.tv_so, item.So);
-                helper.setText(R.id.tv_po, item.Po);
-                helper.setText(R.id.tv_skn, item.Skn);
+                helper.setText(R.id.tv_num, item.Palletid);
+                helper.setText(R.id.tv_name, item.So);
+                helper.setText(R.id.tv_bowei, item.Po);
+                helper.setText(R.id.tv_state, item.Skn);
+                if(item.isSelect){
+                    helper.getView(R.id.ll_container).setBackgroundResource(R.color.top_title_bg);
+                }else{
+                    helper.getView(R.id.ll_container).setBackgroundResource(R.color.white);
+                }
             }
         };
         mAdapter.setOnRecyclerItemClickListener(new OnRecyclerItemClickListener() {
@@ -138,6 +142,11 @@ public class FuncOutNumActivity extends FatherActivity {
                 DataCbm item = (DataCbm) mAdapter.getItem(position);
                 selectPosition = position;
                 edCtnNO.setText(item.Soquan + "");
+                for (int i = 0; i <mAdapter.getData().size() ; i++) {
+                    ((DataCbm) mAdapter.getItem(i)).isSelect=false;
+                }
+                ((DataCbm) mAdapter.getItem(position)).isSelect=true;
+                mAdapter.notifyDataSetChanged();
             }
         });
         mAdapter.setSelectedColor(R.color.text_selected_white_gray);
@@ -189,10 +198,10 @@ public class FuncOutNumActivity extends FatherActivity {
         switch (view.getId()) {
             case R.id.tv_add:
                 DataCbm item = new DataCbm();
-                item.So = inMax.So;
-                item.Po = inMax.Po;
-                item.Skn = inMax.Skn;
-                item.InMxId = inMax.RowId;
+//                item.So = inMax.So;
+//                item.Po = inMax.Po;
+//                item.Skn = inMax.Skn;
+//                item.InMxId = inMax.RowId;
                 mAdapter.add(item);
                 selectPosition = mAdapter.getData().size() - 1;
                 edCtnNO.setText("");
@@ -252,20 +261,25 @@ public class FuncOutNumActivity extends FatherActivity {
                     @Override
                     public void onAfterSuccessOk(JSONObject data) {
                         PrintInfo printInfo = (PrintInfo) JSON.parseObject(data.getString("Data"), PrintInfo.class);
-                        if(printInfo.Sono.equals(inMax.So)&&printInfo.Po.equals(inMax.Po)&&printInfo.Skn.equals(inMax.Skn)){
-                            DataCbm item = new DataCbm();
-                            item.So = printInfo.Sono;
-                            item.Po = printInfo.Po;
-                            item.Skn = printInfo.Skn;
-                            item.InMxId = inMax.RowId;
-                            item.Soquan=printInfo.Pkgs;
-                            mAdapter.add(item);
-                            selectPosition = mAdapter.getData().size() - 1;
-                            edCtnNO.setText(item.Soquan);
-                        }else{
+                        boolean isOk=false;
+                        for (int i = 0; i <appInMaxes.size() ; i++) {
+                            if(printInfo.Sono.equals(appInMaxes.get(i).So)&&printInfo.Po.equals(appInMaxes.get(i).Po)&&printInfo.Skn.equals(appInMaxes.get(i).Skn)){
+                                DataCbm item = new DataCbm();
+                                item.Palletid = printInfo.Palletid;
+                                item.So = printInfo.Sono;
+                                item.Po = printInfo.Po;
+                                item.Skn = printInfo.Skn;
+                                item.InMxId = appInMaxes.get(i).RowId;
+                                item.Soquan=printInfo.Pkgs;
+                                mAdapter.add(item);
+                                selectPosition = mAdapter.getData().size() - 1;
+                                edCtnNO.setText(item.Soquan);
+                                isOk=true;
+                            }
+                        }
+                        if (!isOk){
                             WWToast.showShort("板单信息有误！！！");
                         }
-
                     }
 
                     @Override

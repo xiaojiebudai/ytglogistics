@@ -80,6 +80,7 @@ public class FunOutActivity extends FatherActivity {
         lvData.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                funInAdapter.setPos(position);
                 Intent intent = new Intent(FunOutActivity.this, FunDetailActivity.class);
                 intent.putExtra(Consts.KEY_MODULE, FunDetailActivity.FUNOUT);
                 intent.putExtra(Consts.KEY_DATA, JSONObject.toJSONString(funInAdapter.getData().get(position)));

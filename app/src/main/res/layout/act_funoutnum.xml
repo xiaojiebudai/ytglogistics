@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginTop="10dp"
+        android:visibility="gone"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -62,7 +63,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="40dp" android:visibility="gone"
         android:layout_marginTop="10dp"
         android:orientation="horizontal">
 
@@ -120,18 +121,24 @@
         android:layout_height="40dp"
         android:gravity="center"
         android:orientation="horizontal">
-
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
             android:maxLines="2"
+            android:text="板号"
+            android:textSize="12sp" />
+        <TextView
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:maxLines="2"
             android:text="PO"
             android:textSize="12sp" />
 
         <TextView
-            android:layout_width="120dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:maxLines="2"
@@ -140,7 +147,7 @@
             android:textSize="12sp" />
 
         <TextView
-            android:layout_width="120dp"
+            android:layout_width="110dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:maxLines="2"
@@ -199,6 +206,7 @@
             android:layout_weight="1"
             android:background="@color/top_title_bg"
             android:gravity="center"
+            android:visibility="gone"
             android:text="增加"
             android:textColor="@color/white" />
 

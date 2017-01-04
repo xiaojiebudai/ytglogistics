@@ -15,12 +15,13 @@ import com.ytglogistics.www.ytglogistics.utils.DensityUtil;
  */
 
 public class FunInAdapter extends SuperBaseAdapter<Car> {
-    public static final int FUNIN=0;
-    public static final int FUNOUT=1;
-    private int model=0;
-    public FunInAdapter(Context ctx,int model) {
+    public static final int FUNIN = 0;
+    public static final int FUNOUT = 1;
+    private int model = 0;
+
+    public FunInAdapter(Context ctx, int model) {
         super(ctx);
-        this.model=model;
+        this.model = model;
     }
 
     @Override
@@ -36,29 +37,43 @@ public class FunInAdapter extends SuperBaseAdapter<Car> {
         return convertView;
     }
 
+    private int posSelect = -1;
+
+    public void setPos(int pos) {
+        this.posSelect = pos;
+        notifyDataSetChanged();
+    }
+
     public class ViewHolder {
         public TextView tv_name;
         public TextView tv_num;
         public TextView tv_bowei;
         public TextView tv_state;
+        public LinearLayout ll_container;
 
         public ViewHolder(View convertView) {
             tv_name = (TextView) convertView.findViewById(R.id.tv_name);
             tv_num = (TextView) convertView.findViewById(R.id.tv_num);
             tv_bowei = (TextView) convertView.findViewById(R.id.tv_bowei);
             tv_state = (TextView) convertView.findViewById(R.id.tv_state);
+            ll_container = (LinearLayout) convertView.findViewById(R.id.ll_container);
             convertView.setTag(this);
         }
 
         public void setData(int pos) {
             Car item = getItem(pos);
-            tv_num.setText(pos+"");
-            if(model==FUNIN){
+            tv_num.setText(pos + 1 + "");
+            if (posSelect == pos) {
+                ll_container.setBackgroundResource(R.color.top_title_bg);
+            } else {
+                ll_container.setBackgroundResource(R.color.white);
+            }
+            if (model == FUNIN) {
                 tv_name.setText(item.CarNo);
                 tv_bowei.setText(item.PlaceId);
                 switch (item.Status) {
                     case 0:
-                        tv_state.setText( "已取号");
+                        tv_state.setText("已取号");
                         break;
                     case 1:
                         tv_state.setText("已分配");
@@ -69,11 +84,11 @@ public class FunInAdapter extends SuperBaseAdapter<Car> {
                     default:
                         tv_state.setText("未知");
                 }
-            }else{
+            } else {
                 tv_name.setText(item.So);
                 tv_bowei.setText(item.CabinetNo);
-              tv_state.setText( item.PlaceId);
-                }
+                tv_state.setText(item.PlaceId);
+            }
         }
 
     }

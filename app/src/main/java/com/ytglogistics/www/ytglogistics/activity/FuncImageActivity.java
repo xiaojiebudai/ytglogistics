@@ -80,6 +80,11 @@ public class FuncImageActivity extends FatherActivity {
             protected void convert(BaseViewHolder helper, DataImg item) {
                 helper.setText(R.id.tv_0, item.fName);
                 helper.setText(R.id.tv_1, item.Status);
+                if(item.isSelect){
+                    helper.getView(R.id.ll_container).setBackgroundResource(R.color.top_title_bg);
+                }else{
+                    helper.getView(R.id.ll_container).setBackgroundResource(R.color.white);
+                }
             }
         };
         mAdapter.setOnRecyclerItemClickListener(new OnRecyclerItemClickListener() {
@@ -88,9 +93,13 @@ public class FuncImageActivity extends FatherActivity {
                 selectPos = position;
                 DataImg item = (DataImg) mAdapter.getItem(position);
                 tvNewfilename.setText(item.fName);
+                for (int i = 0; i <mAdapter.getData().size() ; i++) {
+                    ((DataImg) mAdapter.getItem(i)).isSelect=false;
+                }
+                ((DataImg) mAdapter.getItem(position)).isSelect=true;
+                mAdapter.notifyDataSetChanged();
             }
         });
-        mAdapter.setSelectedColor(R.color.text_selected_white_gray);
         lvData.setHasFixedSize(true);
         lvData.setLayoutManager(new LinearLayoutManager(this));
         lvData.setItemAnimator(new DefaultItemAnimator());

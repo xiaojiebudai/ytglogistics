@@ -10,4 +10,5 @@ public class Place {
     public int Status;//状态
     public String Bz;//类型
     public String StatusText;
+    public boolean isSelect;//是否选中
 }

@@ -37,6 +37,7 @@ import com.ytglogistics.www.ytglogistics.xutils.WWXCallBack;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -112,6 +113,8 @@ public class FunInMaxListActivity extends FatherActivity {
     protected void initView() {
         adapter = new FunInMaxListAdapter(this);
         lvData.setAdapter(adapter);
+        final DecimalFormat    df   = new DecimalFormat("######0.00");
+
         lvData.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -130,8 +133,10 @@ public class FunInMaxListActivity extends FatherActivity {
                 tvOneHeight.setText(inMax.High + "");
                 tvCbm.setText(inMax.Cbm + "");
                 tvBkcbm.setText(inMax.BookingCbm + "");
-                tvCbmrate.setText((inMax.CbmRate * 100) + "%");
+
+                tvCbmrate.setText(df.format((inMax.CbmRate * 100)) + "%");
                 tvXiangbang.setText(inMax.PaperCtn + "");
+                adapter.setPos(position);
             }
         });
         tvNum.addTextChangedListener(new TextWatcher() {
@@ -269,7 +274,7 @@ public class FunInMaxListActivity extends FatherActivity {
         context.getObject().CPCL_PageStart(context.getState(), 504, 680, 0, 1);
         context.getObject().CPCL_SetBold(context.getState(), true);
         context.getObject().CPCL_AlignType(context.getState(), preDefiniation.AlignType.AT_CENTER.getValue());
-        context.getObject().CPCL_Print1DBarcode(context.getState(), preDefiniation.BarcodeType.BT_CODEBAR.getValue(), 0, 40, 3, 3, 250, info.Palletid, "gb2312");
+        context.getObject().CPCL_Print1DBarcode(context.getState(), preDefiniation.BarcodeType.BT_CODEBAR.getValue(), 0, 40, 4, 3, 250, info.Palletid, "gb2312");
         context.getObject().CPCL_PrintString(context.getState(), 0, 310, 1, 1, 0, 24, info.Palletid, "gb2312");
         context.getObject().CPCL_PrintString(context.getState(), 10, 380, 1, 1, 0, 24, "DATE: " + getPrintTime(info.CreateTime), "gb2312");
         context.getObject().CPCL_PrintString(context.getState(), 10, 440, 1, 1, 0, 24, "SO NO: " + info.Sono, "gb2312");

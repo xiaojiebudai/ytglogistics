@@ -6,14 +6,17 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.text.format.Time;
+import android.view.View;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.library.BaseRecyclerAdapter;
 import com.github.library.BaseViewHolder;
+import com.github.library.listener.OnRecyclerItemClickListener;
 import com.ytglogistics.www.ytglogistics.R;
 import com.ytglogistics.www.ytglogistics.api.Api;
+import com.ytglogistics.www.ytglogistics.been.DataImg;
 import com.ytglogistics.www.ytglogistics.been.DataInOut;
 import com.ytglogistics.www.ytglogistics.dialog.DateChooseWheelViewDialog;
 import com.ytglogistics.www.ytglogistics.utils.Consts;
@@ -99,7 +102,11 @@ public class FuncQueryActivity extends FatherActivity {
                     helper.setText(R.id.tv_name, item.So);
                     helper.setText(R.id.tv_bowei, item.CabinetNo);
                 }
-
+                if(item.isSelect){
+                    helper.getView(R.id.ll_container).setBackgroundResource(R.color.top_title_bg);
+                }else{
+                    helper.getView(R.id.ll_container).setBackgroundResource(R.color.white);
+                }
                 switch (item.Status) {
                     case 0:
                         item.StatusName = "预约成功";
@@ -121,8 +128,19 @@ public class FuncQueryActivity extends FatherActivity {
                 }
                 helper.setText(R.id.tv_state, item.StatusName);
             }
+
         };
-        mAdapter.setSelectedColor(R.color.text_selected_white_gray);
+        mAdapter.setOnRecyclerItemClickListener(new OnRecyclerItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+
+                for (int i = 0; i <mAdapter.getData().size() ; i++) {
+                    ((DataInOut) mAdapter.getItem(i)).isSelect=false;
+                }
+                ((DataInOut) mAdapter.getItem(position)).isSelect=true;
+                mAdapter.notifyDataSetChanged();
+            }
+        });
         lvData.setHasFixedSize(true);
         lvData.setLayoutManager(new LinearLayoutManager(this));
         lvData.setItemAnimator(new DefaultItemAnimator());
@@ -133,7 +151,7 @@ public class FuncQueryActivity extends FatherActivity {
     protected void doOperate() {
         Calendar calendar = Calendar.getInstance();
         date = calendar.get(Calendar.YEAR) + "-"
-                + (calendar.get(Calendar.MONTH) > 8 ? calendar.get(Calendar.MONTH) + 1 : ("0" + calendar.get(Calendar.MONTH) + 1)) + "-"
+                + (calendar.get(Calendar.MONTH) > 8 ? calendar.get(Calendar.MONTH) + 1 : ("0" + (calendar.get(Calendar.MONTH) + 1))) + "-"
                 + (calendar.get(Calendar.DAY_OF_MONTH) > 9 ? calendar.get(Calendar.DAY_OF_MONTH) : ("0" + calendar.get(Calendar.DAY_OF_MONTH)));
         tvTime.setText(date);
         getList();
@@ -183,7 +201,7 @@ public class FuncQueryActivity extends FatherActivity {
                     Calendar calendar = Calendar.getInstance();
                     calendar.setTimeInMillis(time * 1000);
                     date = calendar.get(Calendar.YEAR) + "-"
-                            + (calendar.get(Calendar.MONTH) > 8 ? calendar.get(Calendar.MONTH) + 1 : ("0" + calendar.get(Calendar.MONTH) + 1)) + "-"
+                            + (calendar.get(Calendar.MONTH) > 8 ? calendar.get(Calendar.MONTH) + 1 : ("0" + (calendar.get(Calendar.MONTH) + 1))) + "-"
                             + (calendar.get(Calendar.DAY_OF_MONTH) > 9 ? calendar.get(Calendar.DAY_OF_MONTH) : ("0" + calendar.get(Calendar.DAY_OF_MONTH)));
                     tvTime.setText(date);
                     getList();

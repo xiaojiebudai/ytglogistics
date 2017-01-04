@@ -21,6 +21,7 @@ import com.github.library.listener.OnRecyclerItemClickListener;
 import com.ytglogistics.www.ytglogistics.R;
 import com.ytglogistics.www.ytglogistics.api.Api;
 import com.ytglogistics.www.ytglogistics.been.AppInMax;
+import com.ytglogistics.www.ytglogistics.been.DataImg;
 import com.ytglogistics.www.ytglogistics.been.DataYy;
 import com.ytglogistics.www.ytglogistics.been.Place;
 import com.ytglogistics.www.ytglogistics.utils.ParamsUtils;
@@ -118,7 +119,7 @@ public class FuncPlaceActivity extends FatherActivity {
     }
 
     /**
-     * 选择公司
+     * 选择位置
      */
     private PopupWindow popupWindow;
 
@@ -129,17 +130,26 @@ public class FuncPlaceActivity extends FatherActivity {
                 @Override
                 protected void convert(BaseViewHolder helper, Place item) {
                     helper.setText(R.id.tv_info, item.PlaceId);
+                    if(item.isSelect){
+                        helper.getView(R.id.ll_container).setBackgroundResource(R.color.top_title_bg);
+                    }else{
+                        helper.getView(R.id.ll_container).setBackgroundResource(R.color.white);
+                    }
                 }
             };
             mAdapter.setOnRecyclerItemClickListener(new OnRecyclerItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
                     placeSelect = (Place) mAdapter.getItem(position);
+                    for (int i = 0; i <mAdapter.getData().size() ; i++) {
+                        ((Place) mAdapter.getItem(i)).isSelect=false;
+                    }
+                    ((Place) mAdapter.getItem(position)).isSelect=true;
+                    mAdapter.notifyDataSetChanged();
                     tvNewplaceId.setText(placeSelect.PlaceId);
                     popupWindow.dismiss();
                 }
             });
-            mAdapter.setSelectedColor(R.color.text_selected_white_gray);
             listView.setHasFixedSize(true);
             listView.setLayoutManager(new LinearLayoutManager(this));
             listView.setItemAnimator(new DefaultItemAnimator());

@@ -30,6 +30,7 @@ public class AppInMax {
     public int PaperCtn;
     public int OutItem;
     public String QtyStatus;
+    public boolean isSelect;//是否选中
     public JSONObject toJson() throws JSONException {
         JSONObject localItemObject = new JSONObject();
         localItemObject.put("RowId", RowId);

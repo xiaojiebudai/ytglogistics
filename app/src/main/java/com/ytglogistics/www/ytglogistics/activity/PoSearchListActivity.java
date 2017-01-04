@@ -16,6 +16,7 @@ import com.github.library.BaseViewHolder;
 import com.github.library.listener.OnRecyclerItemClickListener;
 import com.ytglogistics.www.ytglogistics.R;
 import com.ytglogistics.www.ytglogistics.api.Api;
+import com.ytglogistics.www.ytglogistics.been.DataImg;
 import com.ytglogistics.www.ytglogistics.been.DataSolt;
 import com.ytglogistics.www.ytglogistics.been.PoSearch;
 import com.ytglogistics.www.ytglogistics.utils.ParamsUtils;
@@ -67,9 +68,23 @@ public class PoSearchListActivity extends FatherActivity {
                 helper.setText(R.id.tv_po, item.Skn);
                 helper.setText(R.id.tv_skn, item.Loca);
                 helper.setText(R.id.tv_state, item.Usablequan + "");
+                if(item.isSelect){
+                    helper.getView(R.id.ll_container).setBackgroundResource(R.color.top_title_bg);
+                }else{
+                    helper.getView(R.id.ll_container).setBackgroundResource(R.color.white);
+                }
             }
         };
-        mAdapter.setSelectedColor(R.color.text_selected_white_gray);
+        mAdapter.setOnRecyclerItemClickListener(new OnRecyclerItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                for (int i = 0; i <mAdapter.getData().size() ; i++) {
+                    ((PoSearch) mAdapter.getItem(i)).isSelect=false;
+                }
+                ((PoSearch) mAdapter.getItem(position)).isSelect=true;
+                mAdapter.notifyDataSetChanged();
+            }
+        });
         lvData.setHasFixedSize(true);
         lvData.setLayoutManager(new LinearLayoutManager(this));
         lvData.setItemAnimator(new DefaultItemAnimator());

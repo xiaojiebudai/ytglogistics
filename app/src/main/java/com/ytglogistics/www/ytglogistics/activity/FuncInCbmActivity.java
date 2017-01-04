@@ -117,6 +117,12 @@ public class FuncInCbmActivity extends FatherActivity {
                 helper.setText(R.id.tv_so, item.So);
                 helper.setText(R.id.tv_po, item.Po);
                 helper.setText(R.id.tv_skn, item.Skn);
+                if(item.isSelect){
+                    helper.getView(R.id.ll_container).setBackgroundResource(R.color.top_title_bg);
+                }else{
+                    helper.getView(R.id.ll_container).setBackgroundResource(R.color.white);
+                }
+
             }
         };
         mAdapter.setOnRecyclerItemClickListener(new OnRecyclerItemClickListener() {
@@ -129,10 +135,13 @@ public class FuncInCbmActivity extends FatherActivity {
                 edWidth.setText(item.Wide + "");
                 edHeight.setText(item.High + "");
                 edWeight.setText(item.Unitwei + "");
-
+                for (int i = 0; i <mAdapter.getData().size() ; i++) {
+                    ((DataCbm) mAdapter.getItem(i)).isSelect=false;
+                }
+                ((DataCbm) mAdapter.getItem(position)).isSelect=true;
+                mAdapter.notifyDataSetChanged();
             }
         });
-        mAdapter.setSelectedColor(R.color.text_selected_white_gray);
         lvData.setHasFixedSize(true);
         lvData.setLayoutManager(new LinearLayoutManager(this));
         lvData.setItemAnimator(new DefaultItemAnimator());

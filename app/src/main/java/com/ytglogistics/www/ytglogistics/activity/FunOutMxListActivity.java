@@ -20,6 +20,7 @@ import com.ytglogistics.www.ytglogistics.api.Api;
 import com.ytglogistics.www.ytglogistics.been.AppInMax;
 import com.ytglogistics.www.ytglogistics.been.AppInResult;
 import com.ytglogistics.www.ytglogistics.been.DataCbm;
+import com.ytglogistics.www.ytglogistics.been.DataImg;
 import com.ytglogistics.www.ytglogistics.dialog.CommonDialog;
 import com.ytglogistics.www.ytglogistics.utils.Consts;
 import com.ytglogistics.www.ytglogistics.utils.DialogUtils;
@@ -49,6 +50,8 @@ public class FunOutMxListActivity extends FatherActivity {
     TextView tvShenhe;
     @BindView(R.id.tv_leave)
     TextView tvLeave;
+    @BindView(R.id.tv_printe)
+    TextView tv_printe;
     private AppInResult result;
     private ArrayList<AppInMax> appInMaxes;
     private BaseRecyclerAdapter mAdapter;
@@ -71,6 +74,7 @@ public class FunOutMxListActivity extends FatherActivity {
         mAdapter = new BaseRecyclerAdapter<AppInMax>(this, appInMaxes, R.layout.list_funoutmax_item) {
             @Override
             protected void convert(BaseViewHolder helper, AppInMax item) {
+
                 helper.setText(R.id.tv_xuhao, item.OutItem + "");
                 helper.setText(R.id.tv_so, item.So);
                 helper.setText(R.id.tv_po, item.Po);
@@ -81,16 +85,22 @@ public class FunOutMxListActivity extends FatherActivity {
                     item.QtyStatus="未完成";
                 }
                 helper.setText(R.id.tv_state, item.QtyStatus);
+                if(item.isSelect){
+                    helper.getView(R.id.ll_container).setBackgroundResource(R.color.top_title_bg);
+                }else{
+                    helper.getView(R.id.ll_container).setBackgroundResource(R.color.white);
+                }
             }
         };
         mAdapter.setOnRecyclerItemClickListener(new OnRecyclerItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 AppInMax item = (AppInMax) mAdapter.getItem(position);
-                Intent intent = new Intent(FunOutMxListActivity.this, FuncOutNumActivity.class);
-                intent.putExtra(Consts.KEY_DATA, JSONObject.toJSONString(item));
-                intent.putExtra("Serial", result.Serial);
-                startActivity(intent);
+                for (int i = 0; i <mAdapter.getData().size() ; i++) {
+                    ((AppInMax) mAdapter.getItem(i)).isSelect=false;
+                }
+                ((AppInMax) mAdapter.getItem(position)).isSelect=true;
+                mAdapter.notifyDataSetChanged();
             }
         });
         mAdapter.setSelectedColor(R.color.text_selected_white_gray);
@@ -159,11 +169,17 @@ public class FunOutMxListActivity extends FatherActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.tv_commit, R.id.tv_shenhe, R.id.tv_leave})
+    @OnClick({R.id.tv_commit, R.id.tv_shenhe, R.id.tv_leave,R.id.tv_printe})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_commit:
                 allInfoCommit();
+                break;
+            case R.id.tv_printe:
+                Intent intent = new Intent(FunOutMxListActivity.this, FuncOutNumActivity.class);
+                intent.putExtra(Consts.KEY_DATA, JSONArray.toJSONString(appInMaxes));
+                intent.putExtra("Serial", result.Serial);
+                startActivity(intent);
                 break;
             case R.id.tv_shenhe:
                 boolean isok = true;

@@ -8,4 +8,5 @@ public class DataImg {
     public String ImageUrl;
     public String Status;
     public String fName;
+    public boolean isSelect;//是否选中
 }

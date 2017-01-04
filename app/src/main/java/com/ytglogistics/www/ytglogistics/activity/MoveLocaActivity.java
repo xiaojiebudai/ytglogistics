@@ -16,6 +16,7 @@ import com.github.library.BaseViewHolder;
 import com.github.library.listener.OnRecyclerItemClickListener;
 import com.ytglogistics.www.ytglogistics.R;
 import com.ytglogistics.www.ytglogistics.api.Api;
+import com.ytglogistics.www.ytglogistics.been.DataImg;
 import com.ytglogistics.www.ytglogistics.been.DataSolt;
 import com.ytglogistics.www.ytglogistics.utils.ParamsUtils;
 import com.ytglogistics.www.ytglogistics.utils.WWToast;
@@ -78,6 +79,11 @@ public class MoveLocaActivity extends FatherActivity {
                 helper.setText(R.id.tv_so, item.Po);
                 helper.setText(R.id.tv_po, item.Skn);
                 helper.setText(R.id.tv_skn, item.Loca);
+                if(item.isSelect){
+                    helper.getView(R.id.ll_container).setBackgroundResource(R.color.top_title_bg);
+                }else{
+                    helper.getView(R.id.ll_container).setBackgroundResource(R.color.white);
+                }
             }
         };
         mAdapter.setOnRecyclerItemClickListener(new OnRecyclerItemClickListener() {
@@ -87,9 +93,13 @@ public class MoveLocaActivity extends FatherActivity {
                 tvPo.setText(dataSolt.Po);
                 tvSkn.setText(dataSolt.Skn);
                 tvOldloca.setText(dataSolt.Loca);
+                for (int i = 0; i <mAdapter.getData().size() ; i++) {
+                    ((DataSolt) mAdapter.getItem(i)).isSelect=false;
+                }
+                ((DataSolt) mAdapter.getItem(position)).isSelect=true;
+                mAdapter.notifyDataSetChanged();
             }
         });
-        mAdapter.setSelectedColor(R.color.text_selected_white_gray);
         lvData.setHasFixedSize(true);
         lvData.setLayoutManager(new LinearLayoutManager(this));
         lvData.setItemAnimator(new DefaultItemAnimator());

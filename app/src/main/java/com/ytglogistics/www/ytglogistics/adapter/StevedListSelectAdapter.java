@@ -34,7 +34,7 @@ public class StevedListSelectAdapter extends SuperBaseAdapter<Steved> {
             viewHolder = (ViewHolder) convertView.getTag();
             if (position == selectPostion) {
                 convertView.setBackgroundColor(mContext.getResources()
-                        .getColor(R.color.transparent));
+                        .getColor(R.color.top_title_bg));
             } else {
                 convertView.setBackgroundColor(mContext.getResources()
                         .getColor(R.color.white));

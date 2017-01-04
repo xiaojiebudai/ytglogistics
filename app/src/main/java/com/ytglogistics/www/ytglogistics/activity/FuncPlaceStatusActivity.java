@@ -15,6 +15,7 @@ import com.github.library.listener.OnRecyclerItemClickListener;
 import com.ytglogistics.www.ytglogistics.R;
 import com.ytglogistics.www.ytglogistics.api.Api;
 import com.ytglogistics.www.ytglogistics.been.DataCbm;
+import com.ytglogistics.www.ytglogistics.been.DataImg;
 import com.ytglogistics.www.ytglogistics.been.Place;
 import com.ytglogistics.www.ytglogistics.been.PoSearch;
 import com.ytglogistics.www.ytglogistics.dialog.FuncPlaceStatusDialog;
@@ -73,12 +74,22 @@ public class FuncPlaceStatusActivity extends FatherActivity {
                         item.StatusText = "未知";
                 }
                 helper.setText(R.id.tv_skn, item.StatusText);
+                if (item.isSelect) {
+                    helper.getView(R.id.ll_container).setBackgroundResource(R.color.top_title_bg);
+                } else {
+                    helper.getView(R.id.ll_container).setBackgroundResource(R.color.white);
+                }
             }
         };
         mAdapter.setOnRecyclerItemClickListener(new OnRecyclerItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 Place item = (Place) mAdapter.getItem(position);
+                for (int i = 0; i < mAdapter.getData().size(); i++) {
+                    ((Place) mAdapter.getItem(i)).isSelect = false;
+                }
+                ((Place) mAdapter.getItem(position)).isSelect = true;
+                mAdapter.notifyDataSetChanged();
                 FuncPlaceStatusDialog dialog = new FuncPlaceStatusDialog(FuncPlaceStatusActivity.this, item);
                 dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override

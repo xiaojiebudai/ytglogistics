@@ -24,5 +24,6 @@ public class DataInOut {
     public String PeriodTime;
     public String StatusName;
     public String CabinetNo;
+    public boolean isSelect;//是否选中
 
 }
