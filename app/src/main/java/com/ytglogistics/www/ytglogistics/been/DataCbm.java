@@ -34,6 +34,7 @@ public class DataCbm {
         localItemObject.put("High", High);
         localItemObject.put("Unitwei", Unitwei);
         localItemObject.put("Soquan", Soquan);
+        localItemObject.put("Palletid", Palletid);
         return localItemObject;
     }
 

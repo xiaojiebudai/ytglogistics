@@ -231,7 +231,7 @@ public final class CameraManager {
 
 			DisplayMetrics metrics = context.getResources().getDisplayMetrics();
 
-			int width = (int) (metrics.widthPixels * 0.7);
+			int width = (int) (metrics.widthPixels * 0.8);
 			int height = width;
 			int leftOffset = (screenResolution.x - width) / 2;
 			int topOffset = (screenResolution.y - height) / 2;
@@ -341,13 +341,15 @@ public final class CameraManager {
 	 */
 	public PlanarYUVLuminanceSource buildLuminanceSource(byte[] data,
 			int width, int height) {
-		Rect rect = getFramingRectInPreview();
-		if (rect == null) {
-			return null;
-		}
-		// Go ahead and assume it's YUV rather than die.
-		return new PlanarYUVLuminanceSource(data, width, height, rect.left,
-				rect.top, rect.width(), rect.height(), false);
+//		Rect rect = getFramingRectInPreview();
+//		if (rect == null) {
+//			return null;
+//		}
+//		// Go ahead and assume it's YUV rather than die.
+//		return new PlanarYUVLuminanceSource(data, width, height, rect.left,
+//				rect.top, rect.width(), rect.height(), false);
+		// 直接返回整幅图像的数据，而不计算聚焦框大小。
+		return new PlanarYUVLuminanceSource(data, width, height, 0, 0, width, height, false);
 	}
 
 }

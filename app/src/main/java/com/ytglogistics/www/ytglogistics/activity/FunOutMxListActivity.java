@@ -26,6 +26,7 @@ import com.ytglogistics.www.ytglogistics.utils.Consts;
 import com.ytglogistics.www.ytglogistics.utils.DialogUtils;
 import com.ytglogistics.www.ytglogistics.utils.ParamsUtils;
 import com.ytglogistics.www.ytglogistics.utils.WWToast;
+import com.ytglogistics.www.ytglogistics.utils.ZLog;
 import com.ytglogistics.www.ytglogistics.xutils.WWXCallBack;
 
 import org.xutils.http.RequestParams;
@@ -66,7 +67,6 @@ public class FunOutMxListActivity extends FatherActivity {
     protected void initValues() {
         initDefautHead("出仓修改", true);
         result = JSON.parseObject(getIntent().getStringExtra(Consts.KEY_DATA), AppInResult.class);
-
     }
 
     @Override
@@ -112,13 +112,12 @@ public class FunOutMxListActivity extends FatherActivity {
 
     @Override
     protected void doOperate() {
-
+        getOutMaxData();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        getOutMaxData();
     }
 
     private void getOutMaxData() {
@@ -147,6 +146,7 @@ public class FunOutMxListActivity extends FatherActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == 888) {
+                ZLog.showPost(  data.getStringExtra(Consts.KEY_DATA));
                 ArrayList<DataCbm> lsit22 = (ArrayList<DataCbm>) JSON.parseArray(
                         data.getStringExtra(Consts.KEY_DATA), DataCbm.class);
                 //把重复的去掉
@@ -158,6 +158,14 @@ public class FunOutMxListActivity extends FatherActivity {
                     }
                 }
                 lsit.addAll(lsit22);
+                //更数量
+                for (int i = 0; i < lsit.size(); i++) {
+                    for (int j = 0; j < mAdapter.getData().size(); j++) {
+                        if (lsit.get(i).InMxId == ((AppInMax) mAdapter.getData().get(j)).RowId) {
+                            ((AppInMax) mAdapter.getData().get(j)).Soquan = lsit.get(i).Soquan;
+                        }
+                    }
+                }
             }
         }
     }
@@ -178,8 +186,8 @@ public class FunOutMxListActivity extends FatherActivity {
             case R.id.tv_printe:
                 Intent intent = new Intent(FunOutMxListActivity.this, FuncOutNumActivity.class);
                 intent.putExtra(Consts.KEY_DATA, JSONArray.toJSONString(appInMaxes));
-                intent.putExtra("Serial", result.Serial);
-                startActivity(intent);
+                intent.putExtra("Serial", result.Serial+"");
+                startActivityForResult(intent,888);
                 break;
             case R.id.tv_shenhe:
                 boolean isok = true;
