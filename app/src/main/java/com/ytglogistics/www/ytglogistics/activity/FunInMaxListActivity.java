@@ -274,7 +274,7 @@ public class FunInMaxListActivity extends FatherActivity {
         context.getObject().CPCL_PageStart(context.getState(), 504, 680, 0, 1);
         context.getObject().CPCL_SetBold(context.getState(), true);
         context.getObject().CPCL_AlignType(context.getState(), preDefiniation.AlignType.AT_CENTER.getValue());
-        context.getObject().CPCL_Print1DBarcode(context.getState(), preDefiniation.BarcodeType.BT_CODEBAR.getValue(), 0, 40, 4, 3, 250, info.Palletid, "gb2312");
+        context.getObject().CPCL_Print1DBarcode(context.getState(), preDefiniation.BarcodeType.BT_CODE128.getValue(), 0, 40, 4, 3, 250, info.Palletid, "gb2312");
         context.getObject().CPCL_PrintString(context.getState(), 0, 310, 1, 1, 0, 24, info.Palletid, "gb2312");
         context.getObject().CPCL_PrintString(context.getState(), 10, 380, 1, 1, 0, 24, "DATE: " + getPrintTime(info.CreateTime), "gb2312");
         context.getObject().CPCL_PrintString(context.getState(), 10, 440, 1, 1, 0, 24, "SO NO: " + info.Sono, "gb2312");
