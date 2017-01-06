@@ -79,12 +79,15 @@ public class FunOutMxListActivity extends FatherActivity {
                 helper.setText(R.id.tv_so, item.So);
                 helper.setText(R.id.tv_po, item.Po);
                 helper.setText(R.id.tv_skn, item.Skn);
-                if(item.Soquan==item.OutCtn){
-                    item.QtyStatus="完成";
-                }else {
-                    item.QtyStatus="未完成";
-                }
+                item.QtyStatus=item.Soquan+"/"+item.OutCtn;
                 helper.setText(R.id.tv_state, item.QtyStatus);
+
+                if(item.Soquan==item.OutCtn){
+                    helper.setTextColor(R.id.tv_state,getResources().getColor(R.color.text_f7));
+                }else{
+                    helper.setTextColor(R.id.tv_state,getResources().getColor(R.color.red));
+                }
+
                 if(item.isSelect){
                     helper.getView(R.id.ll_container).setBackgroundResource(R.color.top_title_bg);
                 }else{
@@ -112,12 +115,13 @@ public class FunOutMxListActivity extends FatherActivity {
 
     @Override
     protected void doOperate() {
-        getOutMaxData();
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        getOutMaxData();
     }
 
     private void getOutMaxData() {

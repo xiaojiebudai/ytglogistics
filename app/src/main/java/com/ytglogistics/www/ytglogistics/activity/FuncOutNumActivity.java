@@ -19,6 +19,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.library.BaseRecyclerAdapter;
 import com.github.library.BaseViewHolder;
 import com.github.library.listener.OnRecyclerItemClickListener;
+import com.ytglogistics.www.ytglogistics.MyApplication;
 import com.ytglogistics.www.ytglogistics.R;
 import com.ytglogistics.www.ytglogistics.api.Api;
 import com.ytglogistics.www.ytglogistics.been.AppInMax;
@@ -69,12 +70,13 @@ public class FuncOutNumActivity extends FatherActivity {
     TextView tvSaomiao;
     @BindView(R.id.ll_operate)
     LinearLayout llOperate;
-//    private AppInMax inMax;
-private ArrayList<AppInMax> appInMaxes;
+    //    private AppInMax inMax;
+    private ArrayList<AppInMax> appInMaxes;
     private ArrayList<DataCbm> lsit = new ArrayList<DataCbm>();
     private BaseRecyclerAdapter mAdapter;
     private int selectPosition = -1;
     private String Serial;
+
     @Override
     protected int getLayoutId() {
         return R.layout.act_funoutnum;
@@ -87,12 +89,13 @@ private ArrayList<AppInMax> appInMaxes;
         appInMaxes = (ArrayList<AppInMax>) JSON.parseArray(
                 getIntent().getStringExtra(Consts.KEY_DATA), AppInMax.class);
         Serial = getIntent().getStringExtra("Serial");
-        ZLog.showPost(Serial+"");
+        ZLog.showPost(Serial + "");
 //        edSo.setText(inMax.So);
 //        edCangwei.setText(inMax.Loca);
 //        edChucangnum.setText(inMax.OutCtn+"");
         getListData();
     }
+
     private void getListData() {
         showWaitDialog();
         RequestParams params = ParamsUtils.getSessionParams(Api.GetAppMxNumsById());
@@ -113,13 +116,14 @@ private ArrayList<AppInMax> appInMaxes;
             }
         });
     }
-//实际数量
+
+    //实际数量
     private void setShijiNum() {
-        int num=0;
-        for (int i = 0; i <lsit.size() ; i++) {
-            num+=lsit.get(i).Soquan;
+        int num = 0;
+        for (int i = 0; i < lsit.size(); i++) {
+            num += lsit.get(i).Soquan;
         }
-        edShijinum.setText(num+"");
+        edShijinum.setText(num + "");
     }
 
     @Override
@@ -130,10 +134,10 @@ private ArrayList<AppInMax> appInMaxes;
                 helper.setText(R.id.tv_num, item.Palletid);
                 helper.setText(R.id.tv_name, item.Po);
                 helper.setText(R.id.tv_bowei, item.Skn);
-                helper.setText(R.id.tv_state, item.Soquan+"");
-                if(item.isSelect){
+                helper.setText(R.id.tv_state, item.Soquan + "");
+                if (item.isSelect) {
                     helper.getView(R.id.ll_container).setBackgroundResource(R.color.top_title_bg);
-                }else{
+                } else {
                     helper.getView(R.id.ll_container).setBackgroundResource(R.color.white);
                 }
             }
@@ -144,10 +148,10 @@ private ArrayList<AppInMax> appInMaxes;
                 DataCbm item = (DataCbm) mAdapter.getItem(position);
                 selectPosition = position;
                 edCtnNO.setText(item.Soquan + "");
-                for (int i = 0; i <mAdapter.getData().size() ; i++) {
-                    ((DataCbm) mAdapter.getItem(i)).isSelect=false;
+                for (int i = 0; i < mAdapter.getData().size(); i++) {
+                    ((DataCbm) mAdapter.getItem(i)).isSelect = false;
                 }
-                ((DataCbm) mAdapter.getItem(position)).isSelect=true;
+                ((DataCbm) mAdapter.getItem(position)).isSelect = true;
                 mAdapter.notifyDataSetChanged();
             }
         });
@@ -210,34 +214,43 @@ private ArrayList<AppInMax> appInMaxes;
                 break;
             case R.id.tv_del:
                 if (selectPosition != -1) {
+                    DataCbm dataCbm = (DataCbm) mAdapter.getItem(selectPosition);
+                    for (int i = 0; i < appInMaxes.size(); i++) {
+
+                        if (dataCbm.So.equals(appInMaxes.get(i).So) && dataCbm.Po.equals(appInMaxes.get(i).Po) && dataCbm.Skn.equals(appInMaxes.get(i).Skn)) {
+                            //总数据减少
+                            appInMaxes.get(i).Soquan -= dataCbm.Soquan;
+                            break;
+                        }
+                    }
                     mAdapter.remove(selectPosition);
                     selectPosition = -1;
                     edCtnNO.setText("");
                 } else {
                     WWToast.showShort("请先选择一列数据");
                 }
+
+
                 break;
             case R.id.tv_ok:
-                if (mAdapter.getData().size() == 0) {
-                    WWToast.showShort("沒有任何数据");
-                } else {
-                    boolean isOver = true;
-                    for (int i = 0; i < mAdapter.getData().size(); i++) {
-                        DataCbm item1 = (DataCbm)mAdapter.getData().get(i);
-                        if (item1.Soquan <=  0) {
-                            WWToast.showShort("列表中存在空数据，请填写");
-                            isOver = false;
-                            break;
-                        }
-                    }
-                    if (isOver) {
-                        Intent intent = new Intent();
-                        intent.putExtra(Consts.KEY_DATA, JSONArray.toJSONString(mAdapter.getData()));
-                        setResult(RESULT_OK, intent);
-                        finish();
-                    }
 
+                boolean isOver = true;
+                for (int i = 0; i < mAdapter.getData().size(); i++) {
+                    DataCbm item1 = (DataCbm) mAdapter.getData().get(i);
+                    if (item1.Soquan <= 0) {
+                        WWToast.showShort("列表中存在空数据，请填写");
+                        isOver = false;
+                        break;
+                    }
                 }
+                if (isOver) {
+//                        Intent intent = new Intent();
+//                        intent.putExtra(Consts.KEY_DATA, JSONArray.toJSONString(mAdapter.getData()));
+//                        setResult(RESULT_OK, intent);
+//                        finish();
+                    allInfoCommit();
+                }
+
                 break;
             case R.id.tv_cancel:
                 finish();
@@ -249,6 +262,70 @@ private ArrayList<AppInMax> appInMaxes;
         }
     }
 
+    private void allInfoCommit() {
+        showWaitDialog();
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Consts.KEY_SESSIONID, MyApplication
+                .getInstance().getSessionId());
+        JSONArray array = new JSONArray();
+        for (int i = 0; i < appInMaxes.size(); i++) {
+            array.add(((AppInMax) appInMaxes.get(i)).toJson());
+        }
+        jsonObject.put("objs", array);
+        x.http().post(ParamsUtils.getPostJsonParams(jsonObject, Api.AppOutMxCommit()), new WWXCallBack("AppOutMxCommit") {
+            @Override
+            public void onAfterSuccessOk(JSONObject data) {
+                JSONArray jsonArray = data.getJSONArray("Data");
+                ArrayList<Long> rowIdList = (ArrayList<Long>) JSON.parseArray(
+                        jsonArray.toJSONString(), Long.class);
+                if (rowIdList.size() > 0) {
+                    //更新DataCbm
+                    for (int i = 0; i < mAdapter.getData().size(); i++) {
+                        for (int j = 0; j < appInMaxes.size(); j++) {
+                            if (((DataCbm) mAdapter.getData().get(i)).InMxId == (appInMaxes.get(j)).RowId) {
+                                ((DataCbm) mAdapter.getData().get(i)).InMxId = rowIdList.get(j);
+                            }
+                        }
+                    }
+                    //更新AppInMax
+                    for (int j = 0; j < appInMaxes.size(); j++) {
+                        (appInMaxes.get(j)).RowId = rowIdList.get(j);
+                    }
+                }
+
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put(Consts.KEY_SESSIONID, MyApplication
+                        .getInstance().getSessionId());
+                JSONArray array = new JSONArray();
+                if (mAdapter.getData() != null && mAdapter.getData().size() > 0) {
+                    for (int i = 0; i < mAdapter.getData().size(); i++) {
+                        array.add(((DataCbm) mAdapter.getData().get(i)).toJson());
+                    }
+                }
+                jsonObject.put("objs", array);
+                jsonObject.put("inId", Serial);
+                x.http().post(ParamsUtils.getPostJsonParams(jsonObject, Api.AppMxNumCommit()), new WWXCallBack("AppMxNumCommit") {
+                    @Override
+                    public void onAfterSuccessOk(JSONObject data) {
+                        WWToast.showShort("提交成功");
+                    }
+
+                    @Override
+                    public void onAfterFinished() {
+
+                    }
+                });
+
+
+            }
+
+            @Override
+            public void onAfterFinished() {
+                dismissWaitDialog();
+            }
+        });
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -256,44 +333,44 @@ private ArrayList<AppInMax> appInMaxes;
             return;
         if (requestCode == 999) {
             String info = data.getExtras().getString("codedContent");
-            if(!TextUtils.isEmpty(info)){
+            if (!TextUtils.isEmpty(info)) {
                 RequestParams sessionParams = ParamsUtils.getSessionParams(Api.PalletGet());
-                sessionParams.addBodyParameter("palletId",info);
+                sessionParams.addBodyParameter("palletId", info);
                 x.http().get(sessionParams, new WWXCallBack("PalletGet") {
                     @Override
                     public void onAfterSuccessOk(JSONObject data) {
                         PrintInfo printInfo = (PrintInfo) JSON.parseObject(data.getString("Data"), PrintInfo.class);
-                        boolean isOk=false;
-                        for (int i = 0; i <appInMaxes.size() ; i++) {
-                            if(printInfo.Sono.equals(appInMaxes.get(i).So)&&printInfo.Po.equals(appInMaxes.get(i).Po)&&printInfo.Skn.equals(appInMaxes.get(i).Skn)){
-                                isOk=true;
-                               if((appInMaxes.get(i).Soquan+printInfo.Pkgs)<=appInMaxes.get(i).OutCtn){
-                                   //总数据添加
-                                   appInMaxes.get(i).Soquan+=printInfo.Pkgs;
-                                   DataCbm item = new DataCbm();
-                                   item.Palletid = printInfo.Palletid;
-                                   item.So = printInfo.Sono;
-                                   item.Po = printInfo.Po;
-                                   item.Skn = printInfo.Skn;
-                                   item.InMxId = appInMaxes.get(i).RowId;
-                                   item.Soquan=printInfo.Pkgs;
-                                   mAdapter.add(item);
-                                   selectPosition = mAdapter.getData().size() - 1;
+                        boolean isOk = false;
+                        for (int i = 0; i < appInMaxes.size(); i++) {
+                            if (printInfo.Sono.equals(appInMaxes.get(i).So) && printInfo.Po.equals(appInMaxes.get(i).Po) && printInfo.Skn.equals(appInMaxes.get(i).Skn)) {
+                                isOk = true;
+                                if ((appInMaxes.get(i).Soquan + printInfo.Pkgs) <= appInMaxes.get(i).OutCtn) {
+                                    //总数据添加
+                                    appInMaxes.get(i).Soquan += printInfo.Pkgs;
+                                    DataCbm item = new DataCbm();
+                                    item.Palletid = printInfo.Palletid;
+                                    item.So = printInfo.Sono;
+                                    item.Po = printInfo.Po;
+                                    item.Skn = printInfo.Skn;
+                                    item.InMxId = appInMaxes.get(i).RowId;
+                                    item.Soquan = printInfo.Pkgs;
+                                    mAdapter.add(item);
+                                    selectPosition = mAdapter.getData().size() - 1;
 
-                                   for (int j = 0; j <mAdapter.getData().size() ; j++) {
-                                       ((DataCbm) mAdapter.getItem(j)).isSelect=false;
-                                   }
-                                   ((DataCbm) mAdapter.getItem(selectPosition)).isSelect=true;
-                                   mAdapter.notifyDataSetChanged();
+                                    for (int j = 0; j < mAdapter.getData().size(); j++) {
+                                        ((DataCbm) mAdapter.getItem(j)).isSelect = false;
+                                    }
+                                    ((DataCbm) mAdapter.getItem(selectPosition)).isSelect = true;
+                                    mAdapter.notifyDataSetChanged();
 
-                                   edCtnNO.setText(item.Soquan+"");
-                                   break;
-                               }else{
-                                   WWToast.showShort("该板单重复或者板单信息有误");
-                               }
+                                    edCtnNO.setText(item.Soquan + "");
+                                    break;
+                                } else {
+                                    WWToast.showShort("该板单重复或者板单信息有误");
+                                }
                             }
                         }
-                        if (!isOk){
+                        if (!isOk) {
                             WWToast.showShort("板单信息有误！！！");
                         }
                     }
@@ -303,7 +380,7 @@ private ArrayList<AppInMax> appInMaxes;
 
                     }
                 });
-            }else{
+            } else {
                 WWToast.showShort("未扫描到信息，请重新扫描");
             }
 

@@ -43,4 +43,6 @@
     <color name="address_book_item_header">#FFE0E0E0</color>
     <color name="gray_bg_category_check">#FF7A7A7A</color>
     <color name="cut_line_gray">#D7D7D7</color>
+    <color name="yellow">	#FFFF00</color>
+    <color name="red">#FF0000</color>
 </resources>

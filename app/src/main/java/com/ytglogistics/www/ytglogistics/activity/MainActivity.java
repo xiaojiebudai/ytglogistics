@@ -1,6 +1,9 @@
 package com.ytglogistics.www.ytglogistics.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.View;
@@ -12,10 +15,15 @@ import com.ytglogistics.www.ytglogistics.R;
 import com.ytglogistics.www.ytglogistics.api.Api;
 import com.ytglogistics.www.ytglogistics.utils.Consts;
 import com.ytglogistics.www.ytglogistics.utils.ParamsUtils;
+import com.ytglogistics.www.ytglogistics.utils.PublicWay;
 import com.ytglogistics.www.ytglogistics.utils.SharedPreferenceUtils;
+import com.ytglogistics.www.ytglogistics.utils.WWToast;
 import com.ytglogistics.www.ytglogistics.xutils.WWXCallBack;
 
 import org.xutils.x;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,6 +56,8 @@ public class MainActivity extends FatherActivity {
     ImageView loginout;
     @BindView(R.id.exit)
     ImageView exit;
+    @BindView(R.id.start_app)
+    ImageView start_app;
 
     @Override
     protected int getLayoutId() {
@@ -89,7 +99,7 @@ public class MainActivity extends FatherActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.receiving, R.id.shipping, R.id.warehousing, R.id.outofstorage, R.id.garage_m, R.id.move_operate, R.id.housing_reservation_query, R.id.outofstorage_query, R.id.locale_photos, R.id.housing_reservation_po_query, R.id.berth_map, R.id.loginout, R.id.exit})
+    @OnClick({R.id.start_app,R.id.receiving, R.id.shipping, R.id.warehousing, R.id.outofstorage, R.id.garage_m, R.id.move_operate, R.id.housing_reservation_query, R.id.outofstorage_query, R.id.locale_photos, R.id.housing_reservation_po_query, R.id.berth_map, R.id.loginout, R.id.exit})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.receiving:
@@ -132,9 +142,30 @@ public class MainActivity extends FatherActivity {
             case R.id.exit:
                 finish();
                 break;
+            case R.id.start_app:
+           if(isAvilible(this,"com.embarcadero.PonderApp")) {
+               PublicWay.startApp(this,"com.embarcadero.PonderApp","com.embarcadero.PonderApp.activity.WelcomeActivity");
+           }else{
+               WWToast.showShort("还未安装衡云，请先去应用市场下载");
+           }
+
+
+                break;
         }
     }
-
+    private boolean isAvilible(Context context, String packageName){
+        final PackageManager packageManager = context.getPackageManager();//获取packagemanager
+        List<PackageInfo> pinfo = packageManager.getInstalledPackages(0);//获取所有已安装程序的包信息
+        List<String> pName = new ArrayList<String>();//用于存储所有已安装程序的包名
+        //从pinfo中将包名字逐一取出，压入pName list中
+        if(pinfo != null){
+            for(int i = 0; i < pinfo.size(); i++){
+                String pn = pinfo.get(i).packageName;
+                pName.add(pn);
+            }
+        }
+        return pName.contains(packageName);//判断pName中是否有目标程序的包名，有TRUE，没有FALSE
+    }
     @Override
     protected void onResume() {
         super.onResume();

@@ -283,7 +283,6 @@ public class FunInMaxListActivity extends FatherActivity {
         context.getObject().CPCL_PrintString(context.getState(), 10, 610, 1, 1, 0, 24, "QTY: " + info.Pkgs + "/" + info.PaperCtn, "gb2312");
         context.getObject().CON_PageEnd(context.getState(),
                 context.getPrintway());
-
     }
 
     private String getPrintTime(String timeInfo) {

@@ -230,7 +230,7 @@
             android:layout_weight="1"
             android:background="@color/top_title_bg"
             android:gravity="center"
-            android:text="确定"
+            android:text="提交数据"
             android:textColor="@color/white" />
 
         <TextView
@@ -242,6 +242,7 @@
             android:background="@color/top_title_bg"
             android:gravity="center"
             android:text="取消"
+            android:visibility="gone"
             android:textColor="@color/white" />
         <TextView
             android:id="@+id/tv_saomiao"

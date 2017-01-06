@@ -73,6 +73,7 @@
             android:id="@+id/tv_commit"
             android:layout_width="0dp"
             android:layout_height="35dp"
+            android:visibility="gone"
             android:layout_weight="1"
             android:background="@color/top_title_bg"
             android:gravity="center"

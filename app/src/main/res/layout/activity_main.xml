@@ -153,12 +153,13 @@
                     android:src="@mipmap/bt_11" />
 
                 <ImageView
+                    android:id="@+id/start_app"
                     android:layout_width="0dp"
-                    android:visibility="invisible"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:layout_weight="1"
-                    android:src="@mipmap/bt_10" />
+                    android:src="@mipmap/hengyun" />
             </LinearLayout>
 
         </LinearLayout>
@@ -168,6 +169,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:orientation="horizontal">
 
         <ImageView
