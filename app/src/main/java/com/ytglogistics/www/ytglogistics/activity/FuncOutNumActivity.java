@@ -344,34 +344,42 @@ public class FuncOutNumActivity extends FatherActivity {
                         for (int i = 0; i < appInMaxes.size(); i++) {
                             if (printInfo.Sono.equals(appInMaxes.get(i).So) && printInfo.Po.equals(appInMaxes.get(i).Po) && printInfo.Skn.equals(appInMaxes.get(i).Skn)) {
                                 isOk = true;
-                                if ((appInMaxes.get(i).Soquan + printInfo.Pkgs) <= appInMaxes.get(i).OutCtn) {
-                                    //总数据添加
-                                    appInMaxes.get(i).Soquan += printInfo.Pkgs;
-                                    DataCbm item = new DataCbm();
-                                    item.Palletid = printInfo.Palletid;
-                                    item.So = printInfo.Sono;
-                                    item.Po = printInfo.Po;
-                                    item.Skn = printInfo.Skn;
-                                    item.InMxId = appInMaxes.get(i).RowId;
-                                    item.Soquan = printInfo.Pkgs;
-                                    mAdapter.add(item);
-                                    selectPosition = mAdapter.getData().size() - 1;
-
-                                    for (int j = 0; j < mAdapter.getData().size(); j++) {
-                                        ((DataCbm) mAdapter.getItem(j)).isSelect = false;
+                                for (int j = 0; j < mAdapter.getData().size(); j++) {
+                                    if (((DataCbm) mAdapter.getItem(j)).Palletid.equals(printInfo.Palletid)) {
+                                        isOk = false;
+                                        break;
                                     }
-                                    ((DataCbm) mAdapter.getItem(selectPosition)).isSelect = true;
-                                    mAdapter.notifyDataSetChanged();
+                                }
+                                if (isOk) {
+                                    if ((appInMaxes.get(i).Soquan + printInfo.Pkgs) <= appInMaxes.get(i).OutCtn) {
+                                        //总数据添加
+                                        appInMaxes.get(i).Soquan += printInfo.Pkgs;
+                                        DataCbm item = new DataCbm();
+                                        item.Palletid = printInfo.Palletid;
+                                        item.So = printInfo.Sono;
+                                        item.Po = printInfo.Po;
+                                        item.Skn = printInfo.Skn;
+                                        item.InMxId = appInMaxes.get(i).RowId;
+                                        item.Soquan = printInfo.Pkgs;
+                                        mAdapter.add(item);
+                                        selectPosition = mAdapter.getData().size() - 1;
 
-                                    edCtnNO.setText(item.Soquan + "");
-                                    break;
-                                } else {
-                                    WWToast.showShort("该板单重复或者板单信息有误");
+                                        for (int j = 0; j < mAdapter.getData().size(); j++) {
+                                            ((DataCbm) mAdapter.getItem(j)).isSelect = false;
+                                        }
+                                        ((DataCbm) mAdapter.getItem(selectPosition)).isSelect = true;
+                                        mAdapter.notifyDataSetChanged();
+
+                                        edCtnNO.setText(item.Soquan + "");
+                                        break;
+                                    } else {
+                                        WWToast.showShort("该板单重复或者板单信息有误");
+                                    }
                                 }
                             }
                         }
                         if (!isOk) {
-                            WWToast.showShort("板单信息有误！！！");
+                            WWToast.showShort("该板单重复或者板单信息有误！！！");
                         }
                     }
 
