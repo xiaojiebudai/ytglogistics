@@ -43,8 +43,9 @@
             android:gravity="center"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:text="已约数：5" />
+            android:text="已约数：" />
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="35dp"
@@ -83,6 +84,7 @@
     </LinearLayout>
 
     <View style="@style/cutline_fine" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/lv_data"
         android:layout_width="match_parent"

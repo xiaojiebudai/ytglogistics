@@ -189,13 +189,6 @@ public class FuncImageActivity extends FatherActivity {
         RequestParams params = new RequestParams("http://www.yplog.com.cn/Wcf/bllService.svc/UploadPicture/" + MyApplication
                 .getInstance().getSessionId() + "/" + Uri.encode(inp_path, "utf-8"));
         String newUrl = FileUtils.getCompressedImageFileUrl(item.ImageUrl);
- /*       {
-        "fileName" : fName,
-                "params" : {
-            "fileName" : fName,
-                    "storeFileName" : fName
-        }
-    }*/
         params.addBodyParameter("file", new File(newUrl), null, item.fName);
         params.setMultipart(true);
         x.http().post(params, new WWXCallBack("UploadPicture") {

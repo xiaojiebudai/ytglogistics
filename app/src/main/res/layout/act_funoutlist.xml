@@ -22,8 +22,7 @@
         <TextView
             android:id="@+id/tv_0"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />
+            android:layout_height="wrap_content" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -34,8 +33,7 @@
         <TextView
             android:id="@+id/tv_1"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />
+            android:layout_height="wrap_content" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -46,8 +44,7 @@
         <TextView
             android:id="@+id/tv_2"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
     <LinearLayout
@@ -70,6 +67,7 @@
             android:layout_weight="1"
             android:background="@drawable/bg_yellow_white_shape"
             android:gravity="center_vertical"
+            android:paddingLeft="5dp"
             android:textColorHint="@color/text_c1"
             android:textSize="14sp" />
 
@@ -95,28 +93,29 @@
         android:layout_height="35dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent" />
 
         <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/textView"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="CLP"
             android:textColor="@color/text_f7"
-            android:textSize="12sp"
-            android:id="@+id/textView" />
+            android:textSize="12sp" />
 
         <TextView
+            android:id="@+id/textView2"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="柜号"
             android:textColor="@color/text_f7"
-            android:textSize="12sp"
-            android:id="@+id/textView2" />
+            android:textSize="12sp" />
 
         <TextView
             android:layout_width="110dp"

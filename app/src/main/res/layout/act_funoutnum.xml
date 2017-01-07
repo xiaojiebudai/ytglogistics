@@ -5,12 +5,13 @@
     android:orientation="vertical">
 
     <include layout="@layout/head_operation" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginTop="10dp"
-        android:visibility="gone"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -63,9 +64,10 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp" android:visibility="gone"
+        android:layout_height="40dp"
         android:layout_marginTop="10dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -115,12 +117,15 @@
                 android:textSize="14sp" />
         </LinearLayout>
     </LinearLayout>
-<View style="@style/cutline_fine"/>
+
+    <View style="@style/cutline_fine" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:gravity="center"
         android:orientation="horizontal">
+
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -129,6 +134,7 @@
             android:maxLines="2"
             android:text="板号"
             android:textSize="12sp" />
+
         <TextView
             android:layout_width="110dp"
             android:layout_height="wrap_content"
@@ -206,9 +212,9 @@
             android:layout_weight="1"
             android:background="@color/top_title_bg"
             android:gravity="center"
-            android:visibility="gone"
             android:text="增加"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:visibility="gone" />
 
 
         <TextView
@@ -242,8 +248,9 @@
             android:background="@color/top_title_bg"
             android:gravity="center"
             android:text="取消"
-            android:visibility="gone"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:visibility="gone" />
+
         <TextView
             android:id="@+id/tv_saomiao"
             android:layout_width="0dp"

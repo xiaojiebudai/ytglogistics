@@ -173,7 +173,6 @@ public class MainActivity extends FatherActivity {
         if(pinfo != null){
             for(int i = 0; i < pinfo.size(); i++){
                 String pn = pinfo.get(i).packageName;
-                ZLog.showPost(pn);
                 pName.add(pn);
             }
         }

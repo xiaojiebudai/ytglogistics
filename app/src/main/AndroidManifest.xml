@@ -108,6 +108,11 @@
             android:name="com.ytglogistics.www.ytglogistics.karics.library.zxing.android.CaptureActivity"
             android:screenOrientation="portrait" >
         </activity>
+        <!-- 扫码 -->
+        <activity
+            android:name="com.ytglogistics.www.ytglogistics.activity.ScanActivity"
+            android:screenOrientation="portrait" >
+        </activity>
     </application>
 
 </manifest>

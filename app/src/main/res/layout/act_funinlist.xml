@@ -68,6 +68,7 @@
             android:layout_weight="1"
             android:background="@drawable/bg_yellow_white_shape"
             android:gravity="center_vertical"
+            android:paddingLeft="5dp"
             android:textColorHint="@color/text_c1"
             android:textSize="14sp" />
 

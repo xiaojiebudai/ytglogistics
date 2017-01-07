@@ -108,7 +108,6 @@
                     android:id="@+id/start_app"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:layout_weight="1"
                     android:src="@mipmap/hengyun" />
@@ -134,7 +133,6 @@
                     android:id="@+id/cctv"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:layout_weight="1"
                     android:src="@mipmap/cctv" />
@@ -154,6 +152,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="5dp"
+                    android:layout_marginLeft="5dp"
                     android:layout_weight="1"
                     android:src="@mipmap/bt_10" />
 
@@ -188,11 +187,10 @@
                 <ImageView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:layout_weight="1"
-                    android:src="@mipmap/hengyun"
-                    android:visibility="invisible" />
+                    android:src="@mipmap/yuliu"
+                    />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

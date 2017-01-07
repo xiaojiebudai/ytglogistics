@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <include layout="@layout/head_operation" />
 
     <LinearLayout
@@ -38,63 +39,76 @@
             android:textColor="@color/text_f7"
             android:textSize="12sp" />
     </LinearLayout>
+
     <View style="@style/cutline_fine" />
+
     <ListView
         android:id="@+id/lv_data"
         android:layout_width="match_parent"
-        android:layout_weight="1"
+        android:layout_height="0dp"
 
-        android:layout_height="0dp"></ListView>
+        android:layout_weight="1"></ListView>
+
     <View style="@style/cutline_fine" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:orientation="horizontal">
+
             <TextView
                 android:layout_width="wrap_content"
-                android:gravity="center"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
+                android:gravity="center"
                 android:text="PO:"
-                android:textSize="14sp"
-                android:layout_height="match_parent" />
+                android:textSize="14sp" />
+
             <TextView
                 android:id="@+id/tv_po"
                 android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:layout_marginLeft="5dp"
-                android:layout_weight="1"
-                android:textSize="14sp"
-                android:layout_height="match_parent" />
+                android:textSize="14sp" />
+
             <TextView
                 android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
                 android:gravity="center"
-                android:layout_marginLeft="5dp"
                 android:text="SKN:"
-                android:textSize="14sp"
-                android:layout_height="match_parent" />
+                android:textSize="14sp" />
+
             <TextView
+                android:id="@+id/tv_skn"
                 android:layout_width="wrap_content"
-                android:gravity="center_vertical"  android:id="@+id/tv_skn"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
                 android:layout_weight="1"
-                android:textSize="14sp"
-                android:layout_height="match_parent" />
+                android:gravity="center_vertical"
+                android:textSize="14sp" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:orientation="horizontal">
+
             <TextView
                 android:layout_width="wrap_content"
-                android:gravity="center"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
+                android:gravity="center"
                 android:text="件数:"
-                android:textSize="14sp"
-                android:layout_height="match_parent" />
+                android:textSize="14sp" />
+
             <EditText
                 android:id="@+id/tv_num"
                 android:layout_width="0dp"
@@ -106,13 +120,15 @@
                 android:paddingLeft="10dp"
                 android:textColorHint="@color/text_c1"
                 android:textSize="14sp" />
+
             <TextView
                 android:layout_width="wrap_content"
-                android:gravity="center"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
+                android:gravity="center"
                 android:text="PCS:"
-                android:textSize="14sp"
-                android:layout_height="match_parent" />
+                android:textSize="14sp" />
+
             <EditText
                 android:id="@+id/tv_pcs"
                 android:layout_width="0dp"
@@ -125,191 +141,220 @@
                 android:textColorHint="@color/text_c1"
                 android:textSize="14sp" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:orientation="horizontal">
+
             <TextView
                 android:layout_width="wrap_content"
-                android:gravity="center"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
+                android:gravity="center"
                 android:text="个数:"
-                android:textSize="14sp"
-                android:layout_height="match_parent" />
+                android:textSize="14sp" />
+
             <TextView
+                android:id="@+id/tv_geshu"
                 android:layout_width="wrap_content"
-                android:gravity="center_vertical"
-                android:layout_marginLeft="5dp"  android:id="@+id/tv_geshu"
-                android:layout_weight="1"
-                android:textSize="14sp"
-                android:layout_height="match_parent" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:gravity="center"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:gravity="center"
                 android:text="仓位:"
-                android:textSize="14sp"
-                android:layout_height="match_parent" />
+                android:textSize="14sp" />
+
             <TextView
+                android:id="@+id/tv_cangwei"
                 android:layout_width="wrap_content"
-                android:gravity="center_vertical"
-                android:layout_marginLeft="5dp"  android:id="@+id/tv_cangwei"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
                 android:layout_weight="1"
-                android:textSize="14sp"
-                android:layout_height="match_parent" />
+                android:gravity="center_vertical"
+                android:textSize="14sp" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:orientation="horizontal">
+
             <TextView
                 android:layout_width="wrap_content"
-                android:gravity="center"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
+                android:gravity="center"
                 android:text="单重:"
-                android:textSize="14sp"
-                android:layout_height="match_parent" />
+                android:textSize="14sp" />
+
             <TextView
+                android:id="@+id/tv_one_weight"
                 android:layout_width="wrap_content"
-                android:gravity="center_vertical"
-                android:layout_marginLeft="5dp"  android:id="@+id/tv_one_weight"
-                android:layout_weight="1"
-                android:textSize="14sp"
-                android:layout_height="match_parent" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:gravity="center"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:gravity="center"
                 android:text="总重:"
-                android:textSize="14sp"
-                android:layout_height="match_parent" />
+                android:textSize="14sp" />
+
             <TextView
-                android:layout_width="wrap_content"
-                android:gravity="center_vertical"
-                android:layout_marginLeft="5dp"
                 android:id="@+id/tv_weight"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
                 android:layout_weight="1"
-                android:textSize="14sp"
-                android:layout_height="match_parent" />
+                android:gravity="center_vertical"
+                android:textSize="14sp" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:orientation="horizontal">
+
             <TextView
                 android:layout_width="wrap_content"
-                android:gravity="center"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
+                android:gravity="center"
                 android:text="长度:"
-                android:textSize="14sp"
-                android:layout_height="match_parent" />
+                android:textSize="14sp" />
+
             <TextView
-                android:layout_width="wrap_content"
-                android:gravity="center_vertical"
-                android:layout_marginLeft="5dp"
                 android:id="@+id/tv_length"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
                 android:layout_weight="1"
-                android:textSize="14sp"
-                android:layout_height="match_parent" />
+                android:gravity="center_vertical"
+                android:textSize="14sp" />
+
             <TextView
                 android:layout_width="wrap_content"
-                android:gravity="center"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
+                android:gravity="center"
                 android:text="宽度:"
-                android:textSize="14sp"
-                android:layout_height="match_parent" />
+                android:textSize="14sp" />
+
             <TextView
-                android:layout_width="wrap_content"
-                android:gravity="center_vertical"
-                android:layout_marginLeft="5dp"
                 android:id="@+id/tv_one_wigth"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
                 android:layout_weight="1"
-                android:textSize="14sp"
-                android:layout_height="match_parent" />
+                android:gravity="center_vertical"
+                android:textSize="14sp" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:orientation="horizontal">
+
             <TextView
                 android:layout_width="wrap_content"
-                android:gravity="center"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
+                android:gravity="center"
                 android:text="高度:"
-                android:textSize="14sp"
-                android:layout_height="match_parent" />
+                android:textSize="14sp" />
+
             <TextView
-                android:layout_width="wrap_content"
-                android:gravity="center_vertical"
-                android:layout_marginLeft="5dp"
                 android:id="@+id/tv_one_height"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
                 android:layout_weight="1"
-                android:textSize="14sp"
-                android:layout_height="match_parent" />
+                android:gravity="center_vertical"
+                android:textSize="14sp" />
+
             <TextView
                 android:layout_width="wrap_content"
-                android:gravity="center"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
+                android:gravity="center"
                 android:text="CBM:"
-                android:textSize="14sp"
-                android:layout_height="match_parent" />
+                android:textSize="14sp" />
+
             <TextView
-                android:layout_width="wrap_content"
-                android:gravity="center_vertical"
-                android:layout_marginLeft="5dp"
                 android:id="@+id/tv_cbm"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
                 android:layout_weight="1"
-                android:textSize="14sp"
-                android:layout_height="match_parent" />
+                android:gravity="center_vertical"
+                android:textSize="14sp" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:orientation="horizontal">
+
             <TextView
                 android:layout_width="wrap_content"
-                android:gravity="center"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
+                android:gravity="center"
                 android:text="BkCBM:"
-                android:textSize="14sp"
-                android:layout_height="match_parent" />
+                android:textSize="14sp" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:gravity="center_vertical"
-                android:layout_marginLeft="5dp"
-                android:layout_weight="1"
                 android:id="@+id/tv_bkcbm"
-                android:textSize="14sp"
-                android:layout_height="match_parent" />
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:textSize="14sp" />
 
             <TextView
                 android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
                 android:gravity="center"
-                android:layout_marginLeft="5dp"
                 android:text="CBMRate:"
-                android:textSize="14sp"
-                android:layout_height="match_parent" />
+                android:textSize="14sp" />
+
             <TextView
-                android:layout_width="wrap_content"
-                android:gravity="center_vertical"
-                android:layout_marginLeft="5dp"
                 android:id="@+id/tv_cbmrate"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
                 android:layout_weight="1"
-                android:textSize="14sp"
-                android:layout_height="match_parent" />
+                android:gravity="center_vertical"
+                android:textSize="14sp" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:orientation="horizontal">
+
             <TextView
                 android:layout_width="wrap_content"
-                android:gravity="center"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
+                android:gravity="center"
                 android:text="箱/板:"
-                android:textSize="14sp"
-                android:layout_height="match_parent" />
+                android:textSize="14sp" />
+
             <EditText
                 android:id="@+id/tv_xiangbang"
                 android:layout_width="0dp"
@@ -366,8 +411,6 @@
                 android:text="打印"
                 android:textColor="@color/white" />
         </LinearLayout>
-
-
 
 
     </LinearLayout>

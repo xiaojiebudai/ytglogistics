@@ -54,10 +54,11 @@ public class FuncPlaceStatusDialog extends Dialog implements View.OnClickListene
         findViewById(R.id.tv_tongzhilichang).setOnClickListener(this);
         findViewById(R.id.tv_tingyong).setOnClickListener(this);
         findViewById(R.id.tv_back).setOnClickListener(this);
-
-        getChePia();
         tvBowei.setText(place.PlaceId);
         tvStatus.setText(place.StatusText);
+        if(place.Status!=0){
+            getChePia();
+        }
     }
 
     private void getChePia() {

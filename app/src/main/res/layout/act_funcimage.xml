@@ -24,6 +24,7 @@
         <EditText
             android:id="@+id/et_no"
             android:layout_width="0dp"
+            android:paddingLeft="5dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/bg_yellow_white_shape"
@@ -87,7 +88,7 @@
             android:id="@+id/tv_newfilename"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_weight="1"   android:paddingLeft="5dp"
             android:background="@drawable/bg_yellow_white_shape"
             android:gravity="center_vertical"
             android:paddingRight="5dp"
