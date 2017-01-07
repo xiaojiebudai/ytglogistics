@@ -94,7 +94,7 @@ public class FuncQueryActivity extends FatherActivity {
             @Override
             protected void convert(BaseViewHolder helper, DataInOut item) {
 
-                helper.setText(R.id.tv_num, helper.getAdapterPosition() + "");
+                helper.setText(R.id.tv_num, (helper.getAdapterPosition()+1) + "");
                 if (model == INYUYUE) {
                     helper.setText(R.id.tv_name, item.PeriodName);
                     helper.setText(R.id.tv_bowei, item.CarNo);

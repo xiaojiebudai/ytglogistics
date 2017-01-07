@@ -18,6 +18,7 @@ import com.ytglogistics.www.ytglogistics.utils.ParamsUtils;
 import com.ytglogistics.www.ytglogistics.utils.PublicWay;
 import com.ytglogistics.www.ytglogistics.utils.SharedPreferenceUtils;
 import com.ytglogistics.www.ytglogistics.utils.WWToast;
+import com.ytglogistics.www.ytglogistics.utils.ZLog;
 import com.ytglogistics.www.ytglogistics.xutils.WWXCallBack;
 
 import org.xutils.x;
@@ -58,6 +59,8 @@ public class MainActivity extends FatherActivity {
     ImageView exit;
     @BindView(R.id.start_app)
     ImageView start_app;
+    @BindView(R.id.cctv)
+    ImageView cctv;
 
     @Override
     protected int getLayoutId() {
@@ -99,7 +102,7 @@ public class MainActivity extends FatherActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.start_app,R.id.receiving, R.id.shipping, R.id.warehousing, R.id.outofstorage, R.id.garage_m, R.id.move_operate, R.id.housing_reservation_query, R.id.outofstorage_query, R.id.locale_photos, R.id.housing_reservation_po_query, R.id.berth_map, R.id.loginout, R.id.exit})
+    @OnClick({R.id.cctv,R.id.start_app,R.id.receiving, R.id.shipping, R.id.warehousing, R.id.outofstorage, R.id.garage_m, R.id.move_operate, R.id.housing_reservation_query, R.id.outofstorage_query, R.id.locale_photos, R.id.housing_reservation_po_query, R.id.berth_map, R.id.loginout, R.id.exit})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.receiving:
@@ -151,6 +154,15 @@ public class MainActivity extends FatherActivity {
 
 
                 break;
+            case R.id.cctv:
+           if(isAvilible(this,"sinofloat.safe")) {
+               PublicWay.startApp(this,"sinofloat.safe","sinofloat.main.ui.activities.LauncherActivity");
+           }else{
+               WWToast.showShort("还未安装移动安防，请先去应用市场下载");
+           }
+
+
+                break;
         }
     }
     private boolean isAvilible(Context context, String packageName){
@@ -161,6 +173,7 @@ public class MainActivity extends FatherActivity {
         if(pinfo != null){
             for(int i = 0; i < pinfo.size(); i++){
                 String pn = pinfo.get(i).packageName;
+                ZLog.showPost(pn);
                 pName.add(pn);
             }
         }
