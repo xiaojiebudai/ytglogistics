@@ -72,17 +72,17 @@ public class FunInMaxListActivity extends FatherActivity {
     @BindView(R.id.tv_geshu)
     TextView tvGeshu;
     @BindView(R.id.tv_cangwei)
-    TextView tvCangwei;
+    EditText tvCangwei;
     @BindView(R.id.tv_one_weight)
     TextView tvOneWeight;
     @BindView(R.id.tv_weight)
     TextView tvWeight;
     @BindView(R.id.tv_length)
-    TextView tvLength;
+    EditText tvLength;
     @BindView(R.id.tv_one_wigth)
-    TextView tvOneWigth;
+    EditText tvOneWigth;
     @BindView(R.id.tv_one_height)
-    TextView tvOneHeight;
+    EditText tvOneHeight;
     @BindView(R.id.tv_cbm)
     TextView tvCbm;
     @BindView(R.id.tv_bkcbm)
@@ -113,7 +113,7 @@ public class FunInMaxListActivity extends FatherActivity {
     protected void initView() {
         adapter = new FunInMaxListAdapter(this);
         lvData.setAdapter(adapter);
-        final DecimalFormat    df   = new DecimalFormat("######0.00");
+        final DecimalFormat df = new DecimalFormat("######0.00");
 
         lvData.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -139,6 +139,103 @@ public class FunInMaxListActivity extends FatherActivity {
                 adapter.setPos(position);
             }
         });
+        tvCangwei.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!TextUtils.isEmpty(s)) {
+                    if (selectPosition == -1) {
+                        WWToast.showShort("请先选择一条记录");
+                    } else {
+                        adapter.getData().get(selectPosition).Loca = s + "";
+                    }
+
+                }
+
+            }
+        });
+        tvLength.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!TextUtils.isEmpty(s)) {
+                    if (selectPosition == -1) {
+                        WWToast.showShort("请先选择一条记录");
+                    } else {
+                        adapter.getData().get(selectPosition).Leng = Double.valueOf(s + "");
+                    }
+
+                }
+
+            }
+        });
+        tvOneWigth.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!TextUtils.isEmpty(s)) {
+                    if (selectPosition == -1) {
+                        WWToast.showShort("请先选择一条记录");
+                    } else {
+                        adapter.getData().get(selectPosition).Wide = Double.valueOf(s + "");
+                    }
+
+                }
+
+            }
+        });
+        tvOneHeight.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!TextUtils.isEmpty(s)) {
+                    if (selectPosition == -1) {
+                        WWToast.showShort("请先选择一条记录");
+                    } else {
+                        adapter.getData().get(selectPosition).High = Double.valueOf(s + "");
+                    }
+
+                }
+
+            }
+        });
+
         tvNum.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -299,7 +396,7 @@ public class FunInMaxListActivity extends FatherActivity {
     private void getInMaxData() {
         showWaitDialog();
         RequestParams params = ParamsUtils.getSessionParams(Api.GetAppInMx());
-        params.addBodyParameter("serial", result.Serial+"");
+        params.addBodyParameter("serial", result.Serial + "");
         params.addBodyParameter("queueNo", result.QueueNo);
         x.http().get(params, new WWXCallBack("GetAppInMx") {
             @Override

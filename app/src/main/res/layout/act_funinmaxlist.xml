@@ -99,6 +99,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="30dp"
+            android:layout_marginTop="2dp"
             android:orientation="horizontal">
 
             <TextView
@@ -145,6 +146,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="30dp"
+            android:layout_marginTop="2dp"
             android:orientation="horizontal">
 
             <TextView
@@ -172,19 +174,22 @@
                 android:text="仓位:"
                 android:textSize="14sp" />
 
-            <TextView
+            <EditText
                 android:id="@+id/tv_cangwei"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="5dp"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
                 android:layout_weight="1"
+                android:background="@drawable/bg_yellow_white_shape"
                 android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:textColorHint="@color/text_c1"
                 android:textSize="14sp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="30dp"
+            android:layout_marginTop="2dp"
             android:orientation="horizontal">
 
             <TextView
@@ -225,6 +230,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="30dp"
+            android:layout_marginTop="2dp"
             android:orientation="horizontal">
 
             <TextView
@@ -235,14 +241,18 @@
                 android:text="长度:"
                 android:textSize="14sp" />
 
-            <TextView
+            <EditText
                 android:id="@+id/tv_length"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="5dp"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
                 android:layout_weight="1"
+                android:background="@drawable/bg_yellow_white_shape"
                 android:gravity="center_vertical"
+                android:inputType="numberDecimal"
+                android:paddingLeft="10dp"
+                android:textColorHint="@color/text_c1"
                 android:textSize="14sp" />
+
 
             <TextView
                 android:layout_width="wrap_content"
@@ -252,19 +262,24 @@
                 android:text="宽度:"
                 android:textSize="14sp" />
 
-            <TextView
+            <EditText
                 android:id="@+id/tv_one_wigth"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="5dp"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
                 android:layout_weight="1"
+                android:background="@drawable/bg_yellow_white_shape"
                 android:gravity="center_vertical"
+                android:inputType="numberDecimal"
+                android:paddingLeft="10dp"
+                android:textColorHint="@color/text_c1"
                 android:textSize="14sp" />
+
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="30dp"
+            android:layout_marginTop="2dp"
             android:orientation="horizontal">
 
             <TextView
@@ -275,14 +290,18 @@
                 android:text="高度:"
                 android:textSize="14sp" />
 
-            <TextView
+            <EditText
                 android:id="@+id/tv_one_height"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="5dp"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
                 android:layout_weight="1"
+                android:background="@drawable/bg_yellow_white_shape"
                 android:gravity="center_vertical"
+                android:inputType="numberDecimal"
+                android:paddingLeft="10dp"
+                android:textColorHint="@color/text_c1"
                 android:textSize="14sp" />
+
 
             <TextView
                 android:layout_width="wrap_content"
@@ -305,6 +324,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="30dp"
+            android:layout_marginTop="2dp"
             android:orientation="horizontal">
 
             <TextView
@@ -345,6 +365,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="30dp"
+            android:layout_marginTop="2dp"
             android:orientation="horizontal">
 
             <TextView
