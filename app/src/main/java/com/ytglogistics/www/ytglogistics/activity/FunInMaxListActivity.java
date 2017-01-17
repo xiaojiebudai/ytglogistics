@@ -38,6 +38,7 @@ import com.ytglogistics.www.ytglogistics.xutils.WWXCallBack;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -97,6 +98,7 @@ public class FunInMaxListActivity extends FatherActivity {
     private ArrayList<DataCbm> lsit = new ArrayList<DataCbm>();
     private int selectPosition = -1;
     private ArrayList<AppInMax> appInMaxes;
+    private DecimalFormat df;
 
     @Override
     protected int getLayoutId() {
@@ -110,11 +112,12 @@ public class FunInMaxListActivity extends FatherActivity {
         result = JSON.parseObject(getIntent().getStringExtra(Consts.KEY_DATA), AppInResult.class);
     }
 
+
     @Override
     protected void initView() {
         adapter = new FunInMaxListAdapter(this);
         lvData.setAdapter(adapter);
-        final DecimalFormat df = new DecimalFormat("######0.00");
+        df = new DecimalFormat("######0.00");
 
         lvData.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -128,11 +131,11 @@ public class FunInMaxListActivity extends FatherActivity {
                 tvGeshu.setText((int) inMax.Ttlpcs + "");
                 tvCangwei.setText(inMax.Loca + "");
                 tvOneWeight.setText(inMax.Unitwei + "");
-                tvWeight.setText(inMax.Rweight + "");
+                tvWeight.setText(df.format((inMax.Rweight)) + "");
                 tvLength.setText(inMax.Leng + "");
                 tvOneWigth.setText(inMax.Wide + "");
                 tvOneHeight.setText(inMax.High + "");
-                tvCbm.setText(inMax.Cbm + "");
+                tvCbm.setText(df.format((inMax.Cbm)) + "");
                 tvBkcbm.setText(inMax.BookingCbm + "");
 
                 tvCbmrate.setText(df.format((inMax.CbmRate * 100)) + "%");
@@ -182,6 +185,7 @@ public class FunInMaxListActivity extends FatherActivity {
                         WWToast.showShort("请先选择一条记录");
                     } else {
                         adapter.getData().get(selectPosition).Leng = Double.valueOf(s + "");
+                        setCbm(adapter.getData().get(selectPosition));
                     }
 
                 }
@@ -206,6 +210,7 @@ public class FunInMaxListActivity extends FatherActivity {
                         WWToast.showShort("请先选择一条记录");
                     } else {
                         adapter.getData().get(selectPosition).Wide = Double.valueOf(s + "");
+                        setCbm(adapter.getData().get(selectPosition));
                     }
 
                 }
@@ -230,6 +235,7 @@ public class FunInMaxListActivity extends FatherActivity {
                         WWToast.showShort("请先选择一条记录");
                     } else {
                         adapter.getData().get(selectPosition).High = Double.valueOf(s + "");
+                        setCbm(adapter.getData().get(selectPosition));
                     }
 
                 }
@@ -255,6 +261,8 @@ public class FunInMaxListActivity extends FatherActivity {
                         WWToast.showShort("请先选择一条记录");
                     } else {
                         adapter.getData().get(selectPosition).Soquan = Integer.valueOf(s + "");
+                        setAllWeight(adapter.getData().get(selectPosition).Soquan);
+                        setCbm(adapter.getData().get(selectPosition));
                     }
 
                 }
@@ -311,6 +319,29 @@ public class FunInMaxListActivity extends FatherActivity {
         });
 
 
+    }
+
+    private void setCbm(AppInMax appInMax) {
+
+        appInMax.Cbm = appInMax.Leng * appInMax.Wide * appInMax.High * appInMax.Soquan * 0.001 * 0.001;
+        BigDecimal b = new BigDecimal(appInMax.Cbm);
+        appInMax.Cbm = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+        inMax.Cbm = appInMax.Cbm;
+        tvCbm.setText(df.format((inMax.Cbm)) + "");
+        appInMax.CbmRate = (appInMax.Cbm - appInMax.BookingCbm) / appInMax.BookingCbm;
+        BigDecimal c = new BigDecimal( appInMax.CbmRate);
+        appInMax.CbmRate = c.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+        inMax.CbmRate = appInMax.CbmRate;
+        tvCbmrate.setText(df.format((inMax.CbmRate * 100)) + "%");
+    }
+
+    private void setAllWeight(int soquan) {
+        adapter.getData().get(selectPosition).Rweight = adapter.getData().get(selectPosition).Unitwei * soquan;
+        BigDecimal b = new BigDecimal(adapter.getData().get(selectPosition).Rweight);
+        adapter.getData().get(selectPosition).Rweight = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+
+        inMax.Rweight = adapter.getData().get(selectPosition).Rweight;
+        tvWeight.setText(df.format((inMax.Rweight)) + "");
     }
 
     public MyApplication context;
@@ -399,7 +430,7 @@ public class FunInMaxListActivity extends FatherActivity {
         RequestParams params = ParamsUtils.getSessionParams(Api.GetAppInMx());
         params.addBodyParameter("serial", result.Serial + "");
         params.addBodyParameter("queueNo", result.QueueNo);
-        ZLog.showPost("queueNo"+ result.QueueNo);
+        ZLog.showPost("queueNo" + result.QueueNo);
         x.http().get(params, new WWXCallBack("GetAppInMx") {
             @Override
             public void onAfterSuccessOk(JSONObject data) {
@@ -513,6 +544,9 @@ public class FunInMaxListActivity extends FatherActivity {
                 .getInstance().getSessionId());
         JSONArray array = new JSONArray();
         for (int i = 0; i < adapter.getData().size(); i++) {
+            if ((adapter.getData().get(i).CbmRate > 0.05) || (adapter.getData().get(i).CbmRate < -0.05)) {
+                WWToast.showShort(adapter.getData().get(i).Skn + " CbmRate大于5%，需要复尺.");
+            }
             array.add(adapter.getData().get(i).toJson());
         }
         jsonObject.put("objs", array);

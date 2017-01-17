@@ -25,8 +25,10 @@ import com.ytglogistics.www.ytglogistics.been.AppInResult;
 import com.ytglogistics.www.ytglogistics.been.Car;
 import com.ytglogistics.www.ytglogistics.been.Steved;
 import com.ytglogistics.www.ytglogistics.been.User;
+import com.ytglogistics.www.ytglogistics.dialog.CommonDialog;
 import com.ytglogistics.www.ytglogistics.dialog.DateChooseWheelViewDialog;
 import com.ytglogistics.www.ytglogistics.utils.Consts;
+import com.ytglogistics.www.ytglogistics.utils.DialogUtils;
 import com.ytglogistics.www.ytglogistics.utils.ParamsUtils;
 import com.ytglogistics.www.ytglogistics.utils.SharedPreferenceUtils;
 import com.ytglogistics.www.ytglogistics.utils.TimeUtil;
@@ -76,6 +78,8 @@ public class FunDetailActivity extends FatherActivity {
     TextView tvSave;
     @BindView(R.id.tv_get)
     TextView tvGet;
+    @BindView(R.id.tv_commit)
+    TextView tv_commit;
 
     private AppInResult result;
     private Car car;
@@ -100,6 +104,7 @@ public class FunDetailActivity extends FatherActivity {
         if (model == FUNIN) {
             tvSave.setText("保存");
             tvGet.setText("收货");
+            tv_commit.setVisibility(View.VISIBLE);
         } else {
             tvSave.setText("提交资料");
             tvGet.setText("出货录入");
@@ -159,7 +164,7 @@ public class FunDetailActivity extends FatherActivity {
 
     private DateChooseWheelViewDialog startDateChooseDialog, startDateChooseDialog1, startDateChooseDialog2, startDateChooseDialog3;
 
-    @OnClick({R.id.ll_0, R.id.ll_1, R.id.ll_2, R.id.ll_3, R.id.ll_4, R.id.ll_5, R.id.tv_save, R.id.tv_get})
+    @OnClick({R.id.tv_commit,R.id.ll_0, R.id.ll_1, R.id.ll_2, R.id.ll_3, R.id.ll_4, R.id.ll_5, R.id.tv_save, R.id.tv_get})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ll_0:
@@ -234,6 +239,34 @@ public class FunDetailActivity extends FatherActivity {
                     WWToast.showShort("请选择信息并保存后再操作");
                 }
 
+                break;
+            case R.id.tv_commit:
+                 final CommonDialog commonDialogTwiceConfirm = DialogUtils.getCommonDialogTwiceConfirm(this, "请确认收货录入的数据已完成并提交？", true);
+                commonDialogTwiceConfirm.setRightButtonCilck(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        commonDialogTwiceConfirm.dismiss();
+                        showWaitDialog();
+
+                   RequestParams sessionParams = ParamsUtils.getSessionParams(Api.FinishQueue());
+                        sessionParams.addBodyParameter("operDate",car.OperDate);
+                        sessionParams.addBodyParameter("queueNo",car.QueueNo);
+                        ZLog.showPost(JSONObject.toJSONString(car));
+                        x.http().get(sessionParams, new WWXCallBack("FinishQueue") {
+                            @Override
+                            public void onAfterSuccessOk(JSONObject data) {
+                                WWToast.showShort("提交成功");
+                                finish();
+                            }
+
+                            @Override
+                            public void onAfterFinished() {
+                                dismissWaitDialog();
+                            }
+                        });
+                    }
+                });
+                commonDialogTwiceConfirm.show();
                 break;
 
         }

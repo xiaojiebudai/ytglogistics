@@ -419,7 +419,7 @@
                 android:layout_weight="1"
                 android:background="@color/top_title_bg"
                 android:gravity="center"
-                android:text="确认提交"
+                android:text="数据保存"
                 android:textColor="@color/white" />
 
             <TextView
