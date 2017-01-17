@@ -103,6 +103,7 @@ public class FuncImageActivity extends FatherActivity {
         lvData.setHasFixedSize(true);
         lvData.setLayoutManager(new LinearLayoutManager(this));
         lvData.setItemAnimator(new DefaultItemAnimator());
+        mAdapter.openLoadAnimation(false);
         lvData.setAdapter(mAdapter);
         tvNewfilename.addTextChangedListener(new TextWatcher() {
             @Override

@@ -31,6 +31,7 @@ import com.ytglogistics.www.ytglogistics.utils.RegexUtil;
 import com.ytglogistics.www.ytglogistics.utils.SharedPreferenceUtils;
 import com.ytglogistics.www.ytglogistics.utils.TimeUtil;
 import com.ytglogistics.www.ytglogistics.utils.WWToast;
+import com.ytglogistics.www.ytglogistics.utils.ZLog;
 import com.ytglogistics.www.ytglogistics.utils.preDefiniation;
 import com.ytglogistics.www.ytglogistics.xutils.WWXCallBack;
 
@@ -398,6 +399,7 @@ public class FunInMaxListActivity extends FatherActivity {
         RequestParams params = ParamsUtils.getSessionParams(Api.GetAppInMx());
         params.addBodyParameter("serial", result.Serial + "");
         params.addBodyParameter("queueNo", result.QueueNo);
+        ZLog.showPost("queueNo"+ result.QueueNo);
         x.http().get(params, new WWXCallBack("GetAppInMx") {
             @Override
             public void onAfterSuccessOk(JSONObject data) {

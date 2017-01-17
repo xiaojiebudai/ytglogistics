@@ -39,4 +39,5 @@ dependencies {
     compile 'cn.bingoogolapple:bga-qrcodecore:1.1.6@aar'
     compile 'cn.bingoogolapple:bga-zxing:1.1.6@aar'
     // -------------------- 以上三个库是必须依赖的 ----------------------------
+//    compile 'cn.bingoogolapple:bga-swipebacklayout:1.0.7@aar'
 }

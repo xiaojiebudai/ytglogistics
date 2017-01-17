@@ -23,7 +23,7 @@ import butterknife.ButterKnife;
 
 /**
  * activity基类
- * 
+ *
  * @author xl
  * @date:2016-7-24下午3:06:09
  * @description
@@ -85,7 +85,7 @@ public abstract class FatherActivity extends AppCompatActivity {
 
 	/**
 	 * 初始默认头部
-	 * 
+	 *
 	 * @author xl
 	 * @date:2016-7-24下午3:11:37
 	 * @description 左侧按钮返回,中间title文本
@@ -131,7 +131,7 @@ public abstract class FatherActivity extends AppCompatActivity {
 
 	/**
 	 * 初始化头部右侧的文本按钮
-	 * 
+	 *
 	 * @param resId
 	 * @param listener
 	 */
@@ -146,7 +146,7 @@ public abstract class FatherActivity extends AppCompatActivity {
 
 	/**
 	 * 初始化头部左侧返回
-	 * 
+	 *
 	 */
 	protected void initHeadBack() {
 		View left = findViewById(R.id.rl_head_left);
@@ -194,7 +194,7 @@ public abstract class FatherActivity extends AppCompatActivity {
 
 	/**
 	 * 初始化WaitDialog
-	 * 
+	 *
 	 * @author xl
 	 * @description 开发设置是否取消
 	 * @param cancelable

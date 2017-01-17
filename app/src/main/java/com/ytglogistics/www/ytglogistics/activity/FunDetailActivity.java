@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -30,6 +31,7 @@ import com.ytglogistics.www.ytglogistics.utils.ParamsUtils;
 import com.ytglogistics.www.ytglogistics.utils.SharedPreferenceUtils;
 import com.ytglogistics.www.ytglogistics.utils.TimeUtil;
 import com.ytglogistics.www.ytglogistics.utils.WWToast;
+import com.ytglogistics.www.ytglogistics.utils.ZLog;
 import com.ytglogistics.www.ytglogistics.xutils.WWXCallBack;
 
 import org.xutils.http.RequestParams;
@@ -113,7 +115,6 @@ public class FunDetailActivity extends FatherActivity {
         } else {
             params.addBodyParameter("orderId", car.OrderId);
         }
-
         x.http().get(params, new WWXCallBack((model == FUNIN) ? "GetAppIn" : "GetAppOut") {
             @Override
             public void onAfterSuccessOk(JSONObject data) {
@@ -121,7 +122,7 @@ public class FunDetailActivity extends FatherActivity {
                 if (result.Serial == 0) {
                     User user = (User) JSONObject.parseObject(SharedPreferenceUtils.getInstance().getUserInfo(), User.class);
                     result.UserId = user.Keyid;
-                    result.QueueNo = car.QueueNo;
+                    result.QueueNo = car.YyNo;
                     result.CarNo = car.CarNo;
                     result.PlaceId = car.PlaceId;
                     result.OrderId = car.OrderId;
@@ -225,15 +226,24 @@ public class FunDetailActivity extends FatherActivity {
                 saveInfo();
                 break;
             case R.id.tv_get:
-                Intent intent = new Intent(FunDetailActivity.this, (model == FUNIN) ? FunInMaxListActivity.class : FunOutMxListActivity.class);
-                intent.putExtra(Consts.KEY_DATA, JSON.toJSONString(result));
-                startActivity(intent);
+                if(result.Serial>0){
+                    Intent intent = new Intent(FunDetailActivity.this, (model == FUNIN) ? FunInMaxListActivity.class : FunOutMxListActivity.class);
+                    intent.putExtra(Consts.KEY_DATA, JSON.toJSONString(result));
+                    startActivity(intent);
+                }else{
+                    WWToast.showShort("请选择信息并保存后再操作");
+                }
+
                 break;
 
         }
     }
 
     private void saveInfo() {
+        if(TextUtils.isEmpty(result.UserId)||TextUtils.isEmpty(result.StevedId)){
+            WWToast.showShort("请先完善信息再保存");
+            return;
+        }
         showWaitDialog();
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Consts.KEY_SESSIONID, MyApplication

@@ -88,6 +88,7 @@ public class PoSearchListActivity extends FatherActivity {
         lvData.setHasFixedSize(true);
         lvData.setLayoutManager(new LinearLayoutManager(this));
         lvData.setItemAnimator(new DefaultItemAnimator());
+        mAdapter.openLoadAnimation(false);
         lvData.setAdapter(mAdapter);
     }
 

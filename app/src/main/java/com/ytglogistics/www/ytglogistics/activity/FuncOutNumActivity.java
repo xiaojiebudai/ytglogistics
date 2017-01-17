@@ -159,6 +159,7 @@ public class FuncOutNumActivity extends FatherActivity {
         lvData.setHasFixedSize(true);
         lvData.setLayoutManager(new LinearLayoutManager(this));
         lvData.setItemAnimator(new DefaultItemAnimator());
+        mAdapter.openLoadAnimation(false);
         lvData.setAdapter(mAdapter);
         edCtnNO.addTextChangedListener(new TextWatcher() {
             @Override

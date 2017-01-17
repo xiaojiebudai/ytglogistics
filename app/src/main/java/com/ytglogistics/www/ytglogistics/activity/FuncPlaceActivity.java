@@ -153,6 +153,7 @@ public class FuncPlaceActivity extends FatherActivity {
             listView.setHasFixedSize(true);
             listView.setLayoutManager(new LinearLayoutManager(this));
             listView.setItemAnimator(new DefaultItemAnimator());
+            mAdapter.openLoadAnimation(false);
             listView.setAdapter(mAdapter);
             popupWindow = new PopupWindow(listView,
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
