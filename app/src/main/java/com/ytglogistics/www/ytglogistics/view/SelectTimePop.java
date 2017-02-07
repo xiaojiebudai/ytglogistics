@@ -25,7 +25,7 @@ import java.util.Map;
 
 
 /***
- * Description:选择时间pop Company: wangwanglife Version：1.0
+ * Description:选择时间pop Version：1.0
  * 
  * @author zxj
  * @date 2016-7-29
