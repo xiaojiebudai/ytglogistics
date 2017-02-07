@@ -129,7 +129,7 @@ public class FunInMaxListActivity extends FatherActivity {
                 tvNum.setText((int) inMax.Soquan + "");
                 tvPcs.setText(inMax.Format + "");
                 tvGeshu.setText((int) inMax.Ttlpcs + "");
-                tvCangwei.setText(inMax.Loca + "");
+                tvCangwei.setText(TextUtils.isEmpty(inMax.Loca) ? "" : inMax.Loca);
                 tvOneWeight.setText(inMax.Unitwei + "");
                 tvWeight.setText(df.format((inMax.Rweight)) + "");
                 tvLength.setText(inMax.Leng + "");
@@ -322,17 +322,20 @@ public class FunInMaxListActivity extends FatherActivity {
     }
 
     private void setCbm(AppInMax appInMax) {
-
-        appInMax.Cbm = appInMax.Leng * appInMax.Wide * appInMax.High * appInMax.Soquan * 0.001 * 0.001;
-        BigDecimal b = new BigDecimal(appInMax.Cbm);
-        appInMax.Cbm = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-        inMax.Cbm = appInMax.Cbm;
-        tvCbm.setText(df.format((inMax.Cbm)) + "");
-        appInMax.CbmRate = (appInMax.Cbm - appInMax.BookingCbm) / appInMax.BookingCbm;
-        BigDecimal c = new BigDecimal( appInMax.CbmRate);
-        appInMax.CbmRate = c.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-        inMax.CbmRate = appInMax.CbmRate;
-        tvCbmrate.setText(df.format((inMax.CbmRate * 100)) + "%");
+        if (appInMax.Leng == 0 || appInMax.Wide == 0 || appInMax.High == 0 || appInMax.Soquan == 0 || appInMax.BookingCbm == 0) {
+//存在数据为空的就不去计算了
+        } else {
+            appInMax.Cbm = appInMax.Leng * appInMax.Wide * appInMax.High * appInMax.Soquan * 0.001 * 0.001;
+            BigDecimal b = new BigDecimal(appInMax.Cbm);
+            appInMax.Cbm = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+            inMax.Cbm = appInMax.Cbm;
+            tvCbm.setText(df.format((inMax.Cbm)) + "");
+            appInMax.CbmRate = (appInMax.Cbm - appInMax.BookingCbm) / appInMax.BookingCbm;
+            BigDecimal c = new BigDecimal(appInMax.CbmRate);
+            appInMax.CbmRate = c.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+            inMax.CbmRate = appInMax.CbmRate;
+            tvCbmrate.setText(df.format((inMax.CbmRate * 100)) + "%");
+        }
     }
 
     private void setAllWeight(int soquan) {
