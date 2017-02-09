@@ -137,7 +137,7 @@
             android:textSize="12sp" />
 
         <TextView
-            android:layout_width="110dp"
+            android:layout_width="90dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:maxLines="2"
@@ -154,7 +154,7 @@
             android:textSize="12sp" />
 
         <TextView
-            android:layout_width="110dp"
+            android:layout_width="90dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:maxLines="2"
@@ -261,6 +261,16 @@
             android:background="@color/top_title_bg"
             android:gravity="center"
             android:text="扫描出库"
+            android:textColor="@color/white" />
+        <TextView
+            android:id="@+id/close"
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"
+            android:background="@color/top_title_bg"
+            android:gravity="center"
+            android:text="@string/close"
             android:textColor="@color/white" />
     </LinearLayout>
 </LinearLayout>

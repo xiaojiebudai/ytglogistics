@@ -24,6 +24,7 @@
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.autofocus" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
         android:name="com.ytglogistics.www.ytglogistics.MyApplication"

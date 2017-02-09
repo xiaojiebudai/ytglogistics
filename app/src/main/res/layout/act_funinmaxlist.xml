@@ -205,6 +205,7 @@
                 android:layout_width="0dp"
                 android:layout_height="30dp"
                 android:layout_weight="1"
+                android:inputType="numberDecimal"
                 android:background="@drawable/bg_yellow_white_shape"
                 android:gravity="center_vertical"
                 android:paddingLeft="10dp"

@@ -1,217 +1,186 @@
 package com.ytglogistics.www.ytglogistics.activity;
 
-import android.app.AlertDialog;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
-import android.content.DialogInterface;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.SystemProperties;
-import android.provider.Settings;
+import android.device.ScanManager;
+import android.device.scanner.configuration.PropertyID;
+import android.media.AudioManager;
+import android.media.SoundPool;
+import android.os.Bundle;
+import android.os.Vibrator;
+import android.util.TypedValue;
+import android.view.KeyEvent;
 import android.view.View;
-import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.ToggleButton;
+import android.view.View.OnClickListener;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ytglogistics.www.ytglogistics.R;
 
-import java.util.Timer;
-import java.util.TimerTask;
+public class BarCodeActivity extends Activity {
 
-/**
- * Created by Administrator on 2017/2/9.
- */
+    private final static String SCAN_ACTION = ScanManager.ACTION_DECODE;//default action
 
-public class BarCodeActivity extends FatherActivity implements View.OnClickListener {
-    private EditText mReception;
-    //接受广播
-    private String RECE_DATA_ACTION = "com.se4500.onDecodeComplete";
-    //调用扫描广播
-    private String START_SCAN_ACTION = "com.geomobile.se4500barcode";
+    private TextView mScan;
+    private TextView mClose;
+    private int type;
+    private int outPut;
 
-    private String STOP_SCAN="com.geomobile.se4500barcode.poweroff";
+    private Vibrator mVibrator;
+    private ScanManager mScanManager;
+    private SoundPool soundpool = null;
+    private int soundid;
+    private String barcodeStr;
+    private boolean isScaning = false;
+    private BroadcastReceiver mScanReceiver = new BroadcastReceiver() {
 
-    private Button btnSingleScan, btnClear;
-    private ToggleButton toggleButtonRepeat;
-    private BroadcastReceiver receiver = new BroadcastReceiver() {
-        public void onReceive(android.content.Context context,
-                              android.content.Intent intent) {
-            String action = intent.getAction();
-            if (action.equals(RECE_DATA_ACTION)) {
-                String data = intent.getStringExtra("se4500");
-                mReception.append(data+"\n");
-                Intent intent2=new Intent();
-                intent2.putExtra("codedContent", data);
-                BarCodeActivity.this.setResult(RESULT_OK, intent2);
-                finish();
-                if (isRepeat) {
-                    cancelRepeat();
-                    repeatScan();
-                }
-            }
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // TODO Auto-generated method stub
+            isScaning = false;
+            soundpool.play(soundid, 1, 1, 0, 0, 1);
+            mVibrator.vibrate(100);
+            byte[] barcode = intent.getByteArrayExtra(ScanManager.DECODE_DATA_TAG);
+            int barcodelen = intent.getIntExtra(ScanManager.BARCODE_LENGTH_TAG, 0);
+            byte temp = intent.getByteExtra(ScanManager.BARCODE_TYPE_TAG, (byte) 0);
+            android.util.Log.i("debug", "----codetype--" + temp);
+            barcodeStr = new String(barcode, 0, barcodelen);
+            Toast.makeText(BarCodeActivity.this, "扫描成功", Toast.LENGTH_SHORT).show();
+            Intent intent1 = getIntent();
+            intent1.putExtra("codedContent", barcodeStr);
+            BarCodeActivity.this.setResult(RESULT_OK, intent1);
+            finish();
         }
 
     };
 
     @Override
-    public void onClick(View v) {
+    protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
-        switch (v.getId()) {
-            case R.id.buttonclear:
-                mReception.setText("");
-                break;
-            case R.id.buttonscan:
-                startScan();
-                break;
-            default:
-                break;
+        super.onCreate(savedInstanceState);
+        Window window = getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        setContentView(R.layout.act_barcode);
+        mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        setupView();
+
+    }
+
+    private void initScan() {
+        // TODO Auto-generated method stub
+        mScanManager = new ScanManager();
+        mScanManager.openScanner();
+
+        mScanManager.switchOutputMode(0);
+        soundpool = new SoundPool(1, AudioManager.STREAM_NOTIFICATION, 100); // MODE_RINGTONE
+        soundid = soundpool.load("/etc/Scan_new.ogg", 1);
+    }
+
+    private void setupView() {
+        // TODO Auto-generated method stub
+        TextView center = (TextView) findViewById(R.id.tv_head_center);
+        if (center != null) {
+            center.setText("扫描条码");
+            center.setTextColor(getResources().getColor(R.color.white));
+            center.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
         }
-    }
+        View left = findViewById(R.id.rl_head_left);
+        if (left != null) {
+            left.findViewById(R.id.tv_head_left).setBackgroundResource(
+                    R.mipmap.arrow_back);
+            left.setOnClickListener(new OnClickListener() {
 
-    public class MyTask extends TimerTask {
-        @Override
-        public void run() {
-            startScan();
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
         }
+
+        mScan = (TextView) findViewById(R.id.scan);
+        mScan.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+                // TODO Auto-generated method stub
+                //if(type == 3)
+                mScanManager.stopDecode();
+                isScaning = true;
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                mScanManager.startDecode();
+            }
+        });
+
+        mClose = (TextView) findViewById(R.id.close);
+        mClose.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+                // TODO Auto-generated method stub
+                // if(isScaning) {
+                //  isScaning = false;
+                mScanManager.stopDecode();
+                //}
+            }
+        });
+
+        //btn.setVisibility(View.GONE);
+
     }
-    private Timer timer = new Timer();
-    @Override
-    protected int getLayoutId() {
-        return R.layout.act_barcode;
-    }
-
-    @Override
-    protected void initValues() {
-    initDefautHead("扫描条码",true);
-    }
-
-    @Override
-    protected void initView() {
-
-    }
-
-    @Override
-    protected void doOperate() {
-        judgePropert();
-        btnSingleScan = (Button) findViewById(R.id.buttonscan);
-        btnClear = (Button) findViewById(R.id.buttonclear);
-        toggleButtonRepeat = (ToggleButton) findViewById(R.id.button_repeat);
-        btnSingleScan.setOnClickListener(this);
-        btnClear.setOnClickListener(this);
-        // toggleButtonRepeat.setOnClickListener(this);
-        toggleButtonRepeat
-                .setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton buttonView,
-                                                 boolean isChecked) {
-                        // TODO Auto-generated method stub
-                        if (isChecked) {
-                            isRepeat = true;
-                            repeatScan();
-                        } else {
-                            isRepeat = false;
-                            cancelRepeat();
-                        }
-                    }
-                });
-
-        mReception = (EditText) findViewById(R.id.EditTextReception);
-        IntentFilter iFilter = new IntentFilter();
-        //注册系统广播  接受扫描到的数据
-        iFilter.addAction(RECE_DATA_ACTION);
-        registerReceiver(receiver, iFilter);
-    }
-    /**
-     * 判断快捷扫描是否勾选   不勾选跳转到系统设置中进行设置
-     */
-    private void judgePropert() {
-        String result = SystemProperties.get("persist.sys.keyreport", "true");
-        if (result.equals("false")) {
-            new AlertDialog.Builder(this)
-                    .setTitle(R.string.key_test_back_title)
-                    .setMessage(R.string.action_dialog_setting_config)
-                    .setPositiveButton(
-                            R.string.action_dialog_setting_config_sure_go,
-                            new DialogInterface.OnClickListener() {
-
-                                @Override
-                                public void onClick(DialogInterface dialog,
-                                                    int which) {
-                                    // TODO Auto-generated method stub
-                                    Intent intent = new Intent(
-                                            Settings.ACTION_ACCESSIBILITY_SETTINGS);
-                                    startActivityForResult(intent, 1);
-                                }
-                            })
-                    .setNegativeButton(R.string.action_exit_cancel,
-                            new DialogInterface.OnClickListener() {
-
-                                @Override
-                                public void onClick(DialogInterface dialog,
-                                                    int which) {
-                                    // TODO Auto-generated method stub
-                                    finish();
-                                }
-
-                            }
-
-                    ).show();
-        }
-    }
-
-
 
     @Override
     protected void onDestroy() {
         // TODO Auto-generated method stub
-        Intent intent =new Intent();
-        intent.setAction("com.geomobile.se4500barcode.poweroff");
-        sendBroadcast(intent);
-        unregisterReceiver(receiver);
         super.onDestroy();
     }
 
     @Override
     protected void onPause() {
         // TODO Auto-generated method stub
-
         super.onPause();
-        if (isRepeat) {
-            cancelRepeat();
+        if (mScanManager != null) {
+            mScanManager.stopDecode();
+            isScaning = false;
         }
+        unregisterReceiver(mScanReceiver);
     }
 
     @Override
     protected void onResume() {
         // TODO Auto-generated method stub
-        if (isRepeat) {
-            repeatScan();
-        }
         super.onResume();
-    }
-
-    private boolean isRepeat = false;
-    /**
-     * 发送广播  调用系统扫描
-     */
-    private void startScan() {
-        Intent intent = new Intent();
-        intent.setAction(START_SCAN_ACTION);
-        sendBroadcast(intent, null);
-    }
-
-
-    private void repeatScan() {
-        if (timer == null) {
-            timer = new Timer();
+        initScan();
+        IntentFilter filter = new IntentFilter();
+        int[] idbuf = new int[]{PropertyID.WEDGE_INTENT_ACTION_NAME, PropertyID.WEDGE_INTENT_DATA_STRING_TAG};
+        String[] value_buf = mScanManager.getParameterString(idbuf);
+        if (value_buf != null && value_buf[0] != null && !value_buf[0].equals("")) {
+            filter.addAction(value_buf[0]);
+        } else {
+            filter.addAction(SCAN_ACTION);
         }
-        timer.scheduleAtFixedRate(new MyTask(), 100, 4 * 1000);
+
+        registerReceiver(mScanReceiver, filter);
     }
 
-    private void cancelRepeat() {
-        if (timer != null) {
-            timer.cancel();
-            timer = null;
-        }
-    };
+    @Override
+    protected void onStart() {
+        // TODO Auto-generated method stub
+        super.onStart();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        // TODO Auto-generated method stub
+        return super.onKeyDown(keyCode, event);
+    }
 }

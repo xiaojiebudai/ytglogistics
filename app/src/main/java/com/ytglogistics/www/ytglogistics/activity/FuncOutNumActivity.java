@@ -1,17 +1,28 @@
 package com.ytglogistics.www.ytglogistics.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.device.ScanManager;
+import android.device.scanner.configuration.PropertyID;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.TypedValue;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -68,6 +79,8 @@ public class FuncOutNumActivity extends FatherActivity {
     TextView tvCancel;
     @BindView(R.id.tv_saomiao)
     TextView tvSaomiao;
+    @BindView(R.id.close)
+    TextView close;
     @BindView(R.id.ll_operate)
     LinearLayout llOperate;
     //    private AppInMax inMax;
@@ -77,6 +90,32 @@ public class FuncOutNumActivity extends FatherActivity {
     private int selectPosition = -1;
     private String Serial;
 
+
+    private final static String SCAN_ACTION = ScanManager.ACTION_DECODE;//default action
+    private Vibrator mVibrator;
+    private ScanManager mScanManager;
+    private SoundPool soundpool = null;
+    private int soundid;
+    private String barcodeStr;
+    private boolean isScaning = false;
+    private BroadcastReceiver mScanReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // TODO Auto-generated method stub
+            isScaning = false;
+            soundpool.play(soundid, 1, 1, 0, 0, 1);
+            mVibrator.vibrate(100);
+            byte[] barcode = intent.getByteArrayExtra(ScanManager.DECODE_DATA_TAG);
+            int barcodelen = intent.getIntExtra(ScanManager.BARCODE_LENGTH_TAG, 0);
+            byte temp = intent.getByteExtra(ScanManager.BARCODE_TYPE_TAG, (byte) 0);
+            android.util.Log.i("debug", "----codetype--" + temp);
+            barcodeStr = new String(barcode, 0, barcodelen);
+            Toast.makeText(FuncOutNumActivity.this, "扫描成功", Toast.LENGTH_SHORT).show();
+            addBarCodeInfo(barcodeStr);
+        }
+
+    };
     @Override
     protected int getLayoutId() {
         return R.layout.act_funoutnum;
@@ -94,8 +133,65 @@ public class FuncOutNumActivity extends FatherActivity {
 //        edCangwei.setText(inMax.Loca);
 //        edChucangnum.setText(inMax.OutCtn+"");
         getListData();
+        mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+
+    }
+    private void initScan() {
+        // TODO Auto-generated method stub
+        mScanManager = new ScanManager();
+        mScanManager.openScanner();
+
+        mScanManager.switchOutputMode(0);
+        soundpool = new SoundPool(1, AudioManager.STREAM_NOTIFICATION, 100); // MODE_RINGTONE
+        soundid = soundpool.load("/etc/Scan_new.ogg", 1);
     }
 
+
+    @Override
+    protected void onDestroy() {
+        // TODO Auto-generated method stub
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onPause() {
+        // TODO Auto-generated method stub
+        super.onPause();
+        if (mScanManager != null) {
+            mScanManager.stopDecode();
+            isScaning = false;
+        }
+        unregisterReceiver(mScanReceiver);
+    }
+
+    @Override
+    protected void onResume() {
+        // TODO Auto-generated method stub
+        super.onResume();
+        initScan();
+        IntentFilter filter = new IntentFilter();
+        int[] idbuf = new int[]{PropertyID.WEDGE_INTENT_ACTION_NAME, PropertyID.WEDGE_INTENT_DATA_STRING_TAG};
+        String[] value_buf = mScanManager.getParameterString(idbuf);
+        if (value_buf != null && value_buf[0] != null && !value_buf[0].equals("")) {
+            filter.addAction(value_buf[0]);
+        } else {
+            filter.addAction(SCAN_ACTION);
+        }
+
+        registerReceiver(mScanReceiver, filter);
+    }
+
+    @Override
+    protected void onStart() {
+        // TODO Auto-generated method stub
+        super.onStart();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        // TODO Auto-generated method stub
+        return super.onKeyDown(keyCode, event);
+    }
     private void getListData() {
         showWaitDialog();
         RequestParams params = ParamsUtils.getSessionParams(Api.GetAppMxNumsById());
@@ -200,7 +296,7 @@ public class FuncOutNumActivity extends FatherActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.tv_add, R.id.tv_del, R.id.tv_ok, R.id.tv_cancel, R.id.tv_saomiao})
+    @OnClick({R.id.tv_add, R.id.tv_del, R.id.tv_ok, R.id.tv_cancel, R.id.tv_saomiao,R.id.close})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_add:
@@ -256,10 +352,22 @@ public class FuncOutNumActivity extends FatherActivity {
             case R.id.tv_cancel:
                 finish();
                 break;
+            case R.id.close:
+                mScanManager.stopDecode();
+                break;
             case R.id.tv_saomiao:
 //                Intent intent = new Intent(this, CaptureActivity.class);
-                Intent intent = new Intent(this, BarCodeActivity.class);
-                startActivityForResult(intent, 999);
+//                Intent intent = new Intent(this, BarCodeActivity.class);
+//                startActivityForResult(intent, 999);
+                mScanManager.stopDecode();
+                isScaning = true;
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                mScanManager.startDecode();
                 break;
         }
     }
@@ -335,65 +443,69 @@ public class FuncOutNumActivity extends FatherActivity {
             return;
         if (requestCode == 999) {
             String info = data.getExtras().getString("codedContent");
-            if (!TextUtils.isEmpty(info)) {
-                RequestParams sessionParams = ParamsUtils.getSessionParams(Api.PalletGet());
-                sessionParams.addBodyParameter("palletId", info);
-                x.http().get(sessionParams, new WWXCallBack("PalletGet") {
-                    @Override
-                    public void onAfterSuccessOk(JSONObject data) {
-                        PrintInfo printInfo = (PrintInfo) JSON.parseObject(data.getString("Data"), PrintInfo.class);
-                        boolean isOk = false;
-                        for (int i = 0; i < appInMaxes.size(); i++) {
-                            if (printInfo.Sono.equals(appInMaxes.get(i).So) && printInfo.Po.equals(appInMaxes.get(i).Po) && printInfo.Skn.equals(appInMaxes.get(i).Skn)) {
-                                isOk = true;
-                                for (int j = 0; j < mAdapter.getData().size(); j++) {
-                                    if (((DataCbm) mAdapter.getItem(j)).Palletid.equals(printInfo.Palletid)) {
-                                        isOk = false;
-                                        break;
-                                    }
+            addBarCodeInfo(info);
+        }
+    }
+
+    private void addBarCodeInfo(String info) {
+
+        if (!TextUtils.isEmpty(info)) {
+            RequestParams sessionParams = ParamsUtils.getSessionParams(Api.PalletGet());
+            sessionParams.addBodyParameter("palletId", info);
+            x.http().get(sessionParams, new WWXCallBack("PalletGet") {
+                @Override
+                public void onAfterSuccessOk(JSONObject data) {
+                    PrintInfo printInfo = (PrintInfo) JSON.parseObject(data.getString("Data"), PrintInfo.class);
+                    boolean isOk = false;
+                    for (int i = 0; i < appInMaxes.size(); i++) {
+                        if (printInfo.Sono.equals(appInMaxes.get(i).So) && printInfo.Po.equals(appInMaxes.get(i).Po) && printInfo.Skn.equals(appInMaxes.get(i).Skn)) {
+                            isOk = true;
+                            for (int j = 0; j < mAdapter.getData().size(); j++) {
+                                if (((DataCbm) mAdapter.getItem(j)).Palletid.equals(printInfo.Palletid)) {
+                                    isOk = false;
+                                    break;
                                 }
-                                if (isOk) {
-                                    if ((appInMaxes.get(i).Soquan + printInfo.Pkgs) <= appInMaxes.get(i).OutCtn) {
-                                        //总数据添加
-                                        appInMaxes.get(i).Soquan += printInfo.Pkgs;
-                                        DataCbm item = new DataCbm();
-                                        item.Palletid = printInfo.Palletid;
-                                        item.So = printInfo.Sono;
-                                        item.Po = printInfo.Po;
-                                        item.Skn = printInfo.Skn;
-                                        item.InMxId = appInMaxes.get(i).RowId;
-                                        item.Soquan = printInfo.Pkgs;
-                                        mAdapter.add(item);
-                                        selectPosition = mAdapter.getData().size() - 1;
+                            }
+                            if (isOk) {
+                                if ((appInMaxes.get(i).Soquan + printInfo.Pkgs) <= appInMaxes.get(i).OutCtn) {
+                                    //总数据添加
+                                    appInMaxes.get(i).Soquan += printInfo.Pkgs;
+                                    DataCbm item = new DataCbm();
+                                    item.Palletid = printInfo.Palletid;
+                                    item.So = printInfo.Sono;
+                                    item.Po = printInfo.Po;
+                                    item.Skn = printInfo.Skn;
+                                    item.InMxId = appInMaxes.get(i).RowId;
+                                    item.Soquan = printInfo.Pkgs;
+                                    mAdapter.add(item);
+                                    selectPosition = mAdapter.getData().size() - 1;
 
-                                        for (int j = 0; j < mAdapter.getData().size(); j++) {
-                                            ((DataCbm) mAdapter.getItem(j)).isSelect = false;
-                                        }
-                                        ((DataCbm) mAdapter.getItem(selectPosition)).isSelect = true;
-                                        mAdapter.notifyDataSetChanged();
-
-                                        edCtnNO.setText(item.Soquan + "");
-                                        break;
-                                    } else {
-                                        WWToast.showShort("该板单重复或者板单信息有误");
+                                    for (int j = 0; j < mAdapter.getData().size(); j++) {
+                                        ((DataCbm) mAdapter.getItem(j)).isSelect = false;
                                     }
+                                    ((DataCbm) mAdapter.getItem(selectPosition)).isSelect = true;
+                                    mAdapter.notifyDataSetChanged();
+
+                                    edCtnNO.setText(item.Soquan + "");
+                                    break;
+                                } else {
+                                    WWToast.showShort("该板单重复或者板单信息有误");
                                 }
                             }
                         }
-                        if (!isOk) {
-                            WWToast.showShort("该板单重复或者板单信息有误！！！");
-                        }
                     }
-
-                    @Override
-                    public void onAfterFinished() {
-
+                    if (!isOk) {
+                        WWToast.showShort("该板单重复或者板单信息有误！！！");
                     }
-                });
-            } else {
-                WWToast.showShort("未扫描到信息，请重新扫描");
-            }
+                }
 
+                @Override
+                public void onAfterFinished() {
+
+                }
+            });
+        } else {
+            WWToast.showShort("未扫描到信息，请重新扫描");
         }
     }
 }
