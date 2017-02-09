@@ -76,7 +76,7 @@ public class FunInMaxListActivity extends FatherActivity {
     @BindView(R.id.tv_cangwei)
     EditText tvCangwei;
     @BindView(R.id.tv_one_weight)
-    TextView tvOneWeight;
+    EditText tvOneWeight;
     @BindView(R.id.tv_weight)
     TextView tvWeight;
     @BindView(R.id.tv_length)
@@ -161,6 +161,31 @@ public class FunInMaxListActivity extends FatherActivity {
                         WWToast.showShort("请先选择一条记录");
                     } else {
                         adapter.getData().get(selectPosition).Loca = s + "";
+                    }
+
+                }
+
+            }
+        });
+        tvOneWeight.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!TextUtils.isEmpty(s)) {
+                    if (selectPosition == -1) {
+                        WWToast.showShort("请先选择一条记录");
+                    } else {
+                        adapter.getData().get(selectPosition).Unitwei = Double.valueOf(s + "");
+                        setAllWeight(adapter.getData().get(selectPosition).Unitwei,adapter.getData().get(selectPosition).Soquan);
                     }
 
                 }
@@ -261,7 +286,7 @@ public class FunInMaxListActivity extends FatherActivity {
                         WWToast.showShort("请先选择一条记录");
                     } else {
                         adapter.getData().get(selectPosition).Soquan = Integer.valueOf(s + "");
-                        setAllWeight(adapter.getData().get(selectPosition).Soquan);
+                        setAllWeight(adapter.getData().get(selectPosition).Unitwei,adapter.getData().get(selectPosition).Soquan);
                         setCbm(adapter.getData().get(selectPosition));
                     }
 
@@ -338,8 +363,8 @@ public class FunInMaxListActivity extends FatherActivity {
         }
     }
 
-    private void setAllWeight(int soquan) {
-        adapter.getData().get(selectPosition).Rweight = adapter.getData().get(selectPosition).Unitwei * soquan;
+    private void setAllWeight(double Unitwei, int soquan) {
+        adapter.getData().get(selectPosition).Rweight = Unitwei * soquan;
         BigDecimal b = new BigDecimal(adapter.getData().get(selectPosition).Rweight);
         adapter.getData().get(selectPosition).Rweight = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 

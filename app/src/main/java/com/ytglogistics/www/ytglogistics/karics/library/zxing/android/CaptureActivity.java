@@ -43,7 +43,6 @@ public final class CaptureActivity extends Activity implements
 	private CaptureActivityHandler handler;
 	private ViewfinderView viewfinderView;
 	private boolean hasSurface;
-	private IntentSource source;
 	private Collection<BarcodeFormat> decodeFormats;
 	private Map<DecodeHintType, ?> decodeHints;
 	private String characterSet;
@@ -127,7 +126,7 @@ public final class CaptureActivity extends Activity implements
 		beepManager.updatePrefs();
 		inactivityTimer.onResume();
 
-		source = IntentSource.NONE;
+		IntentSource source = IntentSource.NONE;
 		decodeFormats = null;
 		characterSet = null;
 	}

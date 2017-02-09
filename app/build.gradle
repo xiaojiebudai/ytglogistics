@@ -6,7 +6,7 @@ android {
     defaultConfig {
         applicationId "com.ytglogistics.www.ytglogistics"
         minSdkVersion 17
-        targetSdkVersion 24
+        targetSdkVersion 22
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -27,7 +27,9 @@ dependencies {
     })
     testCompile 'junit:junit:4.12'
     compile 'org.xutils:xutils:3.3.38'
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile files('libs/glide-3.6.1.jar')
+    provided files('libs/layoutlib.jar')
+    compile files('libs/regoPrintLibV3.01.01.jar')
     compile 'com.alibaba:fastjson:1.2.18'
     compile 'com.jakewharton:butterknife:8.4.0'
     compile 'com.android.support:appcompat-v7:24.2.0'
@@ -39,5 +41,5 @@ dependencies {
     compile 'cn.bingoogolapple:bga-qrcodecore:1.1.6@aar'
     compile 'cn.bingoogolapple:bga-zxing:1.1.6@aar'
     // -------------------- 以上三个库是必须依赖的 ----------------------------
-//    compile 'cn.bingoogolapple:bga-swipebacklayout:1.0.7@aar'
+    //    compile 'cn.bingoogolapple:bga-swipebacklayout:1.0.7@aar'
 }

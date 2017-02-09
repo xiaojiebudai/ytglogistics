@@ -200,16 +200,16 @@
                 android:gravity="center"
                 android:text="单重:"
                 android:textSize="14sp" />
-
-            <TextView
+            <EditText
                 android:id="@+id/tv_one_weight"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="5dp"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
                 android:layout_weight="1"
+                android:background="@drawable/bg_yellow_white_shape"
                 android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:textColorHint="@color/text_c1"
                 android:textSize="14sp" />
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"

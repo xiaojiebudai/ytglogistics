@@ -185,7 +185,7 @@ public class FuncImageActivity extends FatherActivity {
         }
     }
 
-    protected void upLocalImg(final int pos, DataImg item, String inp_path) {
+    protected void upLocalImg(final int pos, final DataImg item, String inp_path) {
         showWaitDialog();
         RequestParams params = new RequestParams("http://www.yplog.com.cn/Wcf/bllService.svc/UploadPicture/" + MyApplication
                 .getInstance().getSessionId() + "/" + Uri.encode(inp_path, "utf-8"));
@@ -198,6 +198,9 @@ public class FuncImageActivity extends FatherActivity {
             public void onAfterSuccessOk(JSONObject data) {
                 ((DataImg) mAdapter.getItem(pos)).Status = "已上传";
                 mAdapter.notifyDataSetChanged();
+//                if(pos==(mAdapter.getData().size()-1)){
+                  WWToast.showShort(item.fName+" 上传成功");
+//                }
             }
 
             @Override
@@ -222,7 +225,7 @@ public class FuncImageActivity extends FatherActivity {
                 case 888:
                     DataImg item = new DataImg();
                     item.ImageUrl = data.getStringExtra(Consts.KEY_DATA);
-                    item.fName = new File(item.ImageUrl).getName();
+                    item.fName = getFileName(item.ImageUrl);
                     item.Status = "待上传";
                     mAdapter.add(item);
                     break;
@@ -232,5 +235,15 @@ public class FuncImageActivity extends FatherActivity {
         }
     }
 
+    public String getFileName(String pathandname){
 
+        int start=pathandname.lastIndexOf("/");
+        int end=pathandname.lastIndexOf(".");
+        if(start!=-1 && end!=-1){
+            return pathandname.substring(start+1,end);
+        }else{
+            return null;
+        }
+
+    }
 }

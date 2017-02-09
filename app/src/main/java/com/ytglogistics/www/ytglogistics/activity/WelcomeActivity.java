@@ -29,7 +29,7 @@ public class WelcomeActivity extends FatherActivity {
 				// TODO Auto-generated method stub
 				try {
 					Thread.sleep(sleepTime);
-				} catch (InterruptedException e) {
+				} catch (InterruptedException ignored) {
 				}
 				if (TextUtils.isEmpty(MyApplication.getInstance()
 						.getSessionId())) {

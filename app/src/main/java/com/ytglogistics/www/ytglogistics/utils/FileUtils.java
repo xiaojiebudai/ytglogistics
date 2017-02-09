@@ -428,7 +428,7 @@ public class FileUtils {
 			if (available < 300 * 1024) {
 				return filePath;
 			}
-		} catch (IOException e1) {
+		} catch (IOException ignored) {
 		}
 
 		final Bitmap compressedBitmap = getCompressedImageBitmap(filePath, 0, 0);

@@ -257,7 +257,8 @@ public class FuncOutNumActivity extends FatherActivity {
                 finish();
                 break;
             case R.id.tv_saomiao:
-                Intent intent = new Intent(this, CaptureActivity.class);
+//                Intent intent = new Intent(this, CaptureActivity.class);
+                Intent intent = new Intent(this, BarCodeActivity.class);
                 startActivityForResult(intent, 999);
                 break;
         }
