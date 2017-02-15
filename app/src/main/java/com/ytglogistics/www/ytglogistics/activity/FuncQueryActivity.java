@@ -96,7 +96,7 @@ public class FuncQueryActivity extends FatherActivity {
 
                 helper.setText(R.id.tv_num, (helper.getAdapterPosition()+1) + "");
                 if (model == INYUYUE) {
-                    helper.setText(R.id.tv_name, item.PeriodName);
+                    helper.setText(R.id.tv_name, TextUtils.isEmpty(item.PeriodName)?"现场取号":item.PeriodName);
                     helper.setText(R.id.tv_bowei, item.CarNo);
                 } else {
                     helper.setText(R.id.tv_name, item.So);

@@ -137,11 +137,11 @@ public class FunDetailActivity extends FatherActivity {
                     if (result.JdTime != null)
                         et2.setText(TimeUtil.getTimeToS(result.JdTime * 1000));
                     if (result.PdTime != null)
-                    et3.setText(TimeUtil.getTimeToS(result.PdTime * 1000));
+                        et3.setText(TimeUtil.getTimeToS(result.PdTime * 1000));
                     if (result.BeginTime != null)
-                    et4.setText(TimeUtil.getTimeToS(result.BeginTime * 1000));
+                        et4.setText(TimeUtil.getTimeToS(result.BeginTime * 1000));
                     if (result.EndTime != null)
-                    et5.setText(TimeUtil.getTimeToS(result.EndTime * 1000));
+                        et5.setText(TimeUtil.getTimeToS(result.EndTime * 1000));
                 }
                 getStevedData();
                 getUserData();
@@ -164,7 +164,7 @@ public class FunDetailActivity extends FatherActivity {
 
     private DateChooseWheelViewDialog startDateChooseDialog, startDateChooseDialog1, startDateChooseDialog2, startDateChooseDialog3;
 
-    @OnClick({R.id.tv_commit,R.id.ll_0, R.id.ll_1, R.id.ll_2, R.id.ll_3, R.id.ll_4, R.id.ll_5, R.id.tv_save, R.id.tv_get})
+    @OnClick({R.id.tv_commit, R.id.ll_0, R.id.ll_1, R.id.ll_2, R.id.ll_3, R.id.ll_4, R.id.ll_5, R.id.tv_save, R.id.tv_get})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ll_0:
@@ -231,26 +231,26 @@ public class FunDetailActivity extends FatherActivity {
                 saveInfo();
                 break;
             case R.id.tv_get:
-                if(result.Serial>0){
+                if (result.Serial > 0) {
                     Intent intent = new Intent(FunDetailActivity.this, (model == FUNIN) ? FunInMaxListActivity.class : FunOutMxListActivity.class);
                     intent.putExtra(Consts.KEY_DATA, JSON.toJSONString(result));
                     startActivity(intent);
-                }else{
+                } else {
                     WWToast.showShort("请选择信息并保存后再操作");
                 }
 
                 break;
             case R.id.tv_commit:
-                 final CommonDialog commonDialogTwiceConfirm = DialogUtils.getCommonDialogTwiceConfirm(this, "请确认收货录入的数据已完成并提交？", true);
+                final CommonDialog commonDialogTwiceConfirm = DialogUtils.getCommonDialogTwiceConfirm(this, "请确认收货录入的数据已完成并提交？", true);
                 commonDialogTwiceConfirm.setRightButtonCilck(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         commonDialogTwiceConfirm.dismiss();
                         showWaitDialog();
 
-                   RequestParams sessionParams = ParamsUtils.getSessionParams(Api.FinishQueue());
-                        sessionParams.addBodyParameter("operDate",car.OperDate);
-                        sessionParams.addBodyParameter("queueNo",car.QueueNo);
+                        RequestParams sessionParams = ParamsUtils.getSessionParams(Api.FinishQueue());
+                        sessionParams.addBodyParameter("operDate", car.OperDate);
+                        sessionParams.addBodyParameter("queueNo", car.QueueNo);
                         ZLog.showPost(JSONObject.toJSONString(car));
                         x.http().get(sessionParams, new WWXCallBack("FinishQueue") {
                             @Override
@@ -273,8 +273,19 @@ public class FunDetailActivity extends FatherActivity {
     }
 
     private void saveInfo() {
-        if(TextUtils.isEmpty(result.UserId)||TextUtils.isEmpty(result.StevedId)){
+        if (TextUtils.isEmpty(result.UserId) || TextUtils.isEmpty(result.StevedId)) {
             WWToast.showShort("请先完善信息再保存");
+            return;
+        }
+        if (result.JdTime == null || result.PdTime == null || result.BeginTime == null || result.EndTime == null) {
+            WWToast.showShort("时间必须选择完全");
+            return;
+        }
+        if (result.JdTime > result.PdTime || result.JdTime > result.BeginTime || result.JdTime > result.EndTime
+                || result.PdTime > result.BeginTime || result.PdTime > result.EndTime
+                || result.BeginTime > result.EndTime
+                ) {
+            WWToast.showShort("时间先后顺序有误");
             return;
         }
         showWaitDialog();

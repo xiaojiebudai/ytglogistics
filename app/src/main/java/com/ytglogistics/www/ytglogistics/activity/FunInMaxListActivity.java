@@ -357,7 +357,7 @@ public class FunInMaxListActivity extends FatherActivity {
             tvCbm.setText(df.format((inMax.Cbm)) + "");
             appInMax.CbmRate = (appInMax.Cbm - appInMax.BookingCbm) / appInMax.BookingCbm;
             BigDecimal c = new BigDecimal(appInMax.CbmRate);
-            appInMax.CbmRate = c.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+            appInMax.CbmRate = c.setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue();
             inMax.CbmRate = appInMax.CbmRate;
             tvCbmrate.setText(df.format((inMax.CbmRate * 100)) + "%");
         }
@@ -572,8 +572,8 @@ public class FunInMaxListActivity extends FatherActivity {
                 .getInstance().getSessionId());
         JSONArray array = new JSONArray();
         for (int i = 0; i < adapter.getData().size(); i++) {
-            if ((adapter.getData().get(i).CbmRate > 0.05) || (adapter.getData().get(i).CbmRate < -0.05)) {
-                WWToast.showShort(adapter.getData().get(i).Skn + " CbmRate大于5%，需要复尺.");
+            if ((adapter.getData().get(i).CbmRate > 0.055) || (adapter.getData().get(i).CbmRate < -0.055)) {
+                WWToast.showShort(adapter.getData().get(i).Skn + " CbmRate大于5.5%，需要复尺.");
             }
             array.add(adapter.getData().get(i).toJson());
         }
@@ -610,7 +610,7 @@ public class FunInMaxListActivity extends FatherActivity {
                     x.http().post(ParamsUtils.getPostJsonParams(jsonObject, Api.AppMxCbmCommit()), new WWXCallBack("AppMxCbmCommit") {
                         @Override
                         public void onAfterSuccessOk(JSONObject data) {
-                            WWToast.showShort("提交成功");
+                            WWToast.showShort("数据保存成功");
                         }
 
                         @Override
