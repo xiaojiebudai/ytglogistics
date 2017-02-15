@@ -23,4 +23,8 @@
     <string name="close">停止扫描</string>
     <string name="scanner_hint">对准条码，按设备上扫描键获取条码</string>
     <string name="title_activity_main">扫描头</string>
+    <string name="download_right_now">立即下载</string>
+    <string name="downloading">正在下载...</string>
+    <string name="download_success_please_install">下载成功，请安装最新版本</string>
+    <string name="install_now">安装新版本</string>
 </resources>

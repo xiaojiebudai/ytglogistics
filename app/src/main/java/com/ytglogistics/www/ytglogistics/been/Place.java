@@ -11,4 +11,5 @@ public class Place {
     public String Bz;//类型
     public String StatusText;
     public boolean isSelect;//是否选中
+    public String CarNo;//车牌
 }

@@ -125,6 +125,9 @@
         <activity
             android:name="com.ytglogistics.www.ytglogistics.activity.BarCodeActivity"
             android:screenOrientation="portrait"></activity>
+        <service
+            android:name="com.ytglogistics.www.ytglogistics.service.UpdateVersionService"
+            android:exported="true" />
     </application>
 
 </manifest>

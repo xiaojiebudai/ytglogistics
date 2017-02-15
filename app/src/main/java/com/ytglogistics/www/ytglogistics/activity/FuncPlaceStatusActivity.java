@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.alibaba.fastjson.JSONArray;
@@ -56,7 +57,7 @@ public class FuncPlaceStatusActivity extends FatherActivity {
             @Override
             protected void convert(BaseViewHolder helper, Place item) {
                 helper.setText(R.id.tv_so, item.AreaId);
-                helper.setText(R.id.tv_po, item.PlaceId);
+                helper.setText(R.id.tv_po, item.PlaceId+ (TextUtils.isEmpty(item.CarNo)?"":"("+item.CarNo+")"));
                 switch (item.Status) {
                     case 0:
                         item.StatusText = "空闲";

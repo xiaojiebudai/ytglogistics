@@ -241,6 +241,17 @@ public class FunDetailActivity extends FatherActivity {
 
                 break;
             case R.id.tv_commit:
+//                if (result.JdTime == null || result.PdTime == null || result.BeginTime == null || result.EndTime == null) {
+//                    WWToast.showShort("时间必须选择完全");
+//                    return;
+//                }
+//                if (result.JdTime > result.PdTime || result.JdTime > result.BeginTime || result.JdTime > result.EndTime
+//                        || result.PdTime > result.BeginTime || result.PdTime > result.EndTime
+//                        || result.BeginTime > result.EndTime
+//                        ) {
+//                    WWToast.showShort("时间先后顺序有误");
+//                    return;
+//                }
                 final CommonDialog commonDialogTwiceConfirm = DialogUtils.getCommonDialogTwiceConfirm(this, "请确认收货录入的数据已完成并提交？", true);
                 commonDialogTwiceConfirm.setRightButtonCilck(new View.OnClickListener() {
                     @Override
@@ -275,17 +286,6 @@ public class FunDetailActivity extends FatherActivity {
     private void saveInfo() {
         if (TextUtils.isEmpty(result.UserId) || TextUtils.isEmpty(result.StevedId)) {
             WWToast.showShort("请先完善信息再保存");
-            return;
-        }
-        if (result.JdTime == null || result.PdTime == null || result.BeginTime == null || result.EndTime == null) {
-            WWToast.showShort("时间必须选择完全");
-            return;
-        }
-        if (result.JdTime > result.PdTime || result.JdTime > result.BeginTime || result.JdTime > result.EndTime
-                || result.PdTime > result.BeginTime || result.PdTime > result.EndTime
-                || result.BeginTime > result.EndTime
-                ) {
-            WWToast.showShort("时间先后顺序有误");
             return;
         }
         showWaitDialog();
