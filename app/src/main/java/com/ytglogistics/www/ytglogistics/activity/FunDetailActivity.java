@@ -1,10 +1,12 @@
 package com.ytglogistics.www.ytglogistics.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -16,6 +18,8 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 import com.ytglogistics.www.ytglogistics.MyApplication;
 import com.ytglogistics.www.ytglogistics.R;
 import com.ytglogistics.www.ytglogistics.adapter.StevedListSelectAdapter;
@@ -40,6 +44,7 @@ import org.xutils.http.RequestParams;
 import org.xutils.x;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -49,7 +54,7 @@ import butterknife.OnClick;
  * Created by Administrator on 2016/12/8.
  */
 
-public class FunDetailActivity extends FatherActivity {
+public class FunDetailActivity extends FatherActivity implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
     @BindView(R.id.et_0)
     TextView et0;
     @BindView(R.id.ll_0)
@@ -163,6 +168,8 @@ public class FunDetailActivity extends FatherActivity {
     }
 
     private DateChooseWheelViewDialog startDateChooseDialog, startDateChooseDialog1, startDateChooseDialog2, startDateChooseDialog3;
+    private DatePickerDialog dpd, dpd1, dpd2, dpd3;
+    private TimePickerDialog tpd, tpd1, tpd2, tpd3;
 
     @OnClick({R.id.tv_commit, R.id.ll_0, R.id.ll_1, R.id.ll_2, R.id.ll_3, R.id.ll_4, R.id.ll_5, R.id.tv_save, R.id.tv_get})
     public void onClick(View view) {
@@ -174,58 +181,60 @@ public class FunDetailActivity extends FatherActivity {
                 seleteUser();
                 break;
             case R.id.ll_2:
-                if (startDateChooseDialog == null) {
-
-                    startDateChooseDialog = new DateChooseWheelViewDialog(FunDetailActivity.this, new DateChooseWheelViewDialog.DateChooseInterface() {
-                        @Override
-                        public void getDateTime(long time, boolean longTimeChecked) {
-                            et2.setText(TimeUtil.getTimeToS(time * 1000));
-                            result.JdTime = time;
-                        }
-                    });
-                    startDateChooseDialog.setDateDialogTitle("接单时间");
-
+                if (dpd == null) {
+                    Calendar now = Calendar.getInstance();
+                     dpd = DatePickerDialog.newInstance(
+                            FunDetailActivity.this,
+                            now.get(Calendar.YEAR),
+                            now.get(Calendar.MONTH),
+                            now.get(Calendar.DAY_OF_MONTH)
+                    );
+                    dpd.setVersion(DatePickerDialog.Version.VERSION_2);
                 }
-                startDateChooseDialog.showDateChooseDialog();
+                dpd.show(getFragmentManager(), "Datepickerdialog");
+
                 break;
             case R.id.ll_3:
-                if (startDateChooseDialog1 == null) {
-                    startDateChooseDialog1 = new DateChooseWheelViewDialog(FunDetailActivity.this, new DateChooseWheelViewDialog.DateChooseInterface() {
-                        @Override
-                        public void getDateTime(long time, boolean longTimeChecked) {
-                            et3.setText(TimeUtil.getTimeToS(time * 1000));
-                            result.PdTime = time;
-                        }
-                    });
-                    startDateChooseDialog1.setDateDialogTitle("派单时间");
+                if (dpd1 == null) {
+                    Calendar now = Calendar.getInstance();
+                     dpd1 = DatePickerDialog.newInstance(
+                            FunDetailActivity.this,
+                            now.get(Calendar.YEAR),
+                            now.get(Calendar.MONTH),
+                            now.get(Calendar.DAY_OF_MONTH)
+                    );
+                    dpd1.setVersion(DatePickerDialog.Version.VERSION_2);
                 }
-                startDateChooseDialog1.showDateChooseDialog();
+                dpd1.show(getFragmentManager(), "Datepickerdialog1");
+
                 break;
             case R.id.ll_4:
-                if (startDateChooseDialog2 == null) {
-                    startDateChooseDialog2 = new DateChooseWheelViewDialog(FunDetailActivity.this, new DateChooseWheelViewDialog.DateChooseInterface() {
-                        @Override
-                        public void getDateTime(long time, boolean longTimeChecked) {
-                            et4.setText(TimeUtil.getTimeToS(time * 1000));
-                            result.BeginTime = time;
-                        }
-                    });
-                    startDateChooseDialog2.setDateDialogTitle("开始时间");
+                if (dpd2 == null) {
+                    Calendar now = Calendar.getInstance();
+                     dpd2 = DatePickerDialog.newInstance(
+                            FunDetailActivity.this,
+                            now.get(Calendar.YEAR),
+                            now.get(Calendar.MONTH),
+                            now.get(Calendar.DAY_OF_MONTH)
+                    );
+                    dpd2.setVersion(DatePickerDialog.Version.VERSION_2);
                 }
-                startDateChooseDialog2.showDateChooseDialog();
+                dpd2.show(getFragmentManager(), "Datepickerdialog2");
+
                 break;
             case R.id.ll_5:
-                if (startDateChooseDialog3 == null) {
-                    startDateChooseDialog3 = new DateChooseWheelViewDialog(FunDetailActivity.this, new DateChooseWheelViewDialog.DateChooseInterface() {
-                        @Override
-                        public void getDateTime(long time, boolean longTimeChecked) {
-                            et5.setText(TimeUtil.getTimeToS(time * 1000));
-                            result.EndTime = time;
-                        }
-                    });
-                    startDateChooseDialog3.setDateDialogTitle("结束时间");
+                if (dpd3 == null) {
+                    Calendar now = Calendar.getInstance();
+                     dpd3 = DatePickerDialog.newInstance(
+                            FunDetailActivity.this,
+                            now.get(Calendar.YEAR),
+                            now.get(Calendar.MONTH),
+                            now.get(Calendar.DAY_OF_MONTH)
+                    );
+                    dpd3.setVersion(DatePickerDialog.Version.VERSION_2);
                 }
-                startDateChooseDialog3.showDateChooseDialog();
+                dpd3.show(getFragmentManager(), "Datepickerdialog3");
+
                 break;
             case R.id.tv_save:
                 saveInfo();
@@ -410,8 +419,6 @@ public class FunDetailActivity extends FatherActivity {
 
     private void seleteUser() {
         if (popupWindowUser == null) {
-
-
             ListView listView = new ListView(this);
             listView.setBackgroundResource(R.drawable.bg_yellow_white_shape);
             final UserListSelectAdapter adapter = new UserListSelectAdapter(this);
@@ -435,5 +442,102 @@ public class FunDetailActivity extends FatherActivity {
             });
         }
         popupWindowUser.showAsDropDown(ll1);
+    }
+private int year,month,day,hour,min,sec;
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+        this.year=year;
+        this.month=monthOfYear+1;
+        this.day=dayOfMonth;
+        if (view == dpd) {
+            if (tpd == null) {
+                Calendar now = Calendar.getInstance();
+                tpd = TimePickerDialog.newInstance(
+                        FunDetailActivity.this,
+                        now.get(Calendar.HOUR_OF_DAY),
+                        now.get(Calendar.MINUTE),
+                        true
+                );
+                tpd.enableSeconds(true);
+                tpd.setVersion(TimePickerDialog.Version.VERSION_2);
+            }
+            tpd.show(getFragmentManager(), "Timepickerdialog");
+        } else if (view == dpd1) {
+            if (tpd1 == null) {
+                Calendar now = Calendar.getInstance();
+                tpd1 = TimePickerDialog.newInstance(
+                        FunDetailActivity.this,
+                        now.get(Calendar.HOUR_OF_DAY),
+                        now.get(Calendar.MINUTE),
+                        true
+                );
+                tpd1.enableSeconds(true);
+                tpd1.setVersion(TimePickerDialog.Version.VERSION_2);
+            }
+            tpd1.show(getFragmentManager(), "Timepickerdialog1");
+        } else if (view == dpd2) {
+            if (tpd2 == null) {
+                Calendar now = Calendar.getInstance();
+                tpd2 = TimePickerDialog.newInstance(
+                        FunDetailActivity.this,
+                        now.get(Calendar.HOUR_OF_DAY),
+                        now.get(Calendar.MINUTE),
+                        true
+                );
+                tpd2.enableSeconds(true);
+                tpd2.setVersion(TimePickerDialog.Version.VERSION_2);
+            }
+            tpd2.show(getFragmentManager(), "Timepickerdialog2");
+        } else if (view == dpd3) {
+            if (tpd3 == null) {
+                Calendar now = Calendar.getInstance();
+                tpd3 = TimePickerDialog.newInstance(
+                        FunDetailActivity.this,
+                        now.get(Calendar.HOUR_OF_DAY),
+                        now.get(Calendar.MINUTE),
+                        true
+                );
+                tpd3.enableSeconds(true);
+                tpd3.setVersion(TimePickerDialog.Version.VERSION_2);
+            }
+            tpd3.show(getFragmentManager(), "Timepickerdialog3");
+        }
+    }
+
+    @Override
+    public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
+        this.hour=hourOfDay;
+        this.min=minute;
+        this.sec=second;
+        long time =strTimeToDateFormat(year,month,day,hour,min,sec);
+        if (view == tpd) {
+            et2.setText(TimeUtil.getTimeToS(time * 1000));
+            result.JdTime = time;
+        } else if (view == tpd1) {
+            et3.setText(TimeUtil.getTimeToS(time * 1000));
+            result.PdTime = time;
+        } else if (view == tpd2) {
+            et4.setText(TimeUtil.getTimeToS(time * 1000));
+            result.BeginTime = time;
+        } else if (view == tpd3) {
+            et5.setText(TimeUtil.getTimeToS(time * 1000));
+            result.EndTime = time;
+        }
+    }
+
+    /**
+     * xx年xx月xx日xx时xx分转成时间戳
+     *
+     * @param yearStr
+     * @param month
+     * @param day
+     * @param hourStr
+     * @param minuteStr
+     * @return
+     */
+    private long strTimeToDateFormat(int yearStr,int month, int day, int hourStr, int minuteStr,int sec) {
+        String s = yearStr+ "-"+ month+ "-"+ day+"-"+ hourStr+"-"+
+                + hourStr + "-" + minuteStr + "-"+sec;
+        return Long.parseLong(TimeUtil.dataOne(s));
     }
 }

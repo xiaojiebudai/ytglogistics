@@ -336,7 +336,7 @@ public class MainActivity extends FatherActivity {
             @Override
             public void onSuccess(String result) {
                 final VersionInfo version = JSONObject.parseObject(result, VersionInfo.class);
-                version.IsForce = true;
+                version.IsForce = false;
                 version.DownloadUrl = "http://www.yplog.com.cn/x5/App/app-release.apk";
                 try {
                     if (version.VerNo != SystemUtil.getVersionCode()) {
@@ -456,7 +456,6 @@ public class MainActivity extends FatherActivity {
                 if (!file_path.exists()) {
                     file_path.mkdir();
                 }
-
                 out = new FileOutputStream(new File(FILE_NAME));//为指定的文件路径创建文件输出流
                 byte[] buffer = new byte[1024 * 1024];
                 int len = 0;
@@ -541,6 +540,7 @@ public class MainActivity extends FatherActivity {
     private void installApp() {
         File appFile = new File(FILE_NAME);
         if (!appFile.exists()) {
+            WWToast.showShort("安装文件不存在");
             return;
         }
         // 跳转到新版本应用安装页面

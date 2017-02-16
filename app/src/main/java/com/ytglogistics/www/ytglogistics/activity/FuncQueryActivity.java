@@ -14,6 +14,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.library.BaseRecyclerAdapter;
 import com.github.library.BaseViewHolder;
 import com.github.library.listener.OnRecyclerItemClickListener;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 import com.ytglogistics.www.ytglogistics.R;
 import com.ytglogistics.www.ytglogistics.api.Api;
 import com.ytglogistics.www.ytglogistics.been.DataImg;
@@ -42,7 +44,7 @@ import butterknife.OnClick;
  * Created by Administrator on 2016/12/23.
  */
 
-public class FuncQueryActivity extends FatherActivity {
+public class FuncQueryActivity extends FatherActivity implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
     @BindView(R.id.tv_title)
     TextView tvTitle;
     @BindView(R.id.tv_time)
@@ -94,17 +96,17 @@ public class FuncQueryActivity extends FatherActivity {
             @Override
             protected void convert(BaseViewHolder helper, DataInOut item) {
 
-                helper.setText(R.id.tv_num, (helper.getAdapterPosition()+1) + "");
+                helper.setText(R.id.tv_num, (helper.getAdapterPosition() + 1) + "");
                 if (model == INYUYUE) {
-                    helper.setText(R.id.tv_name, TextUtils.isEmpty(item.PeriodName)?"现场取号":item.PeriodName);
+                    helper.setText(R.id.tv_name, TextUtils.isEmpty(item.PeriodName) ? "现场取号" : item.PeriodName);
                     helper.setText(R.id.tv_bowei, item.CarNo);
                 } else {
                     helper.setText(R.id.tv_name, item.So);
                     helper.setText(R.id.tv_bowei, item.CabinetNo);
                 }
-                if(item.isSelect){
+                if (item.isSelect) {
                     helper.getView(R.id.ll_container).setBackgroundResource(R.color.top_title_bg);
-                }else{
+                } else {
                     helper.getView(R.id.ll_container).setBackgroundResource(R.color.white);
                 }
                 switch (item.Status) {
@@ -134,10 +136,10 @@ public class FuncQueryActivity extends FatherActivity {
             @Override
             public void onItemClick(View view, int position) {
 
-                for (int i = 0; i <mAdapter.getData().size() ; i++) {
-                    ((DataInOut) mAdapter.getItem(i)).isSelect=false;
+                for (int i = 0; i < mAdapter.getData().size(); i++) {
+                    ((DataInOut) mAdapter.getItem(i)).isSelect = false;
                 }
-                ((DataInOut) mAdapter.getItem(position)).isSelect=true;
+                ((DataInOut) mAdapter.getItem(position)).isSelect = true;
                 mAdapter.notifyDataSetChanged();
             }
         });
@@ -191,27 +193,46 @@ public class FuncQueryActivity extends FatherActivity {
         ButterKnife.bind(this);
     }
 
-    private DateChooseWheelViewDialog startDateChooseDialog;
-
+//    private DateChooseWheelViewDialog startDateChooseDialog;
+private  DatePickerDialog dpd;
     @OnClick(R.id.tv_time)
     public void onClick() {
-        if (startDateChooseDialog == null) {
-            startDateChooseDialog = new DateChooseWheelViewDialog(FuncQueryActivity.this, new DateChooseWheelViewDialog.DateChooseInterface() {
-                @Override
-                public void getDateTime(long time, boolean longTimeChecked) {
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.setTimeInMillis(time * 1000);
-                    date = calendar.get(Calendar.YEAR) + "-"
-                            + (calendar.get(Calendar.MONTH) > 8 ? calendar.get(Calendar.MONTH) + 1 : ("0" + (calendar.get(Calendar.MONTH) + 1))) + "-"
-                            + (calendar.get(Calendar.DAY_OF_MONTH) > 9 ? calendar.get(Calendar.DAY_OF_MONTH) : ("0" + calendar.get(Calendar.DAY_OF_MONTH)));
-                    tvTime.setText(date);
-                    getList();
-                }
-            });
-            startDateChooseDialog.setTimePickerGone(true);
-            startDateChooseDialog.setDateDialogTitle("时间选择");
+//        if (startDateChooseDialog == null) {
+//            startDateChooseDialog = new DateChooseWheelViewDialog(FuncQueryActivity.this, new DateChooseWheelViewDialog.DateChooseInterface() {
+//                @Override
+//                public void getDateTime(long time, boolean longTimeChecked) {
+//                    Calendar calendar = Calendar.getInstance();
+//                    calendar.setTimeInMillis(time * 1000);
+//
+//                }
+//            });
+//            startDateChooseDialog.setTimePickerGone(true);
+//            startDateChooseDialog.setDateDialogTitle("时间选择");
 
+//        }
+//        startDateChooseDialog.showDateChooseDialog();
+        if(dpd==null){
+            Calendar now = Calendar.getInstance();
+             dpd = DatePickerDialog.newInstance(
+                    FuncQueryActivity.this,
+                    now.get(Calendar.YEAR),
+                    now.get(Calendar.MONTH),
+                    now.get(Calendar.DAY_OF_MONTH)
+            );
+            dpd.setVersion(DatePickerDialog.Version.VERSION_2);
         }
-        startDateChooseDialog.showDateChooseDialog();
+        dpd.show(getFragmentManager(), "Datepickerdialog");
+    }
+    @Override
+    public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
+    }
+
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+        date = year + "-"
+                + (monthOfYear > 8 ? monthOfYear + 1 : ("0" + (monthOfYear + 1))) + "-"
+                + (dayOfMonth > 9 ? dayOfMonth : ("0" + dayOfMonth));
+        tvTime.setText(date);
+        getList();
     }
 }

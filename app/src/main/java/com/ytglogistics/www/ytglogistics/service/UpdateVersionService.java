@@ -54,7 +54,7 @@ public class UpdateVersionService extends Service {
                 .getExternalStorageState())) {
             updateDir = new File(Environment.getExternalStorageDirectory(),
                     "app/download/");
-            updateFile = new File(updateDir.getPath(), "wwshp.apk");
+            updateFile = new File(updateDir.getPath(), "ytgapp.apk");
         }
         this.updateNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
