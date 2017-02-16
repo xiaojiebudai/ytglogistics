@@ -10,11 +10,9 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.Settings;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.ytglogistics.www.ytglogistics.MyApplication;
 import com.ytglogistics.www.ytglogistics.R;
@@ -29,21 +27,17 @@ import com.ytglogistics.www.ytglogistics.utils.PublicWay;
 import com.ytglogistics.www.ytglogistics.utils.SharedPreferenceUtils;
 import com.ytglogistics.www.ytglogistics.utils.SystemUtil;
 import com.ytglogistics.www.ytglogistics.utils.WWToast;
-import com.ytglogistics.www.ytglogistics.utils.ZLog;
 import com.ytglogistics.www.ytglogistics.xutils.WWXCallBack;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -83,6 +77,62 @@ public class MainActivity extends FatherActivity {
     ImageView start_app;
     @BindView(R.id.cctv)
     ImageView cctv;
+    /*
+    收货操作
+     */
+    private static final int SHOUHUOCAOZUO = 1;
+    /*
+    出货操作
+     */
+    private static final int CHUHUOCAOZUO = 2;
+    /*
+    入仓修改
+     */
+    private static final int RUCANGXIUGAI = 3;
+    /*
+    出仓修改
+     */
+    private static final int CHUCANGXIUGAI = 4;
+    /*
+    泊位管理
+     */
+    private static final int BOWEIGUANGLI = 5;
+    /*
+    移库操作操作
+     */
+    private static final int YIKUCAOZUO = 6;
+    /*
+    入仓预约管理
+     */
+    private static final int RUCANGYUYUEGUANLI = 7;
+    /*
+    出仓预约管理
+     */
+    private static final int CHUCANGYUYUEGUANLI = 8;
+    /*
+    现场照片
+     */
+    private static final int XIANCHANGZHAOPIAN = 9;
+    /*
+    入仓PO查询
+     */
+    private static final int RUCANGPOCHAXUN = 10;
+    /*
+    泊位图
+     */
+    private static final int BOWEITU = 11;
+    /*
+    数据统计
+     */
+    private static final int SHUJUTONGJI = 12;
+    /*
+    VGM
+     */
+    private static final int VGM = 13;
+    /*
+    监控查询
+     */
+    private static final int JIANKONGCHAXUN = 14;
 
     @Override
     protected int getLayoutId() {
@@ -128,37 +178,37 @@ public class MainActivity extends FatherActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.receiving:
-                startActivity(new Intent(this, FunInActivity.class).putExtra(Consts.KEY_MODULE, FunInActivity.INOPERATE));
+                isLimited(SHOUHUOCAOZUO);
                 break;
             case R.id.shipping:
-                startActivity(new Intent(this, FunOutActivity.class).putExtra(Consts.KEY_MODULE, FunOutActivity.OUTOPERATE));
+                isLimited(CHUHUOCAOZUO);
                 break;
             case R.id.warehousing:
-                startActivity(new Intent(this, FunInActivity.class).putExtra(Consts.KEY_MODULE, FunInActivity.INEDIT));
+                isLimited(RUCANGXIUGAI);
                 break;
             case R.id.outofstorage:
-                startActivity(new Intent(this, FunOutActivity.class).putExtra(Consts.KEY_MODULE, FunOutActivity.OUTEDIT));
+                isLimited(CHUCANGXIUGAI);
                 break;
             case R.id.garage_m:
-                startActivity(new Intent(this, FuncPlaceActivity.class));
+                isLimited(BOWEIGUANGLI);
                 break;
             case R.id.move_operate:
-                startActivity(new Intent(this, MoveLocaActivity.class));
+                isLimited(YIKUCAOZUO);
                 break;
             case R.id.housing_reservation_query:
-                startActivity(new Intent(this, FuncQueryActivity.class).putExtra(Consts.KEY_MODULE, FuncQueryActivity.INYUYUE));
+               isLimited(RUCANGYUYUEGUANLI);
                 break;
             case R.id.outofstorage_query:
-                startActivity(new Intent(this, FuncQueryActivity.class).putExtra(Consts.KEY_MODULE, FuncQueryActivity.OUTYUYUE));
+                isLimited(CHUCANGYUYUEGUANLI);
                 break;
             case R.id.locale_photos:
-                startActivity(new Intent(this, FuncImageActivity.class));
+                isLimited(XIANCHANGZHAOPIAN);
                 break;
             case R.id.housing_reservation_po_query:
-                startActivity(new Intent(this, PoSearchListActivity.class));
+                isLimited(RUCANGPOCHAXUN);
                 break;
             case R.id.berth_map:
-                startActivity(new Intent(this, FuncPlaceStatusActivity.class));
+                isLimited(BOWEITU);
                 break;
             case R.id.loginout:
                 MyApplication.getInstance().setSessionId("");
@@ -168,24 +218,81 @@ public class MainActivity extends FatherActivity {
                 finish();
                 break;
             case R.id.start_app:
-                if (isAvilible(this, "com.embarcadero.PonderApp")) {
-                    PublicWay.startApp(this, "com.embarcadero.PonderApp", "com.embarcadero.PonderApp.activity.WelcomeActivity");
-                } else {
-                    WWToast.showShort("还未安装衡云，请先去应用市场下载");
-                }
-
-
+                isLimited(VGM);
                 break;
             case R.id.cctv:
-                if (isAvilible(this, "sinofloat.safe")) {
-                    PublicWay.startApp(this, "sinofloat.safe", "sinofloat.main.ui.activities.LauncherActivity");
-                } else {
-                    WWToast.showShort("还未安装移动安防，请先去应用市场下载");
-                }
-
-
+                isLimited(JIANKONGCHAXUN);
                 break;
         }
+    }
+
+    private void isLimited(final int funcId) {
+        RequestParams params = ParamsUtils.getSessionParams(Api.GetMyGrant());
+        params.addBodyParameter("funcId", funcId + "");
+        x.http().get(params, new WWXCallBack("GetMyGrant") {
+            @Override
+            public void onAfterSuccessOk(JSONObject data) {
+                if (data.getBoolean("Data")) {
+                    switch (funcId) {
+                        case SHOUHUOCAOZUO:
+                            startActivity(new Intent(MainActivity.this, FunInActivity.class).putExtra(Consts.KEY_MODULE, FunInActivity.INOPERATE));
+                            break;
+                        case CHUHUOCAOZUO:
+                            startActivity(new Intent(MainActivity.this, FunOutActivity.class).putExtra(Consts.KEY_MODULE, FunOutActivity.OUTOPERATE));
+                            break;
+                        case RUCANGXIUGAI:
+                            startActivity(new Intent(MainActivity.this, FunInActivity.class).putExtra(Consts.KEY_MODULE, FunInActivity.INEDIT));
+                            break;
+                        case CHUCANGXIUGAI:
+                            startActivity(new Intent(MainActivity.this, FunOutActivity.class).putExtra(Consts.KEY_MODULE, FunOutActivity.OUTEDIT));
+                            break;
+                        case BOWEIGUANGLI:
+                            startActivity(new Intent(MainActivity.this, FuncPlaceActivity.class));
+                            break;
+                        case YIKUCAOZUO:
+                            startActivity(new Intent(MainActivity.this, MoveLocaActivity.class));
+                            break;
+                        case RUCANGYUYUEGUANLI:
+                            startActivity(new Intent(MainActivity.this, FuncQueryActivity.class).putExtra(Consts.KEY_MODULE, FuncQueryActivity.INYUYUE));
+                            break;
+                        case CHUCANGYUYUEGUANLI:
+                            startActivity(new Intent(MainActivity.this, FuncQueryActivity.class).putExtra(Consts.KEY_MODULE, FuncQueryActivity.OUTYUYUE));
+                            break;
+                        case XIANCHANGZHAOPIAN:
+                            startActivity(new Intent(MainActivity.this, FuncImageActivity.class));
+                            break;
+                        case RUCANGPOCHAXUN:
+                            startActivity(new Intent(MainActivity.this, PoSearchListActivity.class));
+                            break;
+                        case BOWEITU:
+                            startActivity(new Intent(MainActivity.this, FuncPlaceStatusActivity.class));
+                            break;
+                        case VGM:
+                            if (isAvilible(MainActivity.this, "com.embarcadero.PonderApp")) {
+                                PublicWay.startApp(MainActivity.this, "com.embarcadero.PonderApp", "com.embarcadero.PonderApp.activity.WelcomeActivity");
+                            } else {
+                                WWToast.showShort("还未安装衡云，请先去应用市场下载");
+                            }
+                            break;
+                        case JIANKONGCHAXUN:
+                            if (isAvilible(MainActivity.this, "sinofloat.safe")) {
+                                PublicWay.startApp(MainActivity.this, "sinofloat.safe", "sinofloat.main.ui.activities.LauncherActivity");
+                            } else {
+                                WWToast.showShort("还未安装移动安防，请先去应用市场下载");
+                            }
+
+                            break;
+                    }
+                } else {
+                    WWToast.showShort("无此操作权限");
+                }
+            }
+
+            @Override
+            public void onAfterFinished() {
+                dismissWaitDialog();
+            }
+        });
     }
 
     private boolean isAvilible(Context context, String packageName) {

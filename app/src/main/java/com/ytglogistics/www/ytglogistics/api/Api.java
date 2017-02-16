@@ -134,5 +134,8 @@ public class Api {
 	public static final String PalletGet() {
 		return ONLINE + "PalletGet";
 	}
+	public static final String GetMyGrant() {
+		return ONLINE + "GetMyGrant";
+	}
 
 }
