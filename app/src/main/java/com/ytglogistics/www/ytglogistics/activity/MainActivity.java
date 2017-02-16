@@ -228,7 +228,7 @@ public class MainActivity extends FatherActivity {
 
     private void isLimited(final int funcId) {
         RequestParams params = ParamsUtils.getSessionParams(Api.GetMyGrant());
-        params.addBodyParameter("funcId", funcId + "");
+        params.addBodyParameter("funcId",funcId<10?"0"+funcId: funcId + "");
         x.http().get(params, new WWXCallBack("GetMyGrant") {
             @Override
             public void onAfterSuccessOk(JSONObject data) {
