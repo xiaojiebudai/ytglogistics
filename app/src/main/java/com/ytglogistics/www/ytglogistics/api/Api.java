@@ -137,5 +137,8 @@ public class Api {
 	public static final String GetMyGrant() {
 		return ONLINE + "GetMyGrant";
 	}
+	public static final String ChagnePlace() {
+		return ONLINE + "ChagnePlace";
+	}
 
 }

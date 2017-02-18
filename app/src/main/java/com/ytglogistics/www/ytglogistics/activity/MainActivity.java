@@ -27,6 +27,7 @@ import com.ytglogistics.www.ytglogistics.utils.PublicWay;
 import com.ytglogistics.www.ytglogistics.utils.SharedPreferenceUtils;
 import com.ytglogistics.www.ytglogistics.utils.SystemUtil;
 import com.ytglogistics.www.ytglogistics.utils.WWToast;
+import com.ytglogistics.www.ytglogistics.utils.ZLog;
 import com.ytglogistics.www.ytglogistics.xutils.WWXCallBack;
 
 import org.xutils.common.Callback;
@@ -335,6 +336,7 @@ public class MainActivity extends FatherActivity {
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
+                ZLog.showPost(result);
                 final VersionInfo version = JSONObject.parseObject(result, VersionInfo.class);
                 version.IsForce = false;
                 version.DownloadUrl = "http://www.yplog.com.cn/x5/App/app-release.apk";

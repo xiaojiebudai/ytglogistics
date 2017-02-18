@@ -208,11 +208,11 @@ public class FuncPlaceActivity extends FatherActivity {
                     return;
                 }
                 showWaitDialog();
-                RequestParams params = ParamsUtils.getSessionParams(Api.AllPlaces());
+                RequestParams params = ParamsUtils.getSessionParams(Api.ChagnePlace());
                 params.addBodyParameter("queueNo", dataYySelect.QueueNo);
                 params.addBodyParameter("oldPlace", dataYySelect.PlaceId);
                 params.addBodyParameter("newPlace", placeSelect.PlaceId);
-                x.http().get(params, new WWXCallBack("AllPlaces") {
+                x.http().get(params, new WWXCallBack("ChagnePlace") {
                     @Override
                     public void onAfterSuccessOk(JSONObject data) {
                         WWToast.showShort("泊位变更成功");

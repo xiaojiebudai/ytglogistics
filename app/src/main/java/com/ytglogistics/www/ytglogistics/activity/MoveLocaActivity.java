@@ -14,10 +14,12 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.library.BaseRecyclerAdapter;
 import com.github.library.BaseViewHolder;
 import com.github.library.listener.OnRecyclerItemClickListener;
+import com.ytglogistics.www.ytglogistics.MyApplication;
 import com.ytglogistics.www.ytglogistics.R;
 import com.ytglogistics.www.ytglogistics.api.Api;
 import com.ytglogistics.www.ytglogistics.been.DataImg;
 import com.ytglogistics.www.ytglogistics.been.DataSolt;
+import com.ytglogistics.www.ytglogistics.utils.Consts;
 import com.ytglogistics.www.ytglogistics.utils.ParamsUtils;
 import com.ytglogistics.www.ytglogistics.utils.WWToast;
 import com.ytglogistics.www.ytglogistics.xutils.WWXCallBack;
@@ -59,6 +61,7 @@ public class MoveLocaActivity extends FatherActivity {
     private ArrayList<DataSolt> dataSolts;
     private BaseRecyclerAdapter mAdapter;
     private DataSolt dataSolt;
+    private int selectId=-1;
 
     @Override
     protected int getLayoutId() {
@@ -89,6 +92,7 @@ public class MoveLocaActivity extends FatherActivity {
         mAdapter.setOnRecyclerItemClickListener(new OnRecyclerItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
+                selectId=position;
                 dataSolt = (DataSolt) mAdapter.getData().get(position);
                 tvPo.setText(dataSolt.Po);
                 tvSkn.setText(dataSolt.Skn);
@@ -149,7 +153,7 @@ public class MoveLocaActivity extends FatherActivity {
                 break;
             case R.id.tv_change:
                 hideSoftKeyboard();
-                String newplaceId = tvNewplaceId.getText().toString().trim();
+                final String newplaceId = tvNewplaceId.getText().toString().trim();
                 if (dataSolt == null) {
                     WWToast.showShort("请选择要修改的入仓记录");
                     return;
@@ -159,18 +163,18 @@ public class MoveLocaActivity extends FatherActivity {
                     return;
                 }
                 showWaitDialog();
-                RequestParams params1 = ParamsUtils.getSessionParams(Api.ChangeSoLoca());
-                params1.addBodyParameter("newloca", dataSolt.Keyid);
-                params1.addBodyParameter("keyId", newplaceId);
-                x.http().get(params1, new WWXCallBack("ChangeSoLoca") {
+                JSONObject jsonObject=new JSONObject();
+                jsonObject.put("newloca", newplaceId);
+                jsonObject.put("keyId", dataSolt.Keyid);
+                jsonObject.put(Consts.KEY_SESSIONID, MyApplication
+                        .getInstance().getSessionId());
+                x.http().post(ParamsUtils.getPostJsonParams(jsonObject,Api.ChangeSoLoca()), new WWXCallBack("ChangeSoLoca") {
                     @Override
                     public void onAfterSuccessOk(JSONObject data) {
                         WWToast.showShort("修改成功");
-                        dataSolt = null;
-                        tvPo.setText("");
-                        tvSkn.setText("");
-                        tvOldloca.setText("");
-                        tvNewplaceId.setText("");
+                        dataSolt.Loca=newplaceId;
+                        ((DataSolt) mAdapter.getData().get(selectId)).Loca=newplaceId;
+                        mAdapter.notifyDataSetChanged();
                     }
 
                     @Override
