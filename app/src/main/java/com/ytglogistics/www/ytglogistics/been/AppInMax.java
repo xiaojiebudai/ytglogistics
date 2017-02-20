@@ -14,7 +14,7 @@ public class AppInMax {
     public String Loca;
     public int Soquan;
     public double Format;
-    public double Ttlpcs;
+    public int Ttlpcs;
     public double Leng;
     public double Wide;
     public double High;

@@ -24,8 +24,10 @@ import com.ytglogistics.www.ytglogistics.been.AppInMax;
 import com.ytglogistics.www.ytglogistics.been.AppInResult;
 import com.ytglogistics.www.ytglogistics.been.DataCbm;
 import com.ytglogistics.www.ytglogistics.been.PrintInfo;
+import com.ytglogistics.www.ytglogistics.dialog.CommonDialog;
 import com.ytglogistics.www.ytglogistics.dialog.InputDialog;
 import com.ytglogistics.www.ytglogistics.utils.Consts;
+import com.ytglogistics.www.ytglogistics.utils.DialogUtils;
 import com.ytglogistics.www.ytglogistics.utils.ParamsUtils;
 import com.ytglogistics.www.ytglogistics.utils.RegexUtil;
 import com.ytglogistics.www.ytglogistics.utils.SharedPreferenceUtils;
@@ -99,6 +101,7 @@ public class FunInMaxListActivity extends FatherActivity {
     private int selectPosition = -1;
     private ArrayList<AppInMax> appInMaxes;
     private DecimalFormat df;
+    private boolean isChange = false;
 
     @Override
     protected int getLayoutId() {
@@ -108,10 +111,47 @@ public class FunInMaxListActivity extends FatherActivity {
     @Override
     protected void initValues() {
         context = (MyApplication) getApplicationContext();
-        initDefautHead("入仓修改", true);
+        initDefautHead("入仓修改", false);
+        View left = findViewById(R.id.rl_head_left);
+        if (left != null) {
+            left.findViewById(R.id.tv_head_left).setBackgroundResource(
+                    R.mipmap.arrow_back);
+            left.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (isChange) {
+                        showBackTips();
+                    } else {
+                        back();
+                    }
+                }
+
+
+            });
+        }
         result = JSON.parseObject(getIntent().getStringExtra(Consts.KEY_DATA), AppInResult.class);
     }
 
+    private void showBackTips() {
+        final CommonDialog commonDialogTwiceConfirm = DialogUtils.getCommonDialogTwiceConfirm(FunInMaxListActivity.this, "请确认数据修改已经提交，是否放弃修改离开当前页面？", true);
+        commonDialogTwiceConfirm.setRightButtonCilck(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                commonDialogTwiceConfirm.dismiss();
+                back();
+            }
+        });
+        commonDialogTwiceConfirm.show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (isChange) {
+            showBackTips();
+        } else {
+            back();
+        }
+    }
 
     @Override
     protected void initView() {
@@ -126,20 +166,20 @@ public class FunInMaxListActivity extends FatherActivity {
                 inMax = adapter.getData().get(position);
                 tvPo.setText(inMax.Po);
                 tvSkn.setText(inMax.Skn);
-                tvNum.setText((int) inMax.Soquan + "");
-                tvPcs.setText(inMax.Format + "");
-                tvGeshu.setText((int) inMax.Ttlpcs + "");
+                tvNum.setText(numderIntFormat(inMax.Soquan));
+                tvPcs.setText(numderDoubleFormat(inMax.Format));
+                tvGeshu.setText(numderIntFormat(inMax.Ttlpcs));
                 tvCangwei.setText(TextUtils.isEmpty(inMax.Loca) ? "" : inMax.Loca);
-                tvOneWeight.setText(inMax.Unitwei + "");
-                tvWeight.setText(df.format((inMax.Rweight)) + "");
-                tvLength.setText(inMax.Leng + "");
-                tvOneWigth.setText(inMax.Wide + "");
-                tvOneHeight.setText(inMax.High + "");
-                tvCbm.setText(df.format((inMax.Cbm)) + "");
-                tvBkcbm.setText(inMax.BookingCbm + "");
+                tvOneWeight.setText(numderDoubleFormat(inMax.Unitwei));
+                tvWeight.setText(inMax.Rweight > 0 ? df.format((inMax.Rweight)) + "" : "");
+                tvLength.setText(numderDoubleFormat(inMax.Leng));
+                tvOneWigth.setText(numderDoubleFormat(inMax.Wide));
+                tvOneHeight.setText(numderDoubleFormat(inMax.High));
+                tvCbm.setText(inMax.Cbm > 0 ? df.format((inMax.Cbm)) + "" : "");
+                tvBkcbm.setText(numderDoubleFormat(inMax.BookingCbm));
 
-                tvCbmrate.setText(df.format((inMax.CbmRate * 100)) + "%");
-                tvXiangbang.setText(inMax.PaperCtn + "");
+                tvCbmrate.setText(inMax.CbmRate > 0 ? df.format((inMax.CbmRate * 100)) + "%" : "");
+                tvXiangbang.setText(numderIntFormat(inMax.PaperCtn));
                 adapter.setPos(position);
             }
         });
@@ -161,6 +201,7 @@ public class FunInMaxListActivity extends FatherActivity {
                         WWToast.showShort("请先选择一条记录");
                     } else {
                         adapter.getData().get(selectPosition).Loca = s + "";
+                        isChange = true;
                     }
 
                 }
@@ -185,7 +226,8 @@ public class FunInMaxListActivity extends FatherActivity {
                         WWToast.showShort("请先选择一条记录");
                     } else {
                         adapter.getData().get(selectPosition).Unitwei = Double.valueOf(s + "");
-                        setAllWeight(adapter.getData().get(selectPosition).Unitwei,adapter.getData().get(selectPosition).Soquan);
+                        setAllWeight(adapter.getData().get(selectPosition).Unitwei, adapter.getData().get(selectPosition).Soquan);
+                        isChange = true;
                     }
 
                 }
@@ -211,6 +253,7 @@ public class FunInMaxListActivity extends FatherActivity {
                     } else {
                         adapter.getData().get(selectPosition).Leng = Double.valueOf(s + "");
                         setCbm(adapter.getData().get(selectPosition));
+                        isChange = true;
                     }
 
                 }
@@ -236,6 +279,7 @@ public class FunInMaxListActivity extends FatherActivity {
                     } else {
                         adapter.getData().get(selectPosition).Wide = Double.valueOf(s + "");
                         setCbm(adapter.getData().get(selectPosition));
+                        isChange = true;
                     }
 
                 }
@@ -261,6 +305,7 @@ public class FunInMaxListActivity extends FatherActivity {
                     } else {
                         adapter.getData().get(selectPosition).High = Double.valueOf(s + "");
                         setCbm(adapter.getData().get(selectPosition));
+                        isChange = true;
                     }
 
                 }
@@ -286,8 +331,9 @@ public class FunInMaxListActivity extends FatherActivity {
                         WWToast.showShort("请先选择一条记录");
                     } else {
                         adapter.getData().get(selectPosition).Soquan = Integer.valueOf(s + "");
-                        setAllWeight(adapter.getData().get(selectPosition).Unitwei,adapter.getData().get(selectPosition).Soquan);
+                        setAllWeight(adapter.getData().get(selectPosition).Unitwei, adapter.getData().get(selectPosition).Soquan);
                         setCbm(adapter.getData().get(selectPosition));
+                        isChange = true;
                     }
 
                 }
@@ -312,6 +358,7 @@ public class FunInMaxListActivity extends FatherActivity {
                         WWToast.showShort("请先选择一条记录");
                     } else {
                         adapter.getData().get(selectPosition).Format = Double.valueOf(s + "");
+                        isChange = true;
                     }
 
                 }
@@ -336,6 +383,7 @@ public class FunInMaxListActivity extends FatherActivity {
                         WWToast.showShort("请先选择一条记录");
                     } else {
                         adapter.getData().get(selectPosition).PaperCtn = Integer.valueOf(s + "");
+                        isChange = true;
                     }
 
                 }
@@ -344,6 +392,14 @@ public class FunInMaxListActivity extends FatherActivity {
         });
 
 
+    }
+
+    private String numderIntFormat(int a) {
+        return a > 0 ? (int) a + "" : "";
+    }
+
+    private String numderDoubleFormat(double dou) {
+        return dou > 0 ? dou + "" : "";
     }
 
     private void setCbm(AppInMax appInMax) {
@@ -499,6 +555,7 @@ public class FunInMaxListActivity extends FatherActivity {
                     }
                 }
                 lsit.addAll(lsit22);
+                isChange = true;
             }
         }
     }
@@ -566,6 +623,18 @@ public class FunInMaxListActivity extends FatherActivity {
     }
 
     private void allInfoCommit() {
+
+        boolean isOk = true;
+        for (int i = 0; i < adapter.getData().size(); i++) {
+            if (TextUtils.isEmpty(adapter.getData().get(i).Po) || TextUtils.isEmpty(adapter.getData().get(i).Skn)) {
+                WWToast.showShort(adapter.getData().get(i).So + "  数据中PO和SKN为空");
+                isOk = false;
+                break;
+            }
+        }
+        if (!isOk) {
+            return;
+        }
         showWaitDialog();
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Consts.KEY_SESSIONID, MyApplication
@@ -598,6 +667,8 @@ public class FunInMaxListActivity extends FatherActivity {
                         adapter.getData().get(j).RowId = rowIdList.get(j);
                     }
                 }
+                WWToast.showShort("数据保存成功");
+                isChange = false;
                 if (lsit != null && lsit.size() > 0) {
                     JSONObject jsonObject = new JSONObject();
                     jsonObject.put(Consts.KEY_SESSIONID, MyApplication
@@ -610,7 +681,7 @@ public class FunInMaxListActivity extends FatherActivity {
                     x.http().post(ParamsUtils.getPostJsonParams(jsonObject, Api.AppMxCbmCommit()), new WWXCallBack("AppMxCbmCommit") {
                         @Override
                         public void onAfterSuccessOk(JSONObject data) {
-                            WWToast.showShort("数据保存成功");
+
                         }
 
                         @Override
