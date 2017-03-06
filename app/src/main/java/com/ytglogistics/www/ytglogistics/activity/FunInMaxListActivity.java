@@ -707,15 +707,17 @@ public class FunInMaxListActivity extends FatherActivity {
         x.http().get(params, new WWXCallBack("PdaPallet") {
             @Override
             public void onAfterSuccessOk(JSONObject data) {
-                //获取打印数据打印
+                //获取打印数据打印，0表示正常，1表示已经打印
+                int code = data.getInteger("Code");
                 JSONArray jsonArray = data.getJSONArray("Data");
                 ArrayList<PrintInfo> list = (ArrayList<PrintInfo>) JSON.parseArray(
                         jsonArray.toJSONString(), PrintInfo.class);
-                if (list != null && list.size() > 0) {
-                    for (int i = 0; i < list.size(); i++) {
-                        printLabel(list.get(i));
-                    }
+                if (code == 1) {
+                    showRePrintTips(list);
+                } else {
+                    print(list);
                 }
+
 
             }
 
@@ -724,5 +726,33 @@ public class FunInMaxListActivity extends FatherActivity {
                 dismissWaitDialog();
             }
         });
+    }
+
+    /**
+     * 打印动作
+     * @param list
+     */
+    private void print(ArrayList<PrintInfo> list) {
+        if (list != null && list.size() > 0) {
+            for (int i = 0; i < list.size(); i++) {
+                printLabel(list.get(i));
+            }
+        }
+    }
+
+    /**
+     * 重复打印提示
+     * @param list
+     */
+    private void showRePrintTips(final ArrayList<PrintInfo> list) {
+        final CommonDialog commonDialogTwiceConfirm = DialogUtils.getCommonDialogTwiceConfirm(this, "此货已生成板，是否需要重复打印条码？", true);
+        commonDialogTwiceConfirm.setRightButtonCilck(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                commonDialogTwiceConfirm.dismiss();
+                print(list);
+            }
+        });
+        commonDialogTwiceConfirm.show();
     }
 }
