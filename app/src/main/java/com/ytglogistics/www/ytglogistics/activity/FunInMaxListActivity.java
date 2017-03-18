@@ -177,8 +177,7 @@ public class FunInMaxListActivity extends FatherActivity {
                 tvOneHeight.setText(numderDoubleFormat(inMax.High));
                 tvCbm.setText(inMax.Cbm > 0 ? df.format((inMax.Cbm)) + "" : "");
                 tvBkcbm.setText(numderDoubleFormat(inMax.BookingCbm));
-
-                tvCbmrate.setText(inMax.CbmRate > 0 ? df.format((inMax.CbmRate * 100)) + "%" : "");
+                tvCbmrate.setText(Math.abs(inMax.CbmRate) > 0 ? df.format((inMax.CbmRate * 100)) + "%" : "");
                 tvXiangbang.setText(numderIntFormat(inMax.PaperCtn));
                 adapter.setPos(position);
             }
@@ -415,7 +414,7 @@ public class FunInMaxListActivity extends FatherActivity {
             BigDecimal c = new BigDecimal(appInMax.CbmRate);
             appInMax.CbmRate = c.setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue();
             inMax.CbmRate = appInMax.CbmRate;
-            tvCbmrate.setText(df.format((inMax.CbmRate * 100)) + "%");
+            tvCbmrate.setText(Math.abs(inMax.CbmRate) > 0 ? df.format((inMax.CbmRate * 100)) + "%" : "");
         }
     }
 
