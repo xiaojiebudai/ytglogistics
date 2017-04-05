@@ -17,7 +17,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.ytglogistics.www.ytglogistics.MyApplication;
 import com.ytglogistics.www.ytglogistics.R;
-import com.ytglogistics.www.ytglogistics.adapter.FunInAdapter;
 import com.ytglogistics.www.ytglogistics.adapter.FunInMaxListAdapter;
 import com.ytglogistics.www.ytglogistics.api.Api;
 import com.ytglogistics.www.ytglogistics.been.AppInMax;
@@ -100,7 +99,7 @@ public class FunInMaxListActivity extends FatherActivity {
     private ArrayList<DataCbm> lsit = new ArrayList<DataCbm>();
     private int selectPosition = -1;
     private ArrayList<AppInMax> appInMaxes;
-    private DecimalFormat df;
+    private DecimalFormat df,df1;
     private boolean isChange = false;
 
     @Override
@@ -158,6 +157,7 @@ public class FunInMaxListActivity extends FatherActivity {
         adapter = new FunInMaxListAdapter(this);
         lvData.setAdapter(adapter);
         df = new DecimalFormat("######0.00");
+        df1 = new DecimalFormat("######0.000");
 
         lvData.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -175,8 +175,8 @@ public class FunInMaxListActivity extends FatherActivity {
                 tvLength.setText(numderDoubleFormat(inMax.Leng));
                 tvOneWigth.setText(numderDoubleFormat(inMax.Wide));
                 tvOneHeight.setText(numderDoubleFormat(inMax.High));
-                tvCbm.setText(inMax.Cbm > 0 ? df.format((inMax.Cbm)) + "" : "");
-                tvBkcbm.setText(numderDoubleFormat(inMax.BookingCbm));
+                tvCbm.setText(inMax.Cbm > 0 ? df1.format((inMax.Cbm)) + "" : "");
+                tvBkcbm.setText(inMax.BookingCbm > 0 ?df1.format(inMax.BookingCbm): "");
                 tvCbmrate.setText(Math.abs(inMax.CbmRate) > 0 ? df.format((inMax.CbmRate * 100)) + "%" : "");
                 tvXiangbang.setText(numderIntFormat(inMax.PaperCtn));
                 adapter.setPos(position);
@@ -407,12 +407,12 @@ public class FunInMaxListActivity extends FatherActivity {
         } else {
             appInMax.Cbm = appInMax.Leng * appInMax.Wide * appInMax.High * appInMax.Soquan * 0.001 * 0.001;
             BigDecimal b = new BigDecimal(appInMax.Cbm);
-            appInMax.Cbm = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+            appInMax.Cbm = b.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
             inMax.Cbm = appInMax.Cbm;
-            tvCbm.setText(df.format((inMax.Cbm)) + "");
+            tvCbm.setText(df1.format((inMax.Cbm)) + "");
             appInMax.CbmRate = (appInMax.Cbm - appInMax.BookingCbm) / appInMax.BookingCbm;
             BigDecimal c = new BigDecimal(appInMax.CbmRate);
-            appInMax.CbmRate = c.setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue();
+            appInMax.CbmRate = c.setScale(5, BigDecimal.ROUND_HALF_UP).doubleValue();
             inMax.CbmRate = appInMax.CbmRate;
             tvCbmrate.setText(Math.abs(inMax.CbmRate) > 0 ? df.format((inMax.CbmRate * 100)) + "%" : "");
         }
@@ -482,7 +482,7 @@ public class FunInMaxListActivity extends FatherActivity {
     }
 
     //打印数据
-    private void printLabel(PrintInfo info) {
+    private void printLabel(PrintInfo info, String message) {
         context.getObject().CPCL_PageStart(context.getState(), 504, 680, 0, 1);
         context.getObject().CPCL_SetBold(context.getState(), true);
         context.getObject().CPCL_AlignType(context.getState(), preDefiniation.AlignType.AT_CENTER.getValue());
@@ -492,7 +492,7 @@ public class FunInMaxListActivity extends FatherActivity {
         context.getObject().CPCL_PrintString(context.getState(), 10, 440, 1, 1, 0, 24, "SO NO: " + info.Sono, "gb2312");
         context.getObject().CPCL_PrintString(context.getState(), 10, 500, 1, 1, 0, 24, "PO NO: " + ((info.Po == null) ? " " : info.Po), "gb2312");
         context.getObject().CPCL_PrintString(context.getState(), 10, 560, 1, 1, 0, 24, "ITEM NO: " + ((info.Skn == null) ? " " : info.Skn), "gb2312");
-        context.getObject().CPCL_PrintString(context.getState(), 10, 610, 1, 1, 0, 24, "QTY: " + info.Pkgs + "/" + info.PaperCtn, "gb2312");
+        context.getObject().CPCL_PrintString(context.getState(), 10, 610, 1, 1, 0, 24, "QTY: " + info.Pkgs + "/" + message, "gb2312");
         context.getObject().CON_PageEnd(context.getState(),
                 context.getPrintway());
     }
@@ -708,13 +708,15 @@ public class FunInMaxListActivity extends FatherActivity {
             public void onAfterSuccessOk(JSONObject data) {
                 //获取打印数据打印，0表示正常，1表示已经打印
                 int code = data.getInteger("Code");
+                String message=data.getString("Message");
+            if(message.contains(".")) message=message.substring(0,message.indexOf("."));
                 JSONArray jsonArray = data.getJSONArray("Data");
                 ArrayList<PrintInfo> list = (ArrayList<PrintInfo>) JSON.parseArray(
                         jsonArray.toJSONString(), PrintInfo.class);
                 if (code == 1) {
-                    showRePrintTips(list);
+                    showRePrintTips(list,message);
                 } else {
-                    print(list);
+                    print(list,message);
                 }
 
 
@@ -730,11 +732,12 @@ public class FunInMaxListActivity extends FatherActivity {
     /**
      * 打印动作
      * @param list
+     * @param message
      */
-    private void print(ArrayList<PrintInfo> list) {
+    private void print(ArrayList<PrintInfo> list, String message) {
         if (list != null && list.size() > 0) {
             for (int i = 0; i < list.size(); i++) {
-                printLabel(list.get(i));
+                printLabel(list.get(i),message);
             }
         }
     }
@@ -742,14 +745,15 @@ public class FunInMaxListActivity extends FatherActivity {
     /**
      * 重复打印提示
      * @param list
+     * @param message
      */
-    private void showRePrintTips(final ArrayList<PrintInfo> list) {
+    private void showRePrintTips(final ArrayList<PrintInfo> list, final String message) {
         final CommonDialog commonDialogTwiceConfirm = DialogUtils.getCommonDialogTwiceConfirm(this, "此货已生成板，是否需要重复打印条码？", true);
         commonDialogTwiceConfirm.setRightButtonCilck(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 commonDialogTwiceConfirm.dismiss();
-                print(list);
+                print(list, message);
             }
         });
         commonDialogTwiceConfirm.show();
