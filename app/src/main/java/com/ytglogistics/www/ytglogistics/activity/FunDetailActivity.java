@@ -128,12 +128,12 @@ public class FunDetailActivity extends FatherActivity {
                 if (result.Serial == 0) {
                     User user = (User) JSONObject.parseObject(SharedPreferenceUtils.getInstance().getUserInfo(), User.class);
                     result.UserId = user.Keyid;
-                    result.QueueNo = car.YyNo;
+                    result.QueueNo = (model == FUNIN) ? car.YyNo:car.QueueNo;
                     result.CarNo = car.CarNo;
                     result.PlaceId = car.PlaceId;
                     result.OrderId = car.OrderId;
                     result.So = car.So;
-                    result.OperType = 1;
+                    result.OperType = (model == FUNIN) ? 0:1;
                 } else {
                     if (result.JdTime != null)
                         et2.setText(TimeUtil.getTimeToS(result.JdTime * 1000));
