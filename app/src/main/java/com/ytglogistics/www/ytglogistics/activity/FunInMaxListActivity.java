@@ -99,7 +99,7 @@ public class FunInMaxListActivity extends FatherActivity {
     private ArrayList<DataCbm> lsit = new ArrayList<DataCbm>();
     private int selectPosition = -1;
     private ArrayList<AppInMax> appInMaxes;
-    private DecimalFormat df,df1;
+    private DecimalFormat df, df1;
     private boolean isChange = false;
 
     @Override
@@ -176,7 +176,7 @@ public class FunInMaxListActivity extends FatherActivity {
                 tvOneWigth.setText(numderDoubleFormat(inMax.Wide));
                 tvOneHeight.setText(numderDoubleFormat(inMax.High));
                 tvCbm.setText(inMax.Cbm > 0 ? df1.format((inMax.Cbm)) + "" : "");
-                tvBkcbm.setText(inMax.BookingCbm > 0 ?df1.format(inMax.BookingCbm): "");
+                tvBkcbm.setText(inMax.BookingCbm > 0 ? df1.format(inMax.BookingCbm) : "");
                 tvCbmrate.setText(Math.abs(inMax.CbmRate) > 0 ? df.format((inMax.CbmRate * 100)) + "%" : "");
                 tvXiangbang.setText(numderIntFormat(inMax.PaperCtn));
                 adapter.setPos(position);
@@ -456,9 +456,11 @@ public class FunInMaxListActivity extends FatherActivity {
     private void QueryStatus() {
         //2:(0 状态正常，1 网络错误，2打印机缺纸，3脱机.4不存在打印对象未连接。5复位错误.6卡纸)
         int sta = context.getObject().CON_QueryStatus2(context.getState(), 2);
+        mBconnect = false;
         switch (sta) {
             case 0:
-                WWToast.showShort("状态正常");
+//                WWToast.showShort("状态正常");
+                mBconnect = true;
                 break;
             case 1:
                 WWToast.showShort("网络错误");
@@ -470,7 +472,7 @@ public class FunInMaxListActivity extends FatherActivity {
                 WWToast.showShort("脱机");
                 break;
             case 4:
-                WWToast.showShort("不存在打印对象未连接");
+                WWToast.showShort("打印对象未连接");
                 break;
             case 5:
                 WWToast.showShort("复位错误");
@@ -482,8 +484,8 @@ public class FunInMaxListActivity extends FatherActivity {
     }
 
     //打印数据
-    private void printLabel(PrintInfo info, String message) {
-        context.getObject().CPCL_PageStart(context.getState(), 504, 680, 0, 1);
+    private void printLabel(PrintInfo info) {
+        context.getObject().CPCL_PageStart(context.getState(), 504, 720, 0, 1);
         context.getObject().CPCL_SetBold(context.getState(), true);
         context.getObject().CPCL_AlignType(context.getState(), preDefiniation.AlignType.AT_CENTER.getValue());
         context.getObject().CPCL_Print1DBarcode(context.getState(), preDefiniation.BarcodeType.BT_CODE128.getValue(), 0, 40, 4, 3, 250, info.Palletid, "gb2312");
@@ -492,7 +494,14 @@ public class FunInMaxListActivity extends FatherActivity {
         context.getObject().CPCL_PrintString(context.getState(), 10, 440, 1, 1, 0, 24, "SO NO: " + info.Sono, "gb2312");
         context.getObject().CPCL_PrintString(context.getState(), 10, 500, 1, 1, 0, 24, "PO NO: " + ((info.Po == null) ? " " : info.Po), "gb2312");
         context.getObject().CPCL_PrintString(context.getState(), 10, 560, 1, 1, 0, 24, "ITEM NO: " + ((info.Skn == null) ? " " : info.Skn), "gb2312");
-        context.getObject().CPCL_PrintString(context.getState(), 10, 610, 1, 1, 0, 24, "QTY: " + info.Pkgs + "/" + message, "gb2312");
+        /**
+         * 理货员名字+“/”+叉车人编号
+         * 如：张三/101
+         */
+        context.getObject().CPCL_PrintString(context.getState(), 10, 620, 1, 1, 0, 24, "QTY: " + info.Pkgs + "/" + info.PalletCtn, "gb2312");
+        context.getObject().DRAW_PrintText(context.getState(), 10,
+                680, "操作员: " + ((TextUtils.isEmpty(info.UserName)) ? "" : info.UserName) + "/" + ((TextUtils.isEmpty(info.ZxdzlNo)) ? "" : info.ZxdzlNo), 24);
+//        context.getObject().CPCL_PrintString(context.getState(), 10, 680, 1, 1, 0, 24, "OPERATOR: " + info.UserName + "/" + info.ZxdzlNo, "gb2312");
         context.getObject().CON_PageEnd(context.getState(),
                 context.getPrintway());
     }
@@ -577,7 +586,8 @@ public class FunInMaxListActivity extends FatherActivity {
                 break;
             case R.id.tv_print:
                 if (inMax != null) {
-
+                    //检测链接状态
+                    QueryStatus();
                     if (mBconnect) {
                         getPrintData();
                     } else {
@@ -708,15 +718,13 @@ public class FunInMaxListActivity extends FatherActivity {
             public void onAfterSuccessOk(JSONObject data) {
                 //获取打印数据打印，0表示正常，1表示已经打印
                 int code = data.getInteger("Code");
-                String message=data.getString("Message");
-            if(message.contains(".")) message=message.substring(0,message.indexOf("."));
                 JSONArray jsonArray = data.getJSONArray("Data");
                 ArrayList<PrintInfo> list = (ArrayList<PrintInfo>) JSON.parseArray(
                         jsonArray.toJSONString(), PrintInfo.class);
                 if (code == 1) {
-                    showRePrintTips(list,message);
+                    showRePrintTips(list);
                 } else {
-                    print(list,message);
+                    print(list);
                 }
 
 
@@ -731,29 +739,29 @@ public class FunInMaxListActivity extends FatherActivity {
 
     /**
      * 打印动作
+     *
      * @param list
-     * @param message
      */
-    private void print(ArrayList<PrintInfo> list, String message) {
+    private void print(ArrayList<PrintInfo> list) {
         if (list != null && list.size() > 0) {
             for (int i = 0; i < list.size(); i++) {
-                printLabel(list.get(i),message);
+                printLabel(list.get(i));
             }
         }
     }
 
     /**
      * 重复打印提示
+     *
      * @param list
-     * @param message
      */
-    private void showRePrintTips(final ArrayList<PrintInfo> list, final String message) {
+    private void showRePrintTips(final ArrayList<PrintInfo> list) {
         final CommonDialog commonDialogTwiceConfirm = DialogUtils.getCommonDialogTwiceConfirm(this, "此货已生成板，是否需要重复打印条码？", true);
         commonDialogTwiceConfirm.setRightButtonCilck(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 commonDialogTwiceConfirm.dismiss();
-                print(list, message);
+                print(list);
             }
         });
         commonDialogTwiceConfirm.show();

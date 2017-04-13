@@ -13,6 +13,7 @@ public class AppInResult {
     public Long JdTime;
     public Long PdTime;
     public String CarNo;
+    public String ZxdzlNo;
     public String So;
     public int OperType;
     public String OrderId;
@@ -36,6 +37,7 @@ public class AppInResult {
         localItemObject.put("OrderId", OrderId);
         localItemObject.put("PlaceId", PlaceId);
         localItemObject.put("QueueNo", QueueNo);
+        localItemObject.put("ZxdzlNo", ZxdzlNo);
         localItemObject.put("Serial", Serial);
         localItemObject.put("StevedId", StevedId);
         localItemObject.put("UserId", UserId);

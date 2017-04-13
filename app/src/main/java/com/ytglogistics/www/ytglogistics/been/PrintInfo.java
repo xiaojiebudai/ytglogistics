@@ -19,4 +19,8 @@ public class PrintInfo {
     public String Unitwei;
     public String Wide;
     public String CreateTime;
+    public String UserName;
+    public String ZxdzlNo;
+    public String PalletCtn;
+    public boolean isSelect;//是否选中
 }

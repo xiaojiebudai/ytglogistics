@@ -24,6 +24,7 @@
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.autofocus" />
+
     <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
@@ -125,6 +126,11 @@
         <activity
             android:name="com.ytglogistics.www.ytglogistics.activity.BarCodeActivity"
             android:screenOrientation="portrait"></activity>
+        <activity
+            android:name="com.ytglogistics.www.ytglogistics.activity.BoardHeadPaperPrintActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Transparent"></activity>
+
         <service
             android:name="com.ytglogistics.www.ytglogistics.service.UpdateVersionService"
             android:exported="true" />

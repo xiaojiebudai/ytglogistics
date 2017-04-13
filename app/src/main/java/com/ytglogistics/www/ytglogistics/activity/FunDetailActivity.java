@@ -20,11 +20,13 @@ import com.ytglogistics.www.ytglogistics.MyApplication;
 import com.ytglogistics.www.ytglogistics.R;
 import com.ytglogistics.www.ytglogistics.adapter.StevedListSelectAdapter;
 import com.ytglogistics.www.ytglogistics.adapter.UserListSelectAdapter;
+import com.ytglogistics.www.ytglogistics.adapter.ZxDzlListSelectAdapter;
 import com.ytglogistics.www.ytglogistics.api.Api;
 import com.ytglogistics.www.ytglogistics.been.AppInResult;
 import com.ytglogistics.www.ytglogistics.been.Car;
 import com.ytglogistics.www.ytglogistics.been.Steved;
 import com.ytglogistics.www.ytglogistics.been.User;
+import com.ytglogistics.www.ytglogistics.been.ZxDzl;
 import com.ytglogistics.www.ytglogistics.dialog.CommonDialog;
 import com.ytglogistics.www.ytglogistics.dialog.DateChooseWheelViewDialog;
 import com.ytglogistics.www.ytglogistics.utils.Consts;
@@ -74,6 +76,10 @@ public class FunDetailActivity extends FatherActivity {
     TextView et5;
     @BindView(R.id.ll_5)
     LinearLayout ll5;
+    @BindView(R.id.et_6)
+    TextView et6;
+    @BindView(R.id.ll_6)
+    LinearLayout ll_6;
     @BindView(R.id.tv_save)
     TextView tvSave;
     @BindView(R.id.tv_get)
@@ -128,12 +134,12 @@ public class FunDetailActivity extends FatherActivity {
                 if (result.Serial == 0) {
                     User user = (User) JSONObject.parseObject(SharedPreferenceUtils.getInstance().getUserInfo(), User.class);
                     result.UserId = user.Keyid;
-                    result.QueueNo = (model == FUNIN) ? car.YyNo:car.QueueNo;
+                    result.QueueNo = (model == FUNIN) ? car.YyNo : car.QueueNo;
                     result.CarNo = car.CarNo;
                     result.PlaceId = car.PlaceId;
                     result.OrderId = car.OrderId;
                     result.So = car.So;
-                    result.OperType = (model == FUNIN) ? 0:1;
+                    result.OperType = (model == FUNIN) ? 0 : 1;
                 } else {
                     if (result.JdTime != null)
                         et2.setText(TimeUtil.getTimeToS(result.JdTime * 1000));
@@ -144,6 +150,7 @@ public class FunDetailActivity extends FatherActivity {
                     if (result.EndTime != null)
                         et5.setText(TimeUtil.getTimeToS(result.EndTime * 1000));
                 }
+
                 getStevedData();
                 getUserData();
             }
@@ -165,7 +172,7 @@ public class FunDetailActivity extends FatherActivity {
 
     private DateChooseWheelViewDialog startDateChooseDialog, startDateChooseDialog1, startDateChooseDialog2, startDateChooseDialog3;
 
-    @OnClick({R.id.tv_commit, R.id.ll_0, R.id.ll_1, R.id.ll_2, R.id.ll_3, R.id.ll_4, R.id.ll_5, R.id.tv_save, R.id.tv_get})
+    @OnClick({R.id.tv_commit, R.id.ll_0, R.id.ll_1, R.id.ll_2, R.id.ll_3, R.id.ll_4, R.id.ll_6, R.id.ll_5, R.id.tv_save, R.id.tv_get})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ll_0:
@@ -173,6 +180,9 @@ public class FunDetailActivity extends FatherActivity {
                 break;
             case R.id.ll_1:
                 seleteUser();
+                break;
+            case R.id.ll_6:
+                selectForkclerk();
                 break;
             case R.id.ll_2:
                 if (startDateChooseDialog == null) {
@@ -279,6 +289,7 @@ public class FunDetailActivity extends FatherActivity {
         }
     }
 
+
     private void commitAllInfo() {
         showWaitDialog();
         RequestParams sessionParams = ParamsUtils.getSessionParams(Api.FinishQueue());
@@ -310,6 +321,7 @@ public class FunDetailActivity extends FatherActivity {
         jsonObject.put(Consts.KEY_SESSIONID, MyApplication
                 .getInstance().getSessionId());
         jsonObject.put("obj", result.toJson());
+        ZLog.showPost(jsonObject.toString());
         x.http().post(ParamsUtils.getPostJsonParams(jsonObject, Api.AppInCommit()), new WWXCallBack("AppInCommit") {
             @Override
             public void onAfterSuccessOk(JSONObject data) {
@@ -342,6 +354,7 @@ public class FunDetailActivity extends FatherActivity {
                     for (int i = 0; i < stevedList.size(); i++) {
                         if (stevedList.get(i).Keyid.equals(result.StevedId)) {
                             et0.setText(stevedList.get(i).Stevedoringcompanyname);
+                            getForkclerkList(stevedList.get(i).Stevedoringcompanycode);
                             break;
                         }
                     }
@@ -387,6 +400,63 @@ public class FunDetailActivity extends FatherActivity {
         });
     }
 
+    private String selectStevedCode = "";
+
+    /**
+     * 获取叉车员列表
+     *
+     * @param Stevedoringcompanycode
+     */
+    private void getForkclerkList(String Stevedoringcompanycode) {
+        selectStevedCode = Stevedoringcompanycode;
+        showWaitDialog();
+        RequestParams params = ParamsUtils.getSessionParams(Api.GetZxDzl());
+        params.addBodyParameter("zxb", Stevedoringcompanycode);
+        x.http().get(params, new WWXCallBack("GetZxDzl") {
+            @Override
+            public void onAfterSuccessOk(JSONObject data) {
+                JSONArray jsonArray = data.getJSONArray("Data");
+                zxdzlList = (ArrayList<ZxDzl>) JSON.parseArray(
+                        jsonArray.toJSONString(), ZxDzl.class);
+
+                if (zxdzlList != null && zxdzlList.size() > 0) {
+                    if(adapter!=null)
+                    {
+                        adapter.setData(zxdzlList);
+                        adapter.setSelectPostion(0);
+                    }
+                    boolean isSelcet=false;
+                    for (int i = 0; i < zxdzlList.size(); i++) {
+                        if (zxdzlList.get(i).Bh.equals(result.ZxdzlNo)) {
+
+                            isSelcet=true;
+                            et6.setText(zxdzlList.get(i).Bh);
+                            if(adapter!=null)
+                            {
+                                adapter.setSelectPostion(i);
+                            }
+                            break;
+                        }
+
+                    }
+                    if(!isSelcet){
+                        et6.setText(zxdzlList.get(0).Bh);
+                        result.ZxdzlNo=zxdzlList.get(0).Bh;
+
+                    }
+
+                }
+
+            }
+
+            @Override
+            public void onAfterFinished() {
+                dismissWaitDialog();
+            }
+        });
+
+    }
+
     /**
      * 选择公司
      */
@@ -417,11 +487,17 @@ public class FunDetailActivity extends FatherActivity {
                     result.StevedName = stevedList.get(position).Stevedoringcompanyname;
                     isChange = true;
                     popupWindow.dismiss();
+                    if (!selectStevedCode.equals(stevedList.get(position).Stevedoringcompanycode)) {
+                        getForkclerkList(stevedList.get(position).Stevedoringcompanycode);
+                    }
+
+
                 }
             });
         }
         popupWindow.showAsDropDown(ll0);
     }
+
 
     /**
      * 选择员工
@@ -436,7 +512,6 @@ public class FunDetailActivity extends FatherActivity {
             ListView listView = new ListView(this);
             listView.setBackgroundResource(R.drawable.bg_yellow_white_shape);
             final UserListSelectAdapter adapter = new UserListSelectAdapter(this);
-            int width = 80;
             listView.setAdapter(adapter);
             adapter.setData(userList);
             popupWindowUser = new PopupWindow(listView,
@@ -458,4 +533,41 @@ public class FunDetailActivity extends FatherActivity {
         }
         popupWindowUser.showAsDropDown(ll1);
     }
+
+    /**
+     * 选择叉货员
+     * 当选择装卸队为华翔时，叉车员这栏中只显示t_zxdzl表中zxb=02的值。显示内容只要BH这样就OK
+     * 同理选另外一个装卸队，只显示zxb=01的值
+     */
+    private ArrayList<ZxDzl> zxdzlList;
+    private PopupWindow popupWindowZxDzl;
+    private ZxDzlListSelectAdapter adapter;
+
+    private void selectForkclerk() {
+        if (popupWindowZxDzl == null) {
+            ListView listView = new ListView(this);
+            listView.setBackgroundResource(R.drawable.bg_yellow_white_shape);
+            adapter = new ZxDzlListSelectAdapter(this);
+            listView.setAdapter(adapter);
+            adapter.setData(zxdzlList);
+            popupWindowZxDzl = new PopupWindow(listView,
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+            popupWindowZxDzl.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view,
+                                        int position, long id) {
+                    adapter.setSelectPostion(position);
+                    et6.setText(zxdzlList.get(position).Bh);
+                    result.ZxdzlNo = zxdzlList.get(position).Bh;
+                    isChange = true;
+                    popupWindowZxDzl.dismiss();
+                }
+            });
+        }
+        popupWindowZxDzl.showAsDropDown(ll_6);
+    }
+
+
 }

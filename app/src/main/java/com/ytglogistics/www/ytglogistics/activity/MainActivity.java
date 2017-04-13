@@ -134,6 +134,10 @@ public class MainActivity extends FatherActivity {
     监控查询
      */
     private static final int JIANKONGCHAXUN = 14;
+    /*
+    板头纸打印
+     */
+    private static final int BOARDHEADPAGERPRINT = 15;
 
     @Override
     protected int getLayoutId() {
@@ -175,7 +179,7 @@ public class MainActivity extends FatherActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.cctv, R.id.start_app, R.id.receiving, R.id.shipping, R.id.warehousing, R.id.outofstorage, R.id.garage_m, R.id.move_operate, R.id.housing_reservation_query, R.id.outofstorage_query, R.id.locale_photos, R.id.housing_reservation_po_query, R.id.berth_map, R.id.loginout, R.id.exit})
+    @OnClick({R.id.cctv, R.id.boardheardpager_print, R.id.start_app, R.id.receiving, R.id.shipping, R.id.warehousing, R.id.outofstorage, R.id.garage_m, R.id.move_operate, R.id.housing_reservation_query, R.id.outofstorage_query, R.id.locale_photos, R.id.housing_reservation_po_query, R.id.berth_map, R.id.loginout, R.id.exit})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.receiving:
@@ -197,7 +201,7 @@ public class MainActivity extends FatherActivity {
                 isLimited(YIKUCAOZUO);
                 break;
             case R.id.housing_reservation_query:
-               isLimited(RUCANGYUYUEGUANLI);
+                isLimited(RUCANGYUYUEGUANLI);
                 break;
             case R.id.outofstorage_query:
                 isLimited(CHUCANGYUYUEGUANLI);
@@ -224,12 +228,16 @@ public class MainActivity extends FatherActivity {
             case R.id.cctv:
                 isLimited(JIANKONGCHAXUN);
                 break;
+            case R.id.boardheardpager_print:
+//                startActivity(new Intent(MainActivity.this, BoardHeadPaperPrintActivity.class));
+                isLimited(BOARDHEADPAGERPRINT);
+                break;
         }
     }
 
     private void isLimited(final int funcId) {
         RequestParams params = ParamsUtils.getSessionParams(Api.GetMyGrant());
-        params.addBodyParameter("funcId",funcId<10?"0"+funcId: funcId + "");
+        params.addBodyParameter("funcId", funcId < 10 ? "0" + funcId : funcId + "");
         x.http().get(params, new WWXCallBack("GetMyGrant") {
             @Override
             public void onAfterSuccessOk(JSONObject data) {
@@ -267,6 +275,9 @@ public class MainActivity extends FatherActivity {
                             break;
                         case BOWEITU:
                             startActivity(new Intent(MainActivity.this, FuncPlaceStatusActivity.class));
+                            break;
+                        case BOARDHEADPAGERPRINT:
+                            startActivity(new Intent(MainActivity.this, BoardHeadPaperPrintActivity.class));
                             break;
                         case VGM:
                             if (isAvilible(MainActivity.this, "com.embarcadero.PonderApp")) {
