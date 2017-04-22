@@ -48,7 +48,6 @@ public class BarCodeActivity extends Activity {
             byte[] barcode = intent.getByteArrayExtra(ScanManager.DECODE_DATA_TAG);
             int barcodelen = intent.getIntExtra(ScanManager.BARCODE_LENGTH_TAG, 0);
             byte temp = intent.getByteExtra(ScanManager.BARCODE_TYPE_TAG, (byte) 0);
-            android.util.Log.i("debug", "----codetype--" + temp);
             barcodeStr = new String(barcode, 0, barcodelen);
             Toast.makeText(BarCodeActivity.this, "扫描成功", Toast.LENGTH_SHORT).show();
             Intent intent1 = getIntent();
