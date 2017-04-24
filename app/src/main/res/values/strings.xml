@@ -27,4 +27,6 @@
     <string name="downloading">正在下载...</string>
     <string name="download_success_please_install">下载成功，请安装最新版本</string>
     <string name="install_now">安装新版本</string>
+    <string name="wifi">WIFI</string>
+    <string name="bluetooth">蓝牙</string>
 </resources>

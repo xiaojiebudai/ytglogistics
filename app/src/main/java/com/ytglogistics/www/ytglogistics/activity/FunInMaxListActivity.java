@@ -25,6 +25,7 @@ import com.ytglogistics.www.ytglogistics.been.DataCbm;
 import com.ytglogistics.www.ytglogistics.been.PrintInfo;
 import com.ytglogistics.www.ytglogistics.dialog.CommonDialog;
 import com.ytglogistics.www.ytglogistics.dialog.InputDialog;
+import com.ytglogistics.www.ytglogistics.dialog.SelectBTDialog;
 import com.ytglogistics.www.ytglogistics.utils.Consts;
 import com.ytglogistics.www.ytglogistics.utils.DialogUtils;
 import com.ytglogistics.www.ytglogistics.utils.ParamsUtils;
@@ -154,6 +155,22 @@ public class FunInMaxListActivity extends FatherActivity {
 
     @Override
     protected void initView() {
+
+        View right = findViewById(R.id.rl_head_right);
+        final TextView text = (TextView) findViewById(R.id.tv_head_right);
+        text.setText(SharedPreferenceUtils.getInstance().getIsWifi() ? R.string.wifi : R.string.bluetooth);
+        right.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferenceUtils.getInstance().saveIsWifi(!SharedPreferenceUtils.getInstance().getIsWifi());
+                if (context.getState() > 0) {
+                    context.getObject().CON_CloseDevices(context.getState());
+                }
+                text.setText(SharedPreferenceUtils.getInstance().getIsWifi() ? R.string.wifi : R.string.bluetooth);
+                context.setState(0);
+            }
+        });
+
         adapter = new FunInMaxListAdapter(this);
         lvData.setAdapter(adapter);
         df = new DecimalFormat("######0.00");
@@ -431,25 +448,44 @@ public class FunInMaxListActivity extends FatherActivity {
     public boolean mBconnect = false;
     public int state;
 
-    public void connect(String IP) {
-        if (mBconnect) {
-            //已经连接  直接打印
+    private void connectBt(String s) {
+        //链接之前需要先断开一下
+        if (context.getState() > 0) {
+            context.getObject().CON_CloseDevices(context.getState());
+        }
+        state = context.getObject().CON_ConnectDevices("RG-MLP80A", s, 200);
+        if (state > 0) {
+            WWToast.showShort("链接成功");
+            mBconnect = true;
+            context.setState(state);
+            context.setName("RG-MLP80A");
+            context.setPrintway(0);
             getPrintData();
         } else {
-            //去链接
-            state = context.getObject().CON_ConnectDevices("RG-MLP80A", IP + ":9100", 200);
-            if (state > 0) {
-                WWToast.showShort("链接成功");
-                SharedPreferenceUtils.getInstance().saveIP(IP);
-                mBconnect = true;
-                context.setState(state);
-                context.setName("RG-MLP80A");
-                context.setPrintway(0);
-                getPrintData();
-            } else {
-                WWToast.showShort("链接失败");
-                mBconnect = false;
-            }
+            WWToast.showShort("链接失败");
+            mBconnect = false;
+        }
+    }
+
+    public void connect(String IP) {
+        //链接之前需要先断开一下
+        if (context.getState() > 0) {
+            context.getObject().CON_CloseDevices(context.getState());
+        }
+
+        //去链接
+        state = context.getObject().CON_ConnectDevices("RG-MLP80A", IP + ":9100", 200);
+        if (state > 0) {
+            WWToast.showShort("链接成功");
+            SharedPreferenceUtils.getInstance().saveIP(IP);
+            mBconnect = true;
+            context.setState(state);
+            context.setName("RG-MLP80A");
+            context.setPrintway(0);
+            getPrintData();
+        } else {
+            WWToast.showShort("链接失败");
+            mBconnect = false;
         }
     }
 
@@ -485,23 +521,28 @@ public class FunInMaxListActivity extends FatherActivity {
 
     //打印数据
     private void printLabel(PrintInfo info) {
-        context.getObject().CPCL_PageStart(context.getState(), 504, 720, 0, 1);
+        context.getObject().CON_PageStart(context.getState(), true,
+                504, 800);
+        context.getObject().DRAW_SetFillMode(false);
         context.getObject().CPCL_SetBold(context.getState(), true);
         context.getObject().CPCL_AlignType(context.getState(), preDefiniation.AlignType.AT_CENTER.getValue());
-        context.getObject().CPCL_Print1DBarcode(context.getState(), preDefiniation.BarcodeType.BT_CODE128.getValue(), 0, 40, 4, 3, 250, info.Palletid, "gb2312");
-        context.getObject().CPCL_PrintString(context.getState(), 0, 310, 1, 1, 0, 24, info.Palletid, "gb2312");
-        context.getObject().CPCL_PrintString(context.getState(), 10, 380, 1, 1, 0, 24, "DATE: " + getPrintTime(info.CreateTime), "gb2312");
-        context.getObject().CPCL_PrintString(context.getState(), 10, 440, 1, 1, 0, 24, "SO NO: " + info.Sono, "gb2312");
-        context.getObject().CPCL_PrintString(context.getState(), 10, 500, 1, 1, 0, 24, "PO NO: " + ((info.Po == null) ? " " : info.Po), "gb2312");
-        context.getObject().CPCL_PrintString(context.getState(), 10, 560, 1, 1, 0, 24, "ITEM NO: " + ((info.Skn == null) ? " " : info.Skn), "gb2312");
+        context.getObject().DRAW_Print1D2DBarcode(context.getState(), preDefiniation.BarcodeType.BT_CODE128.getValue(), 0, 60, 4, 250, info.Palletid);
+        context.getObject().DRAW_PrintText(context.getState(), 0, 320, info.Palletid, 24);
+        context.getObject().DRAW_PrintText(context.getState(), 10, 400, "DATE: " + getPrintTime(info.CreateTime), 24);
+        context.getObject().DRAW_PrintText(context.getState(), 10, 460, "SO NO: " + info.Sono, 24);
+        context.getObject().DRAW_PrintText(context.getState(), 10, 520, "PO NO: " + ((info.Po == null) ? " " : info.Po), 24);
+        context.getObject().DRAW_PrintText(context.getState(), 10, 580, "ITEM NO: " + ((info.Skn == null) ? " " : info.Skn), 24);
         /**
          * 理货员名字+“/”+叉车人编号
          * 如：张三/101
          */
-        context.getObject().CPCL_PrintString(context.getState(), 10, 620, 1, 1, 0, 24, "QTY: " + info.Pkgs + "/" + info.PalletCtn, "gb2312");
+        context.getObject().DRAW_PrintText(context.getState(), 10, 640, "QTY: " + info.Pkgs + "/" + info.PalletCtn, 24);
         context.getObject().DRAW_PrintText(context.getState(), 10,
-                680, "操作员: " + ((TextUtils.isEmpty(info.UserName)) ? "" : info.UserName) + "/" + ((TextUtils.isEmpty(info.ZxdzlNo)) ? "" : info.ZxdzlNo), 24);
-//        context.getObject().CPCL_PrintString(context.getState(), 10, 680, 1, 1, 0, 24, "OPERATOR: " + info.UserName + "/" + info.ZxdzlNo, "gb2312");
+                700, "操作员: " + ((TextUtils.isEmpty(info.UserName)) ? "" : info.UserName) + "/" + ((TextUtils.isEmpty(info.ZxdzlNo)) ? "" : info.ZxdzlNo), 24);
+
+        context.getObject().DRAW_PrintLine(context.getState(), 0, 760,
+                504, 3);
+
         context.getObject().CON_PageEnd(context.getState(),
                 context.getPrintway());
     }
@@ -585,43 +626,54 @@ public class FunInMaxListActivity extends FatherActivity {
                 allInfoCommit();
                 break;
             case R.id.tv_print:
+
                 if (inMax != null) {
-                    //检测链接状态
-                    QueryStatus();
-                    if (mBconnect) {
+
+                    if (context.getState() > 0) {
                         getPrintData();
                     } else {
-                        if (dialog == null) {
-                            dialog = new InputDialog(FunInMaxListActivity.this, R.style.DialogStyle);
-                            dialog.getTv_cancel().setOnClickListener(new View.OnClickListener() {
+                        if (SharedPreferenceUtils.getInstance().getIsWifi()) {
+                            if (dialog == null) {
+                                dialog = new InputDialog(FunInMaxListActivity.this, R.style.DialogStyle);
+                                dialog.getTv_cancel().setOnClickListener(new View.OnClickListener() {
 
-                                @Override
-                                public void onClick(View v) {
-                                    dialog.dismiss();
-                                }
-                            });
-
-                            String ip = SharedPreferenceUtils.getInstance().getIP();
-                            if (!TextUtils.isEmpty(ip)) {
-                                dialog.setInput(ip);
-                            }
-
-                            dialog.getTv_ok().setOnClickListener(new View.OnClickListener() {
-
-                                @Override
-                                public void onClick(View v) {
-                                    if (!TextUtils.isEmpty(dialog.getInput()) && RegexUtil.isIpaddress(dialog.getInput())) {
-                                        connect(dialog.getInput());
+                                    @Override
+                                    public void onClick(View v) {
                                         dialog.dismiss();
-                                    } else {
-                                        WWToast.showShort("请输入正确IP地址");
                                     }
+                                });
 
+                                String ip = SharedPreferenceUtils.getInstance().getIP();
+                                if (!TextUtils.isEmpty(ip)) {
+                                    dialog.setInput(ip);
+                                }
+
+                                dialog.getTv_ok().setOnClickListener(new View.OnClickListener() {
+
+                                    @Override
+                                    public void onClick(View v) {
+                                        if (!TextUtils.isEmpty(dialog.getInput()) && RegexUtil.isIpaddress(dialog.getInput())) {
+                                            connect(dialog.getInput());
+                                            dialog.dismiss();
+                                        } else {
+                                            WWToast.showShort("请输入正确IP地址");
+                                        }
+
+                                    }
+                                });
+
+                            }
+                            dialog.show();
+                        } else {
+                            //蓝牙链接
+                            SelectBTDialog selectBTDialog = new SelectBTDialog(FunInMaxListActivity.this, context, new SelectBTDialog.OnSelectOk() {
+                                @Override
+                                public void seleckOk(String s) {
+                                    connectBt(s);
                                 }
                             });
-
+                            selectBTDialog.show();
                         }
-                        dialog.show();
                     }
 
                 } else {

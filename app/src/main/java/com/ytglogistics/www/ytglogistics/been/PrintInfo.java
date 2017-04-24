@@ -21,6 +21,6 @@ public class PrintInfo {
     public String CreateTime;
     public String UserName;
     public String ZxdzlNo;
-    public String PalletCtn;
+    public int PalletCtn;
     public boolean isSelect;//是否选中
 }

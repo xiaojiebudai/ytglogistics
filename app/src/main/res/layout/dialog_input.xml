@@ -21,7 +21,18 @@
             android:textSize="14sp"
             android:textStyle="bold" />
     </LinearLayout>
+    <TextView
 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="10dp"
+        android:background="@color/white"
+        android:text="提示：链接前请确保手机与打印设备处于同一局域网，并且打印机已经切换至WIFI通讯模式"
+        android:textColor="@color/text_f7"
+        android:textSize="14sp"
+      />
     <View style="@style/cutline_fine" />
 
     <LinearLayout
