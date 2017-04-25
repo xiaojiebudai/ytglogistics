@@ -488,60 +488,21 @@ public class FunInMaxListActivity extends FatherActivity {
             mBconnect = false;
         }
     }
-
-    private void QueryStatus() {
-        //2:(0 状态正常，1 网络错误，2打印机缺纸，3脱机.4不存在打印对象未连接。5复位错误.6卡纸)
-        int sta = context.getObject().CON_QueryStatus2(context.getState(), 2);
-        mBconnect = false;
-        switch (sta) {
-            case 0:
-//                WWToast.showShort("状态正常");
-                mBconnect = true;
-                break;
-            case 1:
-                WWToast.showShort("网络错误");
-                break;
-            case 2:
-                WWToast.showShort("打印机缺纸");
-                break;
-            case 3:
-                WWToast.showShort("脱机");
-                break;
-            case 4:
-                WWToast.showShort("打印对象未连接");
-                break;
-            case 5:
-                WWToast.showShort("复位错误");
-                break;
-            case 6:
-                WWToast.showShort("卡纸");
-                break;
-        }
-    }
-
     //打印数据
     private void printLabel(PrintInfo info) {
-        context.getObject().CON_PageStart(context.getState(), true,
-                504, 800);
-        context.getObject().DRAW_SetFillMode(false);
+        context.getObject().CPCL_PageStart(context.getState(), 504, 800, 0, 1);
         context.getObject().CPCL_SetBold(context.getState(), true);
         context.getObject().CPCL_AlignType(context.getState(), preDefiniation.AlignType.AT_CENTER.getValue());
-        context.getObject().DRAW_Print1D2DBarcode(context.getState(), preDefiniation.BarcodeType.BT_CODE128.getValue(), 0, 60, 4, 250, info.Palletid);
-        context.getObject().DRAW_PrintText(context.getState(), 0, 320, info.Palletid, 24);
-        context.getObject().DRAW_PrintText(context.getState(), 10, 400, "DATE: " + getPrintTime(info.CreateTime), 24);
-        context.getObject().DRAW_PrintText(context.getState(), 10, 460, "SO NO: " + info.Sono, 24);
-        context.getObject().DRAW_PrintText(context.getState(), 10, 520, "PO NO: " + ((info.Po == null) ? " " : info.Po), 24);
-        context.getObject().DRAW_PrintText(context.getState(), 10, 580, "ITEM NO: " + ((info.Skn == null) ? " " : info.Skn), 24);
-        /**
-         * 理货员名字+“/”+叉车人编号
-         * 如：张三/101
-         */
-        context.getObject().DRAW_PrintText(context.getState(), 10, 640, "QTY: " + info.Pkgs + "/" + info.PalletCtn, 24);
-        context.getObject().DRAW_PrintText(context.getState(), 10,
-                700, "操作员: " + ((TextUtils.isEmpty(info.UserName)) ? "" : info.UserName) + "/" + ((TextUtils.isEmpty(info.ZxdzlNo)) ? "" : info.ZxdzlNo), 24);
-
-        context.getObject().DRAW_PrintLine(context.getState(), 0, 760,
-                504, 3);
+        context.getObject().CPCL_Print1DBarcode(context.getState(), preDefiniation.BarcodeType.BT_CODE128.getValue(), 0, 60, 4, 3, 250, info.Palletid, "gb2312");
+        context.getObject().CPCL_PrintString(context.getState(), 0, 340, 1, 1, 0, 24, info.Palletid, "gb2312");
+        context.getObject().CPCL_PrintString(context.getState(), 10, 400, 1, 1, 0, 24, "DATE: " + getPrintTime(info.CreateTime), "gb2312");
+        context.getObject().CPCL_PrintString(context.getState(), 10, 460, 1, 1, 0, 24, "SO NO: " + info.Sono, "gb2312");
+        context.getObject().CPCL_PrintString(context.getState(), 10, 520, 1, 1, 0, 24, "PO NO: " + ((info.Po == null) ? " " : info.Po), "gb2312");
+        context.getObject().CPCL_PrintString(context.getState(), 10, 580, 1, 1, 0, 24, "ITEM NO: " + ((info.Skn == null) ? " " : info.Skn), "gb2312");
+        context.getObject().CPCL_PrintString(context.getState(), 10, 640, 1, 1, 0, 24, "QTY: " + info.Pkgs + "/" + info.PalletCtn, "gb2312");
+        context.getObject().CPCL_PrintString(context.getState(), 10,
+                700, 1, 1, 0, 24, "操作员: " + ((TextUtils.isEmpty(info.UserName)) ? "" : info.UserName) + "/" + ((TextUtils.isEmpty(info.ZxdzlNo)) ? "" : info.ZxdzlNo), "gb2312");
+        context.getObject().CPCL_PrintLine(context.getState(), 0, 760, 504, 760, 3);
 
         context.getObject().CON_PageEnd(context.getState(),
                 context.getPrintway());
