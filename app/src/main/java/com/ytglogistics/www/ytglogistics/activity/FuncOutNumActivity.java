@@ -111,7 +111,6 @@ public class FuncOutNumActivity extends FatherActivity {
             byte temp = intent.getByteExtra(ScanManager.BARCODE_TYPE_TAG, (byte) 0);
             android.util.Log.i("debug", "----codetype--" + temp);
             barcodeStr = new String(barcode, 0, barcodelen);
-            Toast.makeText(FuncOutNumActivity.this, "扫描成功", Toast.LENGTH_SHORT).show();
             addBarCodeInfo(barcodeStr);
         }
 
