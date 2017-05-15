@@ -55,6 +55,10 @@ import butterknife.OnClick;
 public class FunInMaxListActivity extends FatherActivity {
     @BindView(R.id.lv_data)
     ListView lvData;
+    @BindView(R.id.ll_title_0)
+    LinearLayout llTitle0;
+    @BindView(R.id.ll_title_1)
+    LinearLayout llTitle1;
     private FunInMaxListAdapter adapter;
     private AppInResult result;
     @BindView(R.id.tv_lh_input)
@@ -102,6 +106,7 @@ public class FunInMaxListActivity extends FatherActivity {
     private ArrayList<AppInMax> appInMaxes;
     private DecimalFormat df, df1;
     private boolean isChange = false;
+    private int modelDbk = 0;
 
     @Override
     protected int getLayoutId() {
@@ -111,7 +116,16 @@ public class FunInMaxListActivity extends FatherActivity {
     @Override
     protected void initValues() {
         context = (MyApplication) getApplicationContext();
-        initDefautHead("入仓修改", false);
+        modelDbk = getIntent().getIntExtra(MainActivity.KEY_IN_TYPE, 0);
+        initDefautHead(modelDbk == MainActivity.DBK_IN ? "DBK入仓修改" : "入仓修改", false);
+        if (modelDbk == MainActivity.DBK_IN) {
+            llTitle1.setVisibility(View.VISIBLE);
+            llTitle0.setVisibility(View.GONE);
+        } else {
+            llTitle0.setVisibility(View.VISIBLE);
+            llTitle1.setVisibility(View.GONE);
+        }
+
         View left = findViewById(R.id.rl_head_left);
         if (left != null) {
             left.findViewById(R.id.tv_head_left).setBackgroundResource(
@@ -171,7 +185,7 @@ public class FunInMaxListActivity extends FatherActivity {
             }
         });
 
-        adapter = new FunInMaxListAdapter(this);
+        adapter = new FunInMaxListAdapter(this,modelDbk);
         lvData.setAdapter(adapter);
         df = new DecimalFormat("######0.00");
         df1 = new DecimalFormat("######0.000");
@@ -414,32 +428,37 @@ public class FunInMaxListActivity extends FatherActivity {
     }
 
     /**
-     *按DBK取完以后,同一个SO+PO+SKN就会有9条记录,所以当输入一行的长宽高时,可以同步更新其它8行的长宽高,同时对应CBM也自动更新.
+     * 按DBK取完以后,同一个SO+PO+SKN就会有9条记录,所以当输入一行的长宽高时,可以同步更新其它8行的长宽高,同时对应CBM也自动更新.
+     *
      * @param selectPosition
      */
     private void refreshOtherItem(int selectPosition) {
-     int size=   adapter.getData().size();
-        AppInMax selectItem=  adapter.getData().get(selectPosition);
-        if (selectItem.Leng == 0 || selectItem.Wide == 0 || selectItem.High == 0 || selectItem.Soquan == 0 || selectItem.BookingCbm == 0) {
+        if (modelDbk == MainActivity.DBK_IN) {
+            ZLog.showPost("sdsds");
+            int size = adapter.getData().size();
+            AppInMax selectItem = adapter.getData().get(selectPosition);
+            if (selectItem.Leng == 0 || selectItem.Wide == 0 || selectItem.High == 0 || selectItem.Soquan == 0 || selectItem.BookingCbm == 0) {
 //存在数据为空的就不去计算了
-        } else {
-            for (int i = 0; i <size ; i++) {
-                AppInMax item=  adapter.getData().get(i);
-                if(i!=selectPosition){
-                    if(selectItem.So.equals(item.So)&&selectItem.Po.equals(item.Po)&&selectItem.Skn.equals(item.Skn)){
-                        item.Leng=selectItem.Leng;
-                        item.Wide=selectItem.Wide;
-                        item.High=selectItem.High;
-                        item.Cbm = item.Leng * item.Wide * item.High * item.Soquan * 0.001 * 0.001;
-                        BigDecimal b = new BigDecimal(item.Cbm);
-                        item.Cbm = b.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
-                        item.CbmRate = (item.Cbm - item.BookingCbm) / item.BookingCbm;
-                        BigDecimal c = new BigDecimal(item.CbmRate);
-                        item.CbmRate = c.setScale(5, BigDecimal.ROUND_HALF_UP).doubleValue();
+            } else {
+                for (int i = 0; i < size; i++) {
+                    AppInMax item = adapter.getData().get(i);
+                    if (i != selectPosition) {
+                        if (selectItem.So.equals(item.So) && selectItem.Po.equals(item.Po) && selectItem.Skn.equals(item.Skn)) {
+                            item.Leng = selectItem.Leng;
+                            item.Wide = selectItem.Wide;
+                            item.High = selectItem.High;
+                            item.Cbm = item.Leng * item.Wide * item.High * item.Soquan * 0.001 * 0.001;
+                            BigDecimal b = new BigDecimal(item.Cbm);
+                            item.Cbm = b.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
+                            item.CbmRate = (item.Cbm - item.BookingCbm) / item.BookingCbm;
+                            BigDecimal c = new BigDecimal(item.CbmRate);
+                            item.CbmRate = c.setScale(5, BigDecimal.ROUND_HALF_UP).doubleValue();
+                        }
                     }
                 }
             }
         }
+
 
     }
 
@@ -521,6 +540,7 @@ public class FunInMaxListActivity extends FatherActivity {
             mBconnect = false;
         }
     }
+
     //打印数据
     private void printLabel(PrintInfo info) {
         context.getObject().CPCL_PageStart(context.getState(), 504, 800, 0, 1);

@@ -92,6 +92,7 @@ public class FunDetailActivity extends FatherActivity {
     public static final int FUNIN = 0;
     public static final int FUNOUT = 1;
     private int model = 0;
+    private int modelDbk = 0;
     private boolean isChange = false;
 
     @Override
@@ -102,6 +103,7 @@ public class FunDetailActivity extends FatherActivity {
     @Override
     protected void initValues() {
         model = getIntent().getIntExtra(Consts.KEY_MODULE, FUNIN);
+        modelDbk = getIntent().getIntExtra(MainActivity.KEY_IN_TYPE, 0);
         initDefautHead("详情", true);
         car = JSONObject.parseObject(getIntent().getStringExtra(Consts.KEY_DATA), Car.class);
     }
@@ -252,6 +254,9 @@ public class FunDetailActivity extends FatherActivity {
             case R.id.tv_get:
                 if (result.Serial > 0) {
                     Intent intent = new Intent(FunDetailActivity.this, (model == FUNIN) ? FunInMaxListActivity.class : FunOutMxListActivity.class);
+                    if(model==FUNIN){
+                        intent.putExtra(MainActivity.KEY_IN_TYPE, modelDbk);
+                    }
                     intent.putExtra(Consts.KEY_DATA, JSON.toJSONString(result));
                     startActivity(intent);
                 } else {

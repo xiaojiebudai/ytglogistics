@@ -78,6 +78,15 @@ public class MainActivity extends FatherActivity {
     ImageView start_app;
     @BindView(R.id.cctv)
     ImageView cctv;
+
+    public static final int NORMAL_IN = 0;
+    public static final int DBK_IN = 1;
+    /**
+     * 收货操作模式
+     */
+    public static final String KEY_IN_TYPE = "intype";
+
+
     /*
     收货操作
      */
@@ -244,17 +253,19 @@ public class MainActivity extends FatherActivity {
                 if (data.getBoolean("Data")) {
                     switch (funcId) {
                         case SHOUHUOCAOZUO:
-                            final CommonDialog commonDialog=   DialogUtils.getCommonDialog(MainActivity.this,"请选择收货方式");
-                            commonDialog.getButtonLeft("普通收货").setOnClickListener(new View.OnClickListener() {
+                            final CommonDialog commonDialog = DialogUtils.getCommonDialog(MainActivity.this, "请选择收货方式");
+                            commonDialog.getButtonRight("普通收货").setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     commonDialog.dismiss();
+                                    startActivity(new Intent(MainActivity.this, FunInActivity.class).putExtra(Consts.KEY_MODULE, FunInActivity.INOPERATE).putExtra(KEY_IN_TYPE, NORMAL_IN));
                                 }
-                            });       commonDialog.getButtonRight("DBK收货").setOnClickListener(new View.OnClickListener() {
+                            });
+                            commonDialog.getButtonLeft("DBK收货").setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     commonDialog.dismiss();
-                                    startActivity(new Intent(MainActivity.this, FunInActivity.class).putExtra(Consts.KEY_MODULE, FunInActivity.INOPERATE));
+                                    startActivity(new Intent(MainActivity.this, FunInActivity.class).putExtra(Consts.KEY_MODULE, FunInActivity.INOPERATE).putExtra(KEY_IN_TYPE, DBK_IN));
                                 }
                             });
                             commonDialog.show();

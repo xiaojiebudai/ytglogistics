@@ -50,6 +50,7 @@ public class FunInActivity extends FatherActivity {
     public static final int INOPERATE = 0;
     public static final int INEDIT = 1;
     private int model = 0;
+    private int modelDbk = 0;
 
     @Override
     protected int getLayoutId() {
@@ -59,8 +60,9 @@ public class FunInActivity extends FatherActivity {
     @Override
     protected void initValues() {
         model = getIntent().getIntExtra(Consts.KEY_MODULE, INOPERATE);
+        modelDbk = getIntent().getIntExtra(MainActivity.KEY_IN_TYPE, 0);
         if (model == INOPERATE) {
-            initDefautHead("收货操作", true);
+            initDefautHead(modelDbk==MainActivity.DBK_IN?"DBK收货操作":"收货操作", true);
         } else {
             initDefautHead("入仓修改", true);
         }
@@ -83,6 +85,9 @@ public class FunInActivity extends FatherActivity {
                 funInAdapter.setPos(position);
                 Intent intent = new Intent(FunInActivity.this, FunDetailActivity.class);
                 intent.putExtra(Consts.KEY_MODULE, FunDetailActivity.FUNIN);
+                if(model==INOPERATE){
+                    intent.putExtra(MainActivity.KEY_IN_TYPE, modelDbk);
+                }
                 intent.putExtra(Consts.KEY_DATA, JSONObject.toJSONString(funInAdapter.getData().get(position)));
                 startActivity(intent);
             }
