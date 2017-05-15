@@ -270,6 +270,7 @@ public class FunInMaxListActivity extends FatherActivity {
                         adapter.getData().get(selectPosition).Leng = Double.valueOf(s + "");
                         setCbm(adapter.getData().get(selectPosition));
                         isChange = true;
+                        refreshOtherItem(selectPosition);
                     }
 
                 }
@@ -296,6 +297,7 @@ public class FunInMaxListActivity extends FatherActivity {
                         adapter.getData().get(selectPosition).Wide = Double.valueOf(s + "");
                         setCbm(adapter.getData().get(selectPosition));
                         isChange = true;
+                        refreshOtherItem(selectPosition);
                     }
 
                 }
@@ -322,6 +324,7 @@ public class FunInMaxListActivity extends FatherActivity {
                         adapter.getData().get(selectPosition).High = Double.valueOf(s + "");
                         setCbm(adapter.getData().get(selectPosition));
                         isChange = true;
+                        refreshOtherItem(selectPosition);
                     }
 
                 }
@@ -407,6 +410,36 @@ public class FunInMaxListActivity extends FatherActivity {
             }
         });
 
+
+    }
+
+    /**
+     *按DBK取完以后,同一个SO+PO+SKN就会有9条记录,所以当输入一行的长宽高时,可以同步更新其它8行的长宽高,同时对应CBM也自动更新.
+     * @param selectPosition
+     */
+    private void refreshOtherItem(int selectPosition) {
+     int size=   adapter.getData().size();
+        AppInMax selectItem=  adapter.getData().get(selectPosition);
+        if (selectItem.Leng == 0 || selectItem.Wide == 0 || selectItem.High == 0 || selectItem.Soquan == 0 || selectItem.BookingCbm == 0) {
+//存在数据为空的就不去计算了
+        } else {
+            for (int i = 0; i <size ; i++) {
+                AppInMax item=  adapter.getData().get(i);
+                if(i!=selectPosition){
+                    if(selectItem.So.equals(item.So)&&selectItem.Po.equals(item.Po)&&selectItem.Skn.equals(item.Skn)){
+                        item.Leng=selectItem.Leng;
+                        item.Wide=selectItem.Wide;
+                        item.High=selectItem.High;
+                        item.Cbm = item.Leng * item.Wide * item.High * item.Soquan * 0.001 * 0.001;
+                        BigDecimal b = new BigDecimal(item.Cbm);
+                        item.Cbm = b.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
+                        item.CbmRate = (item.Cbm - item.BookingCbm) / item.BookingCbm;
+                        BigDecimal c = new BigDecimal(item.CbmRate);
+                        item.CbmRate = c.setScale(5, BigDecimal.ROUND_HALF_UP).doubleValue();
+                    }
+                }
+            }
+        }
 
     }
 

@@ -19,9 +19,9 @@ import com.ytglogistics.www.ytglogistics.R;
 public class WWToast {
 	// Toast
 	private static Toast toast;
-
-	/** 自定义样式 */
-	private static Toast custom;
+//
+//	/** 自定义样式 */
+//	private static Toast custom;
 
 	private static Context context;
 
@@ -37,11 +37,11 @@ public class WWToast {
 		if (toast == null) {
 			toast = Toast.makeText(context, "", Toast.LENGTH_SHORT);
 			toast.setGravity(Gravity.CENTER, 0, 0);
-			custom = new Toast(context);
-			custom.setView(LayoutInflater.from(context).inflate(
-					R.layout.custom_toast, null));
-			custom.setGravity(Gravity.CENTER, 0, 0);
-			custom.setDuration(Toast.LENGTH_SHORT);
+//			custom = new Toast(context);
+//			custom.setView(LayoutInflater.from(context).inflate(
+//					R.layout.custom_toast, null));
+//			custom.setGravity(Gravity.CENTER, 0, 0);
+//			custom.setDuration(Toast.LENGTH_SHORT);
 			WWToast.context = context;
 		}
 	}

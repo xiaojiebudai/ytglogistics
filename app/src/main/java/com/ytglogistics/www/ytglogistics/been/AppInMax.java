@@ -23,6 +23,8 @@ public class AppInMax {
     public double Unitwei;
     public String Po;
     public String Skn;
+    public String Dbk;
+    public String Dc;
     public double BookingCbm;
     public double CbmRate;
     public int OutCtn;
@@ -55,6 +57,8 @@ public class AppInMax {
         localItemObject.put("OutItem", OutItem);
         localItemObject.put("QtyStatus", QtyStatus);
         localItemObject.put("OutCtn", OutCtn);
+        localItemObject.put("Dbk", Dbk);
+        localItemObject.put("Dc", Dc);
         return localItemObject;
     }
 

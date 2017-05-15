@@ -23,7 +23,7 @@
             android:textSize="12sp" />
 
         <TextView
-            android:layout_width="120dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:maxLines="2"
@@ -32,11 +32,29 @@
             android:textSize="12sp" />
 
         <TextView
-            android:layout_width="120dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:maxLines="2"
             android:text="SKN"
+            android:textColor="@color/text_f7"
+            android:textSize="12sp" />
+
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:maxLines="2"
+            android:text="DBK"
+            android:textColor="@color/text_f7"
+            android:textSize="12sp" />
+
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:maxLines="2"
+            android:text="DC"
             android:textColor="@color/text_f7"
             android:textSize="12sp" />
     </LinearLayout>
@@ -178,13 +196,13 @@
             <EditText
                 android:id="@+id/tv_cangwei"
                 android:layout_width="0dp"
-                android:paddingBottom="6dp"
-                android:paddingTop="6dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/bg_yellow_white_shape"
                 android:gravity="center_vertical"
+                android:paddingBottom="6dp"
                 android:paddingLeft="10dp"
+                android:paddingTop="6dp"
                 android:textColorHint="@color/text_c1"
                 android:textSize="14sp" />
         </LinearLayout>
@@ -202,17 +220,19 @@
                 android:gravity="center"
                 android:text="单重:"
                 android:textSize="14sp" />
+
             <EditText
                 android:id="@+id/tv_one_weight"
                 android:layout_width="0dp"
                 android:layout_height="30dp"
                 android:layout_weight="1"
-                android:inputType="numberDecimal"
                 android:background="@drawable/bg_yellow_white_shape"
                 android:gravity="center_vertical"
+                android:inputType="numberDecimal"
                 android:paddingLeft="10dp"
                 android:textColorHint="@color/text_c1"
                 android:textSize="14sp" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"

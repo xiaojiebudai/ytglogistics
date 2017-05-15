@@ -28,7 +28,7 @@ public void setPos(int pos){
         ViewHolder viewHolder;
         if (convertView == null) {
             convertView = View.inflate(mContext,
-                    R.layout.list_funinmax_item, null);
+                    R.layout.list_funinmax_item_new, null);
             viewHolder = new ViewHolder(convertView);
         } else
             viewHolder = (ViewHolder) convertView.getTag();
@@ -40,12 +40,16 @@ public void setPos(int pos){
         public TextView tv_so;
         public TextView tv_po;
         public TextView tv_skn;
+        public TextView tv_dbk;
+        public TextView tv_dc;
         public LinearLayout ll_container;
 
         public ViewHolder(View convertView) {
             tv_so = (TextView) convertView.findViewById(R.id.tv_so);
             tv_po = (TextView) convertView.findViewById(R.id.tv_po);
             tv_skn = (TextView) convertView.findViewById(R.id.tv_skn);
+            tv_dbk = (TextView) convertView.findViewById(R.id.tv_dbk);
+            tv_dc = (TextView) convertView.findViewById(R.id.tv_dc);
             ll_container = (LinearLayout) convertView.findViewById(R.id.ll_container);
             convertView.setTag(this);
         }
@@ -55,6 +59,8 @@ public void setPos(int pos){
             tv_so.setText(item.So);
             tv_po.setText(item.Po);
             tv_skn.setText(item.Skn);
+            tv_dc.setText(item.Dc);
+            tv_dbk.setText(item.Dbk);
             if(posSelect==pos){
                 ll_container.setBackgroundResource(R.color.top_title_bg);
             }else{

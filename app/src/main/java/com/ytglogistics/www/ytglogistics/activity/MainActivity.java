@@ -244,7 +244,20 @@ public class MainActivity extends FatherActivity {
                 if (data.getBoolean("Data")) {
                     switch (funcId) {
                         case SHOUHUOCAOZUO:
-                            startActivity(new Intent(MainActivity.this, FunInActivity.class).putExtra(Consts.KEY_MODULE, FunInActivity.INOPERATE));
+                            final CommonDialog commonDialog=   DialogUtils.getCommonDialog(MainActivity.this,"请选择收货方式");
+                            commonDialog.getButtonLeft("普通收货").setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    commonDialog.dismiss();
+                                }
+                            });       commonDialog.getButtonRight("DBK收货").setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    commonDialog.dismiss();
+                                    startActivity(new Intent(MainActivity.this, FunInActivity.class).putExtra(Consts.KEY_MODULE, FunInActivity.INOPERATE));
+                                }
+                            });
+                            commonDialog.show();
                             break;
                         case CHUHUOCAOZUO:
                             startActivity(new Intent(MainActivity.this, FunOutActivity.class).putExtra(Consts.KEY_MODULE, FunOutActivity.OUTOPERATE));
