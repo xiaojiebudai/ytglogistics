@@ -45,7 +45,7 @@ public class FunInMaxListAdapter extends SuperBaseAdapter<AppInMax> {
         public TextView tv_so;
         public TextView tv_po;
         public TextView tv_skn;
-        public TextView tv_dbk;
+        public TextView tv_num;
         public TextView tv_dc;
         public LinearLayout ll_container;
 
@@ -54,14 +54,13 @@ public class FunInMaxListAdapter extends SuperBaseAdapter<AppInMax> {
             tv_po = (TextView) convertView.findViewById(R.id.tv_po);
             tv_skn = (TextView) convertView.findViewById(R.id.tv_skn);
             if (dbkModel == MainActivity.DBK_IN) {
-                tv_dbk = (TextView) convertView.findViewById(R.id.tv_dbk);
+                tv_num = (TextView) convertView.findViewById(R.id.tv_num);
                 tv_dc = (TextView) convertView.findViewById(R.id.tv_dc);
             }
 
             ll_container = (LinearLayout) convertView.findViewById(R.id.ll_container);
             convertView.setTag(this);
         }
-
         public void setData(int pos) {
             AppInMax item = getItem(pos);
             tv_so.setText(item.So);
@@ -69,7 +68,7 @@ public class FunInMaxListAdapter extends SuperBaseAdapter<AppInMax> {
             tv_skn.setText(item.Skn);
             if (dbkModel == MainActivity.DBK_IN) {
                 tv_dc.setText(item.Dc);
-                tv_dbk.setText(item.Dbk);
+                tv_num.setText(item.Soquan > 0 ? (int) item.Soquan  + "" : "");
             }
 
             if (posSelect == pos) {

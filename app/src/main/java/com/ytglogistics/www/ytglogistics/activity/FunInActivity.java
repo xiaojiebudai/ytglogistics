@@ -64,7 +64,7 @@ public class FunInActivity extends FatherActivity {
         if (model == INOPERATE) {
             initDefautHead(modelDbk==MainActivity.DBK_IN?"DBK收货操作":"收货操作", true);
         } else {
-            initDefautHead("入仓修改", true);
+            initDefautHead(modelDbk==MainActivity.DBK_IN?"DBK入仓修改":"入仓修改", true);
         }
 
         initTextHeadRigth(R.string.fresh, new View.OnClickListener() {
@@ -85,9 +85,7 @@ public class FunInActivity extends FatherActivity {
                 funInAdapter.setPos(position);
                 Intent intent = new Intent(FunInActivity.this, FunDetailActivity.class);
                 intent.putExtra(Consts.KEY_MODULE, FunDetailActivity.FUNIN);
-                if(model==INOPERATE){
-                    intent.putExtra(MainActivity.KEY_IN_TYPE, modelDbk);
-                }
+                intent.putExtra(MainActivity.KEY_IN_TYPE, modelDbk);
                 intent.putExtra(Consts.KEY_DATA, JSONObject.toJSONString(funInAdapter.getData().get(position)));
                 startActivity(intent);
             }

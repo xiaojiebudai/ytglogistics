@@ -8,8 +8,9 @@
     <include layout="@layout/head_operation" />
 
     <LinearLayout
+        android:id="@+id/ll_title_0"
         android:layout_width="match_parent"
-        android:layout_height="40dp"  android:id="@+id/ll_title_0"
+        android:layout_height="40dp"
 
         android:gravity="center"
         android:orientation="horizontal">
@@ -44,12 +45,14 @@
 
 
     </LinearLayout>
+
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="40dp"  android:visibility="gone"
-        android:gravity="center"
         android:id="@+id/ll_title_1"
-        android:orientation="horizontal">
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="0dp"
@@ -77,16 +80,6 @@
             android:text="SKN"
             android:textColor="@color/text_f7"
             android:textSize="12sp" />
-
-        <TextView
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:maxLines="2"
-            android:text="DBK"
-            android:textColor="@color/text_f7"
-            android:textSize="12sp" />
-
         <TextView
             android:layout_width="80dp"
             android:layout_height="wrap_content"
@@ -95,7 +88,17 @@
             android:text="DC"
             android:textColor="@color/text_f7"
             android:textSize="12sp" />
+
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:maxLines="2"
+            android:text="件数"
+            android:textColor="@color/text_f7"
+            android:textSize="12sp" />
     </LinearLayout>
+
     <View style="@style/cutline_fine" />
 
     <ListView

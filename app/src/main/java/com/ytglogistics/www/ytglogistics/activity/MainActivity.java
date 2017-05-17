@@ -274,7 +274,23 @@ public class MainActivity extends FatherActivity {
                             startActivity(new Intent(MainActivity.this, FunOutActivity.class).putExtra(Consts.KEY_MODULE, FunOutActivity.OUTOPERATE));
                             break;
                         case RUCANGXIUGAI:
-                            startActivity(new Intent(MainActivity.this, FunInActivity.class).putExtra(Consts.KEY_MODULE, FunInActivity.INEDIT));
+                            final CommonDialog commonDialog1 = DialogUtils.getCommonDialog(MainActivity.this, "请选择收货修改方式");
+                            commonDialog1.getButtonRight("普通收货修改").setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    commonDialog1.dismiss();
+                                    startActivity(new Intent(MainActivity.this, FunInActivity.class).putExtra(Consts.KEY_MODULE, FunInActivity.INEDIT).putExtra(KEY_IN_TYPE, NORMAL_IN));
+                                }
+                            });
+                            commonDialog1.getButtonLeft("DBK收货修改").setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    commonDialog1.dismiss();
+                                    startActivity(new Intent(MainActivity.this, FunInActivity.class).putExtra(Consts.KEY_MODULE, FunInActivity.INEDIT).putExtra(KEY_IN_TYPE, DBK_IN));
+                                }
+                            });
+                            commonDialog1.show();
+
                             break;
                         case CHUCANGXIUGAI:
                             startActivity(new Intent(MainActivity.this, FunOutActivity.class).putExtra(Consts.KEY_MODULE, FunOutActivity.OUTEDIT));

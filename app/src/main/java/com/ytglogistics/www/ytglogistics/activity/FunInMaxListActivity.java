@@ -258,6 +258,7 @@ public class FunInMaxListActivity extends FatherActivity {
                         adapter.getData().get(selectPosition).Unitwei = Double.valueOf(s + "");
                         setAllWeight(adapter.getData().get(selectPosition).Unitwei, adapter.getData().get(selectPosition).Soquan);
                         isChange = true;
+                        refreshOtherWeightItem(selectPosition);
                     }
 
                 }
@@ -427,6 +428,30 @@ public class FunInMaxListActivity extends FatherActivity {
 
     }
 
+    private void refreshOtherWeightItem(int selectPosition) {
+
+        if (modelDbk == MainActivity.DBK_IN) {
+
+            int size = adapter.getData().size();
+            AppInMax selectItem = adapter.getData().get(selectPosition);
+
+                for (int i = 0; i < size; i++) {
+                    AppInMax item = adapter.getData().get(i);
+                    if (i != selectPosition) {
+                        if (selectItem.So.equals(item.So) && selectItem.Po.equals(item.Po) && selectItem.Skn.equals(item.Skn)) {
+                            item.Unitwei = selectItem.Unitwei;
+                            item.Rweight = item.Unitwei * item.Soquan;
+                            BigDecimal b = new BigDecimal(item.Rweight);
+                            item.Rweight = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                        }
+
+                }
+            }
+        }
+
+
+    }
+
     /**
      * 按DBK取完以后,同一个SO+PO+SKN就会有9条记录,所以当输入一行的长宽高时,可以同步更新其它8行的长宽高,同时对应CBM也自动更新.
      *
@@ -434,7 +459,7 @@ public class FunInMaxListActivity extends FatherActivity {
      */
     private void refreshOtherItem(int selectPosition) {
         if (modelDbk == MainActivity.DBK_IN) {
-            ZLog.showPost("sdsds");
+
             int size = adapter.getData().size();
             AppInMax selectItem = adapter.getData().get(selectPosition);
             if (selectItem.Leng == 0 || selectItem.Wide == 0 || selectItem.High == 0 || selectItem.Soquan == 0 || selectItem.BookingCbm == 0) {
