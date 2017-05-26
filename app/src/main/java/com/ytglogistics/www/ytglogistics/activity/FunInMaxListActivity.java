@@ -365,6 +365,7 @@ public class FunInMaxListActivity extends FatherActivity {
                         WWToast.showShort("请先选择一条记录");
                     } else {
                         adapter.getData().get(selectPosition).Soquan = Integer.valueOf(s + "");
+                        setGeshu(adapter.getData().get(selectPosition));
                         setAllWeight(adapter.getData().get(selectPosition).Unitwei, adapter.getData().get(selectPosition).Soquan);
                         setCbm(adapter.getData().get(selectPosition));
                         isChange = true;
@@ -392,6 +393,7 @@ public class FunInMaxListActivity extends FatherActivity {
                         WWToast.showShort("请先选择一条记录");
                     } else {
                         adapter.getData().get(selectPosition).Format = Double.valueOf(s + "");
+                        setGeshu(adapter.getData().get(selectPosition));
                         isChange = true;
                     }
 
@@ -426,6 +428,11 @@ public class FunInMaxListActivity extends FatherActivity {
         });
 
 
+    }
+
+    private void setGeshu(AppInMax appInMax) {
+        appInMax.Ttlpcs= (int) (appInMax.Soquan*appInMax.Format);
+        tvGeshu.setText(numderIntFormat(inMax.Ttlpcs));
     }
 
     private void refreshOtherWeightItem(int selectPosition) {
