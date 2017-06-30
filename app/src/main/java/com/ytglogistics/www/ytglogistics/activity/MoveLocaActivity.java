@@ -76,12 +76,13 @@ public class MoveLocaActivity extends FatherActivity {
     @Override
     protected void initView() {
         lvData.setBackgroundResource(R.drawable.bg_yellow_white_shape);
-        mAdapter = new BaseRecyclerAdapter<DataSolt>(this, dataSolts, R.layout.list_funinmax_item) {
+        mAdapter = new BaseRecyclerAdapter<DataSolt>(this, dataSolts, R.layout.list_movelocal_item) {
             @Override
             protected void convert(BaseViewHolder helper, DataSolt item) {
                 helper.setText(R.id.tv_so, item.Po);
                 helper.setText(R.id.tv_po, item.Skn);
                 helper.setText(R.id.tv_skn, item.Loca);
+                helper.setText(R.id.tv_dc, item.Dc);
                 if(item.isSelect){
                     helper.getView(R.id.ll_container).setBackgroundResource(R.color.top_title_bg);
                 }else{

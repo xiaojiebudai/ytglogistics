@@ -9,5 +9,6 @@ public class DataSolt {
     public String Po;
     public String Skn;
     public String Loca;
+    public String Dc;
     public boolean isSelect;//是否选中
 }
