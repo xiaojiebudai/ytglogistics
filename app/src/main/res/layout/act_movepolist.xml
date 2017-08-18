@@ -68,7 +68,7 @@
 
         <TextView
             android:id="@+id/textView2"
-            android:layout_width="90dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="Skn"
@@ -76,16 +76,23 @@
             android:textSize="12sp" />
 
         <TextView
-            android:layout_width="90dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="仓位"
             android:textColor="@color/text_f7"
             android:textSize="12sp" />     <TextView
-            android:layout_width="90dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="Dc"
+            android:textColor="@color/text_f7"
+            android:textSize="12sp" />
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="件数"
             android:textColor="@color/text_f7"
             android:textSize="12sp" />
     </LinearLayout>
