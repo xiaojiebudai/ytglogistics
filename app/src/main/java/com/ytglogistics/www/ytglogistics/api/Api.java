@@ -181,8 +181,15 @@ public class Api {
 
     public static final String GetZxDzl() {
         return ONLINE + "GetZxDzl";
-    }  public static final String PdaPalletBySo() {
+    }
+
+    public static final String PdaPalletBySo() {
         return ONLINE + "PdaPalletBySo";
+    }
+    public static final String TaskOutList() {
+        return ONLINE + "TaskOutList";
+    }   public static final String TaskOutConfirm() {
+        return ONLINE + "TaskOutConfirm";
     }
 
 }

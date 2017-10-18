@@ -132,6 +132,11 @@
             android:name="com.ytglogistics.www.ytglogistics.activity.BoardHeadPaperPrintActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Transparent"></activity>
+        <activity
+            android:name="com.ytglogistics.www.ytglogistics.activity.ContainerConfimActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"
+            android:theme="@style/AppTheme.Transparent"></activity>
 
         <service
             android:name="com.ytglogistics.www.ytglogistics.service.UpdateVersionService"

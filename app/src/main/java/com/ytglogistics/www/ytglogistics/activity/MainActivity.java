@@ -77,7 +77,8 @@ public class MainActivity extends FatherActivity {
     @BindView(R.id.start_app)
     ImageView start_app;
     @BindView(R.id.cctv)
-    ImageView cctv;
+    ImageView cctv;   @BindView(R.id.iv_confim)
+    ImageView iv_confim;
 
     public static final int NORMAL_IN = 0;
     public static final int DBK_IN = 1;
@@ -147,6 +148,10 @@ public class MainActivity extends FatherActivity {
     板头纸打印
      */
     private static final int BOARDHEADPAGERPRINT = 15;
+    /*
+    柜号确认
+     */
+    private static final int CONTAINERCONFIRM = 16;
 
     @Override
     protected int getLayoutId() {
@@ -188,7 +193,7 @@ public class MainActivity extends FatherActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.cctv, R.id.boardheardpager_print, R.id.start_app, R.id.receiving, R.id.shipping, R.id.warehousing, R.id.outofstorage, R.id.garage_m, R.id.move_operate, R.id.housing_reservation_query, R.id.outofstorage_query, R.id.locale_photos, R.id.housing_reservation_po_query, R.id.berth_map, R.id.loginout, R.id.exit})
+    @OnClick({R.id.cctv, R.id.iv_confim, R.id.boardheardpager_print, R.id.start_app, R.id.receiving, R.id.shipping, R.id.warehousing, R.id.outofstorage, R.id.garage_m, R.id.move_operate, R.id.housing_reservation_query, R.id.outofstorage_query, R.id.locale_photos, R.id.housing_reservation_po_query, R.id.berth_map, R.id.loginout, R.id.exit})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.receiving:
@@ -240,6 +245,10 @@ public class MainActivity extends FatherActivity {
             case R.id.boardheardpager_print:
 //                startActivity(new Intent(MainActivity.this, BoardHeadPaperPrintActivity.class));
                 isLimited(BOARDHEADPAGERPRINT);
+                break;
+            case R.id.iv_confim:
+//                startActivity(new Intent(MainActivity.this, ContainerConfimActivity.class));
+                isLimited(CONTAINERCONFIRM);
                 break;
         }
     }
@@ -333,6 +342,9 @@ public class MainActivity extends FatherActivity {
                                 WWToast.showShort("还未安装移动安防，请先去应用市场下载");
                             }
 
+                            break;
+                        case CONTAINERCONFIRM:
+                            startActivity(new Intent(MainActivity.this, ContainerConfimActivity.class));
                             break;
                     }
                 } else {
