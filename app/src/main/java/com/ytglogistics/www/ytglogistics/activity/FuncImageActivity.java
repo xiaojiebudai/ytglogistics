@@ -75,6 +75,10 @@ public class FuncImageActivity extends FatherActivity {
 
     @Override
     protected void initView() {
+        if(!TextUtils.isEmpty(getIntent().getStringExtra("data"))){
+            etNo.setText(getIntent().getStringExtra("data"));
+        }
+
         mAdapter = new BaseRecyclerAdapter<DataImg>(this, lsit, R.layout.list_tv_two_item) {
             @Override
             protected void convert(BaseViewHolder helper, DataImg item) {

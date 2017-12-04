@@ -80,7 +80,7 @@
             android:layout_width="90dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="工作单号"
+            android:text="CLP"
             android:textColor="@color/text_f7"
             android:textSize="12sp" />
 

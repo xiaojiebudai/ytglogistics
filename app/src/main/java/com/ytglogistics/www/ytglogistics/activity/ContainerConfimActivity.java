@@ -1,6 +1,8 @@
 package com.ytglogistics.www.ytglogistics.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -77,6 +79,7 @@ public class ContainerConfimActivity extends FatherActivity {
     private long delTime = -1;
     private DateChooseWheelViewDialog dateChooseWheelViewDialog;
 
+
     @Override
     protected int getLayoutId() {
         return R.layout.act_containerconfim;
@@ -106,7 +109,7 @@ public class ContainerConfimActivity extends FatherActivity {
             protected void convert(BaseViewHolder helper, DataCont item) {
                 helper.setText(R.id.tv_num, item.ContNo);
                 helper.setText(R.id.tv_type, item.ContSize);
-                helper.setText(R.id.tv_work_num, item.TaskId);
+                helper.setText(R.id.tv_clp, item.Clp);
                 helper.setText(R.id.tv_bowei, item.PlaceId);
 
                 if (item.isSelect) {
@@ -119,6 +122,8 @@ public class ContainerConfimActivity extends FatherActivity {
         mAdapter.setOnRecyclerItemClickListener(new OnRecyclerItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
+
+                rgResult.check(R.id.rb_ok);
                 selectId = position;
                 dataSolt = (DataCont) mAdapter.getData().get(position);
                 for (int i = 0; i < mAdapter.getData().size(); i++) {
@@ -126,6 +131,7 @@ public class ContainerConfimActivity extends FatherActivity {
                 }
                 ((DataCont) mAdapter.getItem(position)).isSelect = true;
                 mAdapter.notifyDataSetChanged();
+
             }
         });
         lvData.setHasFixedSize(true);
@@ -134,6 +140,7 @@ public class ContainerConfimActivity extends FatherActivity {
         mAdapter.openLoadAnimation(false);
         lvData.setAdapter(mAdapter);
         getData();
+
     }
 
     @Override
@@ -143,7 +150,7 @@ public class ContainerConfimActivity extends FatherActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.tv_search, R.id.ll_time, R.id.tv_commit})
+    @OnClick({R.id.tv_search, R.id.ll_time, R.id.tv_commit,R.id.rb_error})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_search:
@@ -155,6 +162,11 @@ public class ContainerConfimActivity extends FatherActivity {
             }
                 getData();
 
+                break;
+            case  R.id.rb_error:
+                if(selectId!=-1){
+                    startActivity(new Intent(ContainerConfimActivity.this, FuncImageActivity.class).putExtra("data",dataSolt.Clp));
+                }
                 break;
             case R.id.ll_time:
                 if (dateChooseWheelViewDialog == null) {

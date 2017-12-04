@@ -9,6 +9,7 @@ public class DataCont {
   public String PlaceId;
   public String ContNo;
   public String TaskId;
+  public String Clp;
   public String ContSize;
   public boolean isSelect;
 
